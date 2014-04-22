@@ -1,0 +1,79 @@
+def projectName = 'thirdfoot-rto'
+def langLevel = 1.7
+def tomcatVersion = '7.0.11'
+
+allprojects {
+    apply plugin: 'eclipse'
+ 
+    group = 'net.thirdfoot.rto'
+    version = '0.1'
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.2.3'
+    }
+}
+ 
+subprojects {
+    apply plugin: 'java'
+ 
+    sourceCompatibility = langLevel
+    targetCompatibility = langLevel
+ 
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+ 
+    dependencies {
+        testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+    }
+}
+ 
+project(':rto-model') {
+    dependencies {
+        compile 'org.hibernate:hibernate-core:4.1.7.Final'
+    }
+}
+
+project(':rto-service') {
+    dependencies {
+        compile project(':rto-model')
+
+        compile 'org.hibernate:hibernate-core:4.1.7.Final'
+    }
+}
+
+project(':rto-web') {
+    apply plugin: 'war'
+    apply plugin: 'tomcat'
+
+    war {
+        baseName = projectName
+    }
+ 
+    dependencies {
+        compile project(':rto-model')
+        compile project(':rto-service')
+
+        compile 'org.springframework:spring-webmvc:3.1.2.RELEASE'
+
+        tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
+        tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
+            exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
+        }
+    }
+}
+ 
+eclipse {
+    project {
+        jdkName = langLevel
+        languageLevel = langLevel
+    }
+}
