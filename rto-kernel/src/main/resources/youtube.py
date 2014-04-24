@@ -39,15 +39,15 @@ class youtube_stream(YoutubeStream):
     """ Wrapper class for holding data of Youtube streams """
 
     def __init__(self, extension, resolution, url):
-        self.extension = extension
-        self.resolution = resolution
-        self.url = url
+        self.stream_extension = extension
+        self.stream_resolution = resolution
+        self.stream_url = url
 
     def getExtension(self):
-        return self.extension
+        return self.stream_extension
 
     def getResolution(self):
-        return self.resolution
+        return self.stream_resolution
 
     def getUrl(self):
-        return self.url
+        return self.stream_url
