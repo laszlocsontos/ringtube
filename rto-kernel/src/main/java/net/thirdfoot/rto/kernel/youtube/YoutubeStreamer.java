@@ -7,14 +7,14 @@ import java.util.List;
  */
 public interface YoutubeStreamer {
 
-	public String getVideoAuthor();
+    public String getVideoAuthor();
 
-	public int getVideoLength();
+    public int getVideoLength();
 
-	public double getVideoRating();
+    public double getVideoRating();
 
-	public List<YoutubeStream> getVideoStreams();
+    public List<YoutubeStream> getVideoStreams();
 
-	public String getVideoTitle();
+    public String getVideoTitle();
 
 }

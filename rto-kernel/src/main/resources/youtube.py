@@ -36,7 +36,7 @@ class youtube_streamer(YoutubeStreamer):
         return self.video_title
 
 class youtube_stream(YoutubeStream):
-        """ Wrapper class for holding data of Youtube streams """
+    """ Wrapper class for holding data of Youtube streams """
 
     def __init__(self, extension, resolution, url):
         self.extension = extension
