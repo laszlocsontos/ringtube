@@ -1,1 +1,1 @@
-include 'rto-model', 'rto-service', 'rto-web'
+include 'rto-kernel', 'rto-model', 'rto-service', 'rto-web'

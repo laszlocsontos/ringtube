@@ -34,6 +34,12 @@ subprojects {
         testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
     }
 }
+
+project(':rto-kernel') {
+    dependencies {
+        compile 'org.python:jython:2.7-b1'
+    }
+}
  
 project(':rto-model') {
     dependencies {
@@ -43,6 +49,7 @@ project(':rto-model') {
 
 project(':rto-service') {
     dependencies {
+        compile project(':rto-kernel')
         compile project(':rto-model')
 
         compile 'org.hibernate:hibernate-core:4.1.7.Final'
