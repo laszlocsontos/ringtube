@@ -28,6 +28,10 @@ subprojects {
     repositories {
         mavenLocal()
         mavenCentral()
+
+        maven {
+            url 'http://xuggle.googlecode.com/svn/trunk/repo/share/java/'
+        }
     }
  
     dependencies {
@@ -37,7 +41,12 @@ subprojects {
 
 project(':rto-kernel') {
     dependencies {
+        compile 'org.jodd:jodd-http:3.5.1'
         compile 'org.python:jython:2.7-b1'
+        compile 'org.slf4j:slf4j-api:1.7.7'
+        compile 'xuggle:xuggle-xuggler:5.4'
+
+        runtime 'ch.qos.logback:logback-classic:1.1.2'
     }
 }
  

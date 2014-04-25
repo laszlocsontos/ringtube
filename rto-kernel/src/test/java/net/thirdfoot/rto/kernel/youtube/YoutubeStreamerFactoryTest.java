@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author lcsontos
@@ -33,6 +35,11 @@ public class YoutubeStreamerFactoryTest {
         Assert.assertNotNull(extension);
         Assert.assertNotNull(resolution);
         Assert.assertNotNull(url);
+
+        _log.info("URL: " + url);
     }
+
+    private static Logger _log = LoggerFactory.getLogger(
+        YoutubeStreamerFactoryTest.class);
 
 }
