@@ -13,45 +13,45 @@ import org.slf4j.LoggerFactory;
  */
 public class YoutubeStreamerFactoryTest {
 
-    @Test
-    public void testCreate() {
-        YoutubeStreamer streamer = YoutubeStreamerFactory.create(
-            "https://www.youtube.com/watch?v=W2yk1lsi9RM");
+  @Test
+  public void testCreate() {
+    YoutubeStreamer streamer = YoutubeStreamerFactory.create(
+      "https://www.youtube.com/watch?v=W2yk1lsi9RM");
 
-        Assert.assertNotNull(streamer);
+    Assert.assertNotNull(streamer);
 
-        List<YoutubeStream> videoStreams = streamer.getAllStreams();
+    List<YoutubeStream> videoStreams = streamer.getAllStreams();
 
-        Assert.assertNotNull(videoStreams);
-        Assert.assertFalse(videoStreams.isEmpty());
+    Assert.assertNotNull(videoStreams);
+    Assert.assertFalse(videoStreams.isEmpty());
 
-        YoutubeStream stream = null;
+    YoutubeStream stream = null;
 
-        for (Iterator<YoutubeStream> iterator = videoStreams.iterator();
-            iterator.hasNext();) {
+    for (Iterator<YoutubeStream> iterator = videoStreams.iterator();
+      iterator.hasNext();) {
 
-            YoutubeStream audioStream = (YoutubeStream)iterator.next();
+      YoutubeStream audioStream = (YoutubeStream)iterator.next();
 
-            if (audioStream.getMediaType().equals("audio")) {
-                stream = audioStream;
+      if (audioStream.getMediaType().equals("audio")) {
+        stream = audioStream;
 
-                break;
-            }
-        }
-
-        Assert.assertNotNull(stream);
-
-        Assert.assertNotNull(stream.getExtension());
-        Assert.assertNotNull(stream.getMediaType());
-        Assert.assertNotNull(stream.getQuality());
-        Assert.assertNotNull(stream.getResolution());
-        Assert.assertTrue(stream.getSize() > 0);
-        Assert.assertNotNull(stream.getUrl());
-
-        _log.info("URL: " + stream.getUrl());
+        break;
+      }
     }
 
-    private static Logger _log = LoggerFactory.getLogger(
-        YoutubeStreamerFactoryTest.class);
+    Assert.assertNotNull(stream);
+
+    Assert.assertNotNull(stream.getExtension());
+    Assert.assertNotNull(stream.getMediaType());
+    Assert.assertNotNull(stream.getQuality());
+    Assert.assertNotNull(stream.getResolution());
+    Assert.assertTrue(stream.getSize() > 0);
+    Assert.assertNotNull(stream.getUrl());
+
+    _log.info("URL: " + stream.getUrl());
+  }
+
+  private static Logger _log = LoggerFactory.getLogger(
+    YoutubeStreamerFactoryTest.class);
 
 }

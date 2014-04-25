@@ -3,93 +3,93 @@ def langLevel = 1.7
 def tomcatVersion = '7.0.11'
 
 allprojects {
-    apply plugin: 'eclipse'
+  apply plugin: 'eclipse'
  
-    group = 'net.thirdfoot.rto'
-    version = '0.1'
+  group = 'net.thirdfoot.rto'
+  version = '0.1'
 }
 
 buildscript {
-    repositories {
-        jcenter()
-    }
+  repositories {
+    jcenter()
+  }
 
-    dependencies {
-        classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.2.3'
-    }
+  dependencies {
+    classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:1.2.3'
+  }
 }
  
 subprojects {
-    apply plugin: 'java'
+  apply plugin: 'java'
  
-    sourceCompatibility = langLevel
-    targetCompatibility = langLevel
+  sourceCompatibility = langLevel
+  targetCompatibility = langLevel
  
-    repositories {
-        mavenLocal()
-        mavenCentral()
+  repositories {
+    mavenLocal()
+    mavenCentral()
 
-        maven {
-            url 'http://xuggle.googlecode.com/svn/trunk/repo/share/java/'
-        }
+    maven {
+      url 'http://xuggle.googlecode.com/svn/trunk/repo/share/java/'
     }
+  }
  
-    dependencies {
-        testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
-    }
+  dependencies {
+    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+  }
 }
 
 project(':rto-kernel') {
-    dependencies {
-        compile 'org.jodd:jodd-http:3.5.1'
-        compile 'org.python:jython:2.7-b1'
-        compile 'org.slf4j:slf4j-api:1.7.7'
-        compile 'xuggle:xuggle-xuggler:5.4'
+  dependencies {
+    compile 'org.jodd:jodd-http:3.5.1'
+    compile 'org.python:jython:2.7-b1'
+    compile 'org.slf4j:slf4j-api:1.7.7'
+    compile 'xuggle:xuggle-xuggler:5.4'
 
-        runtime 'ch.qos.logback:logback-classic:1.1.2'
-    }
+    runtime 'ch.qos.logback:logback-classic:1.1.2'
+  }
 }
  
 project(':rto-model') {
-    dependencies {
-        compile 'org.hibernate:hibernate-core:4.1.7.Final'
-    }
+  dependencies {
+    compile 'org.hibernate:hibernate-core:4.1.7.Final'
+  }
 }
 
 project(':rto-service') {
-    dependencies {
-        compile project(':rto-kernel')
-        compile project(':rto-model')
+  dependencies {
+    compile project(':rto-kernel')
+    compile project(':rto-model')
 
-        compile 'org.hibernate:hibernate-core:4.1.7.Final'
-    }
+    compile 'org.hibernate:hibernate-core:4.1.7.Final'
+  }
 }
 
 project(':rto-web') {
-    apply plugin: 'war'
-    apply plugin: 'tomcat'
+  apply plugin: 'war'
+  apply plugin: 'tomcat'
 
-    war {
-        baseName = projectName
-    }
+  war {
+    baseName = projectName
+  }
  
-    dependencies {
-        compile project(':rto-model')
-        compile project(':rto-service')
+  dependencies {
+    compile project(':rto-model')
+    compile project(':rto-service')
 
-        compile 'org.springframework:spring-webmvc:3.1.2.RELEASE'
+    compile 'org.springframework:spring-webmvc:3.1.2.RELEASE'
 
-        tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
-            "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
-        tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
-            exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
-        }
+    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+      "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
+    tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
+      exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
     }
+  }
 }
  
 eclipse {
-    project {
-        jdkName = langLevel
-        languageLevel = langLevel
-    }
+  project {
+    jdkName = langLevel
+    languageLevel = langLevel
+  }
 }

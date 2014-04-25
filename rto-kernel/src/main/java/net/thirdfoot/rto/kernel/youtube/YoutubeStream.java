@@ -5,16 +5,16 @@ package net.thirdfoot.rto.kernel.youtube;
  */
 public interface YoutubeStream {
 
-    public String getExtension();
+  public String getExtension();
 
-    public String getMediaType();
+  public String getMediaType();
 
-    public String getResolution();
+  public String getResolution();
 
-    public String getQuality();
+  public String getQuality();
 
-    public int getSize();
+  public int getSize();
 
-    public String getUrl();
+  public String getUrl();
 
 }
