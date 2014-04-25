@@ -13,7 +13,7 @@ public interface YoutubeStreamer {
 
     public double getVideoRating();
 
-    public List<YoutubeStream> getVideoStreams();
+    public List<YoutubeStream> getAllStreams();
 
     public String getVideoTitle();
 

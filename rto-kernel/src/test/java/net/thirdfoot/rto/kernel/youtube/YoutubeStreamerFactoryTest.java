@@ -1,5 +1,6 @@
 package net.thirdfoot.rto.kernel.youtube;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Assert;
@@ -19,24 +20,35 @@ public class YoutubeStreamerFactoryTest {
 
         Assert.assertNotNull(streamer);
 
-        List<YoutubeStream> videoStreams = streamer.getVideoStreams();
+        List<YoutubeStream> videoStreams = streamer.getAllStreams();
 
         Assert.assertNotNull(videoStreams);
         Assert.assertFalse(videoStreams.isEmpty());
 
-        YoutubeStream stream = videoStreams.get(0);
+        YoutubeStream stream = null;
+
+        for (Iterator<YoutubeStream> iterator = videoStreams.iterator();
+            iterator.hasNext();) {
+
+            YoutubeStream audioStream = (YoutubeStream)iterator.next();
+
+            if (audioStream.getMediaType().equals("audio")) {
+                stream = audioStream;
+
+                break;
+            }
+        }
 
         Assert.assertNotNull(stream);
 
-        String extension = stream.getExtension();
-        String resolution = stream.getResolution();
-        String url = stream.getUrl();
+        Assert.assertNotNull(stream.getExtension());
+        Assert.assertNotNull(stream.getMediaType());
+        Assert.assertNotNull(stream.getQuality());
+        Assert.assertNotNull(stream.getResolution());
+        Assert.assertTrue(stream.getSize() > 0);
+        Assert.assertNotNull(stream.getUrl());
 
-        Assert.assertNotNull(extension);
-        Assert.assertNotNull(resolution);
-        Assert.assertNotNull(url);
-
-        _log.info("URL: " + url);
+        _log.info("URL: " + stream.getUrl());
     }
 
     private static Logger _log = LoggerFactory.getLogger(

@@ -14,11 +14,16 @@ class youtube_streamer(YoutubeStreamer):
         self.video_rating = video.rating
         self.video_title = video.title
 
-        self.video_streams = []
+        self.all_streams = []
 
-        for s in video.streams:
-            ys = youtube_stream(s.extension, s.resolution, s.url)
-            self.video_streams.append(ys)
+        for s in video.allstreams:
+            ys = youtube_stream(
+                s.extension, s.mediatype, s.quality, s.resolution,
+                s.get_filesize(), s.url);
+            self.all_streams.append(ys)
+
+    def getAllStreams(self):
+        return self.all_streams
 
     def getVideoAuthor(self):
         return self.video_author
@@ -29,25 +34,34 @@ class youtube_streamer(YoutubeStreamer):
     def getVideoRating(self):
         return self.video_rating
 
-    def getVideoStreams(self):
-        return self.video_streams
-        
     def getVideoTitle(self):
         return self.video_title
 
 class youtube_stream(YoutubeStream):
     """ Wrapper class for holding data of Youtube streams """
 
-    def __init__(self, extension, resolution, url):
+    def __init__(self, extension, mediatype, quality, resolution, size, url):
         self.stream_extension = extension
+        self.stream_mediatype = mediatype
+        self.stream_quality = quality
         self.stream_resolution = resolution
+        self.stream_size = size
         self.stream_url = url
 
     def getExtension(self):
         return self.stream_extension
 
+    def getMediaType(self):
+        return self.stream_mediatype
+
     def getResolution(self):
         return self.stream_resolution
+
+    def getQuality(self):
+        return self.stream_quality
+
+    def getSize(self):
+        return self.stream_size
 
     def getUrl(self):
         return self.stream_url
