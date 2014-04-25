@@ -1,7 +1,11 @@
-package net.thirdfoot.rto.kernel.youtube;
+package net.thirdfoot.rto.kernel.media;
 
 import java.util.Iterator;
 import java.util.List;
+
+import net.thirdfoot.rto.kernel.media.YoutubeStream;
+import net.thirdfoot.rto.kernel.media.YoutubeStreamer;
+import net.thirdfoot.rto.kernel.media.YoutubeStreamerFactory;
 
 import org.junit.Assert;
 import org.junit.Test;

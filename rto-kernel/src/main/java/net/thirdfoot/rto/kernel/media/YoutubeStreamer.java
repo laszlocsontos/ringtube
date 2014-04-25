@@ -1,4 +1,4 @@
-package net.thirdfoot.rto.kernel.youtube;
+package net.thirdfoot.rto.kernel.media;
 
 import java.util.List;
 
