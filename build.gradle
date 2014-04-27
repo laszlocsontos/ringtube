@@ -50,16 +50,9 @@ project(':rto-kernel') {
   }
 }
  
-project(':rto-model') {
-  dependencies {
-    compile 'org.hibernate:hibernate-core:4.1.7.Final'
-  }
-}
-
-project(':rto-service') {
+roject(':rto-service') {
   dependencies {
     compile project(':rto-kernel')
-    compile project(':rto-model')
 
     compile 'org.hibernate:hibernate-core:4.1.7.Final'
   }
@@ -74,7 +67,6 @@ project(':rto-web') {
   }
  
   dependencies {
-    compile project(':rto-model')
     compile project(':rto-service')
 
     compile 'org.springframework:spring-webmvc:3.1.2.RELEASE'
