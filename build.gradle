@@ -50,7 +50,7 @@ project(':rto-kernel') {
   }
 }
  
-roject(':rto-service') {
+project(':rto-service') {
   dependencies {
     compile project(':rto-kernel')
 
