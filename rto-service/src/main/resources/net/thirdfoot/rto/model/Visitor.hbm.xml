@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping package="net.thirdfoot.rto.model">
+  <subclass name="Visitor" extends="UUIDModel">
+    <property name="ipAddress" column="IP_ADDRESS"/>
+    <property name="city" column="CITY"/>
+    <property name="countryCode" column="COUNTRY_CODE"/>
+    <property name="countryName" column="COUNTRY_NAME"/>
+  </subclass>
+</hibernate-mapping>

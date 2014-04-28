@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping package="net.thirdfoot.rto.model">
+  <subclass name="Visit" extends="LongModel">
+    <property name="city" column="CITY"/>
+    <property name="countryCode" column="COUNTRY_CODE"/>
+    <property name="countryName" column="COUNTRY_NAME"/>
+    <property name="ipAddress" column="IP_ADDRESS"/>
+    <property name="latitude" column="LATITUDE"/>
+    <property name="longitude" column="LONGITUDE"/>
+    <property name="regionCode" column="REGION_CODE"/>
+    <property name="regionName" column="REGION_NAME"/>
+    <property name="userAgent" column="USER_AGENT"/>
+
+    <many-to-one name="visitor" class="Visitor" column="VISITOR_UUID"/>
+  </subclass>
+</hibernate-mapping>

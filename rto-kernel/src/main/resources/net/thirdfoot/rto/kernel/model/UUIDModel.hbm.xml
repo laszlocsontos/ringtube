@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hibernate-mapping package="net.thirdfoot.rto.kernel.model">
-  <class name="UUIDModel" extends="BaseModel">
+  <subclass name="UUIDModel" extends="BaseModel">
     <id name="primaryKey" column="UUID"/>
-  </class>
+  </subclass>
 </hibernate-mapping>

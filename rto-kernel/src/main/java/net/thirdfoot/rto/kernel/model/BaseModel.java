@@ -26,20 +26,8 @@ public abstract class BaseModel<K> implements Serializable {
     return _primaryKey;
   }
 
-  public void setDateCreated(Date dateCreated) {
-    _dateCreated = dateCreated;
-  }
-
-  public void setDateDeleted(Date dateDeleted) {
-    _dateDeleted = dateDeleted;
-  }
-
-  public void setDateModified(Date dateModified) {
-    _dateModified = dateModified;
-  }
-
-  public void setPrimaryKey(K primaryKey) {
-    _primaryKey = primaryKey;
+  public long getRevision() {
+    return _revision;
   }
 
   @SuppressWarnings("unchecked")
@@ -65,6 +53,26 @@ public abstract class BaseModel<K> implements Serializable {
     return _primaryKey.hashCode();
   }
 
+  public void setDateCreated(Date dateCreated) {
+    _dateCreated = dateCreated;
+  }
+
+  public void setDateDeleted(Date dateDeleted) {
+    _dateDeleted = dateDeleted;
+  }
+
+  public void setDateModified(Date dateModified) {
+    _dateModified = dateModified;
+  }
+
+  public void setPrimaryKey(K primaryKey) {
+    _primaryKey = primaryKey;
+  }
+
+  public void setRevision(long revision) {
+    _revision = revision;
+  }
+
   @Override
   public String toString() {
     return getClass() + StringPool.AT + getPrimaryKey();
@@ -75,5 +83,7 @@ public abstract class BaseModel<K> implements Serializable {
   private Date _dateModified;
 
   private K _primaryKey;
+
+  private long _revision;
 
 }

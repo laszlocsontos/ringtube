@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping package="net.thirdfoot.rto.model">
+  <subclass name="Video" extends="LongModel">
+    <property name="author" column="AUTHOR"/>
+    <property name="convertCount" column="CONVERT_COUNT"/>
+    <property name="length" column="LENGTH"/>
+    <property name="nativeId" column="NATIVE_ID"/>
+    <property name="rating" column="RATING"/>
+    <property name="size" column="SIZE"/>
+    <property name="status" column="STATUS">
+      <type name="org.hibernate.type.EnumType">
+        <param name="enumClass">net.thirdfoot.rto.model.VideoStatus</param>
+      </type>
+    </property>
+    <property name="viewCount" column="VIEWCOUNT"/>
+  </subclass>
+</hibernate-mapping>
