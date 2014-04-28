@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hibernate-mapping package="net.thirdfoot.rto.kernel.model">
+  <class name="BaseModel">
+    <property name="dateCreated" column="DATE_CREATED"/>
+    <property name="dateDeleted" column="DATE_DELETED"/>
+    <property name="dateModified" column="DATE_MODIFIED"/>
+  </class>
+</hibernate-mapping>
