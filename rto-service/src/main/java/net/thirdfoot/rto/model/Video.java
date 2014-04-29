@@ -1,11 +1,11 @@
 package net.thirdfoot.rto.model;
 
-import net.thirdfoot.rto.kernel.model.LongModel;
+import net.thirdfoot.rto.kernel.model.UUIDModel;
 
 /**
  * @author lcsontos
  */
-public class Video extends LongModel {
+public class Video extends UUIDModel {
 
   public String getAuthor() {
     return _author;
