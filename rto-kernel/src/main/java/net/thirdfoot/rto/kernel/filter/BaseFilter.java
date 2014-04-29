@@ -9,6 +9,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author lcsontos
  */
@@ -16,6 +19,9 @@ public abstract class BaseFilter implements Filter {
 
   @Override
   public void destroy() {
+    if (_log.isDebugEnabled()) {
+      _log.debug(this.getClass() + " destroyed.");
+    }
   }
 
   @Override
@@ -35,6 +41,9 @@ public abstract class BaseFilter implements Filter {
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
+    if (_log.isDebugEnabled()) {
+      _log.debug(this.getClass() + " initialized.");
+    }
   }
 
   protected void doFilterFinally(
@@ -43,5 +52,7 @@ public abstract class BaseFilter implements Filter {
 
   protected abstract void doProcessFilter(
     ServletRequest request, ServletResponse response);
+
+  private static Logger _log = LoggerFactory.getLogger(BaseFilter.class);
 
 }
