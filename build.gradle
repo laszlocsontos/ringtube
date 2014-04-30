@@ -35,7 +35,9 @@ subprojects {
   }
  
   dependencies {
-    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.springframework:spring-context:3.2.5.RELEASE'
+    testCompile 'org.springframework:spring-test:3.2.5.RELEASE'
   }
 }
 
@@ -70,7 +72,7 @@ project(':rto-web') {
   dependencies {
     compile project(':rto-service')
 
-    compile 'org.springframework:spring-webmvc:3.1.2.RELEASE'
+    compile 'org.springframework:spring-webmvc:3.2.5.RELEASE'
 
     tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
       "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"

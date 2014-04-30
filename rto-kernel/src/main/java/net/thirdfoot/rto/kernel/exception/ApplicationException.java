@@ -1,7 +1,9 @@
 package net.thirdfoot.rto.kernel.exception;
 
-import net.thirdfoot.rto.kernel.i18n.LanguageUtil;
+import java.util.Arrays;
 
+import net.thirdfoot.rto.kernel.i18n.LanguageUtil;
+import jodd.util.ArraysUtil;
 import jodd.util.StringPool;
 import jodd.util.StringUtil;
 
@@ -11,8 +13,11 @@ import jodd.util.StringUtil;
 public class ApplicationException extends Exception {
 
   public ApplicationException() {
-    _messageKey = null;
-    _messageParams = null;
+    this(null, (Object)null);
+  }
+
+  public ApplicationException(String messageKey) {
+    this(messageKey, (Object)null);
   }
 
   public ApplicationException(String messageKey, Object... messageParams) {
@@ -27,7 +32,12 @@ public class ApplicationException extends Exception {
     }
 
     if (StringUtil.isBlank(_message)) {
-      _message = LanguageUtil.format(_messageKey, _messageParams);
+      if (_messageParams != null && _messageParams.length > 0) {
+        _message = LanguageUtil.format(_messageKey, _messageParams);
+      }
+      else {
+        _message = LanguageUtil.get(_messageKey);
+      }
     }
 
     return _message;

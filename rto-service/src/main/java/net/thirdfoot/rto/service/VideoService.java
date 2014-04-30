@@ -1,5 +1,6 @@
 package net.thirdfoot.rto.service;
 
+import net.thirdfoot.rto.model.exception.InvalidVideoUrlException;
 import net.thirdfoot.rto.model.exception.NoSuchVideoException;
 
 /**
@@ -7,6 +8,7 @@ import net.thirdfoot.rto.model.exception.NoSuchVideoException;
  */
 public interface VideoService {
 
-  public String checkVideo(String url) throws NoSuchVideoException;
+  public String checkVideo(String url)
+    throws InvalidVideoUrlException, NoSuchVideoException;
 
 }
