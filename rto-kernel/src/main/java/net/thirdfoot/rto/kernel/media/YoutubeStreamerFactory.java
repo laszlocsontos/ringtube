@@ -1,11 +1,15 @@
 package net.thirdfoot.rto.kernel.media;
 
+import jodd.datetime.JStopWatch;
+
 import org.python.core.Py;
 import org.python.core.PyException;
 import org.python.core.PyObject;
 import org.python.core.PyString;
 import org.python.core.PySystemState;
-import org.python.util.PythonInterpreter;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author lcsontos
@@ -14,10 +18,18 @@ public class YoutubeStreamerFactory {
 
   public static YoutubeStreamer create(String url) {
     try {
-      YoutubeStreamerFactory factory = _getInstance();
+      JStopWatch stopWatch = null;
 
-      PyObject youtubeStreamer = factory._youtubeStreamerClass.__call__(
+      if (_log.isDebugEnabled()) {
+        stopWatch = new JStopWatch();
+      }
+
+      PyObject youtubeStreamer = _getInstance()._youtubeStreamerClass.__call__(
         new PyString(url));
+
+      if (stopWatch != null) {
+        _log.debug("Object created under " + stopWatch.elapsed() + " ms");
+      }
 
       return (YoutubeStreamer)youtubeStreamer.__tojava__(
         YoutubeStreamer.class);
@@ -27,13 +39,20 @@ public class YoutubeStreamerFactory {
   }
 
   private YoutubeStreamerFactory() {
-    _pySystemState.path.append(
+    PySystemState pySystemState = Py.getSystemState();
+
+    pySystemState.path.append(
       new PyString("/home/lcsontos/devtools/jython-2.7b1/Lib"));
 
-    _pyInterpreter = new PythonInterpreter(null, _pySystemState);
-    _pyInterpreter.exec("from youtube import youtube_streamer");
+    PyObject pyImporter = pySystemState.getBuiltins().__getitem__(
+      new PyString("__import__"));
 
-    _youtubeStreamerClass = _pyInterpreter.get("youtube_streamer");
+    PyObject pyModule = pyImporter.__call__(
+      new PyObject[] {
+        new PyString("youtube"), new PyString("youtube_streamer")},
+      new String[] {"name", "fromlist"});
+
+    _youtubeStreamerClass = pyModule.__getattr__("youtube_streamer");
   }
 
   private static YoutubeStreamerFactory _getInstance() {
@@ -47,8 +66,9 @@ public class YoutubeStreamerFactory {
   private static YoutubeStreamerFactory _instance =
     new YoutubeStreamerFactory();
 
-  private PythonInterpreter _pyInterpreter;
-  private PySystemState _pySystemState = Py.getSystemState();
+  private static Logger _log = LoggerFactory.getLogger(
+    YoutubeStreamerFactory.class);
+
   private PyObject _youtubeStreamerClass;
 
 }

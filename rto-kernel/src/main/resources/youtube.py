@@ -6,7 +6,7 @@ import pafy
 class youtube_streamer(YoutubeStreamer):
   """ Wrapper class for pafy """
 
-  def __init__(self, url):
+  def __init__(self, url, stream_type = "audio"):
     video = pafy.new(url)
 
     self.video_author = video.author
@@ -16,7 +16,9 @@ class youtube_streamer(YoutubeStreamer):
 
     self.all_streams = []
 
-    for s in video.allstreams:
+    streams = video.audiostreams if stream_type == "audio" else video.streams
+
+    for s in streams:
       ys = youtube_stream(
         s.extension, s.mediatype, s.quality, s.resolution,
         s.get_filesize(), s.url);

@@ -19,13 +19,12 @@ public class YoutubeStreamerFactoryTest {
 
   @Test(expected = YoutubeStreamerException.class)
   public void testCreateWithWrongUrl() {
-    YoutubeStreamerFactory.create("https://www.youtube.com/watch?v=wrongId");
+    YoutubeStreamerFactory.create(_INVALID_URL);
   }
 
   @Test
   public void testCreate() {
-    YoutubeStreamer streamer = YoutubeStreamerFactory.create(
-      "https://www.youtube.com/watch?v=W2yk1lsi9RM");
+    YoutubeStreamer streamer = YoutubeStreamerFactory.create(_VALID_URL);
 
     Assert.assertNotNull(streamer);
 
@@ -62,5 +61,9 @@ public class YoutubeStreamerFactoryTest {
 
   private static Logger _log = LoggerFactory.getLogger(
     YoutubeStreamerFactoryTest.class);
+
+  private final String _INVALID_URL = "https://www.youtube.com/watch?v=wrongId";
+  private final String _VALID_URL =
+    "https://www.youtube.com/watch?v=W2yk1lsi9RM";
 
 }
