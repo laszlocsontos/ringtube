@@ -1,6 +1,7 @@
 package net.thirdfoot.rto.kernel.media;
 
 import org.python.core.Py;
+import org.python.core.PyException;
 import org.python.core.PyObject;
 import org.python.core.PyString;
 import org.python.core.PySystemState;
@@ -12,13 +13,17 @@ import org.python.util.PythonInterpreter;
 public class YoutubeStreamerFactory {
 
   public static YoutubeStreamer create(String url) {
-    YoutubeStreamerFactory factory = _getInstance();
+    try {
+      YoutubeStreamerFactory factory = _getInstance();
 
-    PyObject youtubeStreamer = factory._youtubeStreamerClass.__call__(
-      new PyString(url));
+      PyObject youtubeStreamer = factory._youtubeStreamerClass.__call__(
+        new PyString(url));
 
-    return (YoutubeStreamer)youtubeStreamer.__tojava__(
-      YoutubeStreamer.class);
+      return (YoutubeStreamer)youtubeStreamer.__tojava__(
+        YoutubeStreamer.class);
+    } catch (PyException pye) {
+      throw new YoutubeStreamerException(pye);
+    }
   }
 
   private YoutubeStreamerFactory() {

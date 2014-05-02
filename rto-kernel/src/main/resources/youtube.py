@@ -1,5 +1,5 @@
-from net.thirdfoot.rto.kernel.youtube import YoutubeStream
-from net.thirdfoot.rto.kernel.youtube import YoutubeStreamer
+from net.thirdfoot.rto.kernel.media import YoutubeStream
+from net.thirdfoot.rto.kernel.media import YoutubeStreamer
 
 import pafy
 

@@ -17,6 +17,11 @@ import org.slf4j.LoggerFactory;
  */
 public class YoutubeStreamerFactoryTest {
 
+  @Test(expected = YoutubeStreamerException.class)
+  public void testCreateWithWrongUrl() {
+    YoutubeStreamerFactory.create("https://www.youtube.com/watch?v=wrongId");
+  }
+
   @Test
   public void testCreate() {
     YoutubeStreamer streamer = YoutubeStreamerFactory.create(
