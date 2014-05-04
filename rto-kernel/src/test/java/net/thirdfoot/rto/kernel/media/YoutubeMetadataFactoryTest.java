@@ -3,6 +3,9 @@ package net.thirdfoot.rto.kernel.media;
 import java.util.Iterator;
 import java.util.List;
 
+import jodd.io.FileUtil;
+import jodd.util.ObjectUtil;
+
 import net.thirdfoot.rto.kernel.media.YoutubeStream;
 import net.thirdfoot.rto.kernel.media.YoutubeMetadata;
 import net.thirdfoot.rto.kernel.media.YoutubeMetadataFactory;
@@ -57,6 +60,26 @@ public class YoutubeMetadataFactoryTest {
     Assert.assertNotNull(stream.getUrl());
 
     _log.info("URL: " + stream.getUrl());
+  }
+
+  @Test
+  public void testSerialize() throws Exception {
+    YoutubeMetadata expectedMetadata = YoutubeMetadataFactory.create(
+      _VALID_URL);
+
+    byte[] data = ObjectUtil.objectToByteArray(expectedMetadata);
+
+    YoutubeMetadata actualMetadata =
+      (YoutubeMetadata)ObjectUtil.byteArrayToObject(data);
+
+    Assert.assertEquals(
+      expectedMetadata.getAllStreams(), actualMetadata.getAllStreams());
+    Assert.assertEquals(
+      expectedMetadata.getVideoAuthor(), actualMetadata.getVideoAuthor());
+    Assert.assertEquals(
+      expectedMetadata.getVideoLength(), actualMetadata.getVideoLength());
+    Assert.assertEquals(
+      expectedMetadata.getVideoTitle(), actualMetadata.getVideoTitle());
   }
 
   private static Logger _log = LoggerFactory.getLogger(

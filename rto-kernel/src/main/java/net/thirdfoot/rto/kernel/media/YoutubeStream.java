@@ -1,9 +1,11 @@
 package net.thirdfoot.rto.kernel.media;
 
+import java.io.Serializable;
+
 /**
  * @author lcsontos
  */
-public interface YoutubeStream {
+public interface YoutubeStream extends Serializable {
 
   public String getExtension();
 

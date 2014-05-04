@@ -1,9 +1,9 @@
 from net.thirdfoot.rto.kernel.media import YoutubeStream
-from net.thirdfoot.rto.kernel.media import YoutubeStreamer
+from net.thirdfoot.rto.kernel.media import YoutubeMetadata
 
 import pafy
 
-class youtube_streamer(YoutubeStreamer):
+class youtube_metadata(YoutubeMetadata):
   """ Wrapper class for pafy """
 
   def __init__(self, url, stream_type = "audio"):

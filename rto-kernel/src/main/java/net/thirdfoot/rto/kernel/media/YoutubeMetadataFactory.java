@@ -49,10 +49,10 @@ public class YoutubeMetadataFactory {
 
     PyObject pyModule = pyImporter.__call__(
       new PyObject[] {
-        new PyString("youtube"), new PyString("youtube_streamer")},
+        new PyString("youtube"), new PyString("youtube_metadata")},
       new String[] {"name", "fromlist"});
 
-    _youtubeStreamerClass = pyModule.__getattr__("youtube_streamer");
+    _youtubeStreamerClass = pyModule.__getattr__("youtube_metadata");
   }
 
   private static YoutubeMetadataFactory _getInstance() {

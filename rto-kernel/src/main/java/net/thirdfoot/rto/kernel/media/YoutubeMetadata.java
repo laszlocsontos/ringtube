@@ -1,11 +1,12 @@
 package net.thirdfoot.rto.kernel.media;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author lcsontos
  */
-public interface YoutubeMetadata {
+public interface YoutubeMetadata extends Serializable {
 
   public String getVideoAuthor();
 
