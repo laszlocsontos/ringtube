@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @author lcsontos
  */
-public interface YoutubeStreamer {
+public interface YoutubeMetadata {
 
   public String getVideoAuthor();
 

@@ -1,8 +1,8 @@
 package net.thirdfoot.rto.service;
 
 import jodd.util.StringUtil;
-import net.thirdfoot.rto.kernel.media.YoutubeStreamer;
-import net.thirdfoot.rto.kernel.media.YoutubeStreamerFactory;
+import net.thirdfoot.rto.kernel.media.YoutubeMetadata;
+import net.thirdfoot.rto.kernel.media.YoutubeMetadataFactory;
 import net.thirdfoot.rto.kernel.media.YoutubeUtil;
 import net.thirdfoot.rto.model.exception.InvalidVideoUrlException;
 import net.thirdfoot.rto.model.exception.NoSuchVideoException;
@@ -22,7 +22,7 @@ public class VideoServiceImpl implements VideoService {
       throw new InvalidVideoUrlException();
     }
 
-    YoutubeStreamer youtubeStreamer = YoutubeStreamerFactory.create(url);
+    YoutubeMetadata youtubeStreamer = YoutubeMetadataFactory.create(url);
 
     return null;
   }

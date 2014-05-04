@@ -14,9 +14,9 @@ import org.slf4j.LoggerFactory;
 /**
  * @author lcsontos
  */
-public class YoutubeStreamerFactory {
+public class YoutubeMetadataFactory {
 
-  public static YoutubeStreamer create(String url) {
+  public static YoutubeMetadata create(String url) {
     try {
       JStopWatch stopWatch = null;
 
@@ -31,14 +31,14 @@ public class YoutubeStreamerFactory {
         _log.debug("Object created under " + stopWatch.elapsed() + " ms");
       }
 
-      return (YoutubeStreamer)youtubeStreamer.__tojava__(
-        YoutubeStreamer.class);
+      return (YoutubeMetadata)youtubeStreamer.__tojava__(
+        YoutubeMetadata.class);
     } catch (PyException pye) {
-      throw new YoutubeStreamerException(pye);
+      throw new YoutubeException(pye);
     }
   }
 
-  private YoutubeStreamerFactory() {
+  private YoutubeMetadataFactory() {
     PySystemState pySystemState = Py.getSystemState();
 
     pySystemState.path.append(
@@ -55,19 +55,19 @@ public class YoutubeStreamerFactory {
     _youtubeStreamerClass = pyModule.__getattr__("youtube_streamer");
   }
 
-  private static YoutubeStreamerFactory _getInstance() {
+  private static YoutubeMetadataFactory _getInstance() {
     if (_instance == null) {
-      _instance = new YoutubeStreamerFactory();
+      _instance = new YoutubeMetadataFactory();
     }
 
     return _instance;
   }
 
-  private static YoutubeStreamerFactory _instance =
-    new YoutubeStreamerFactory();
+  private static YoutubeMetadataFactory _instance =
+    new YoutubeMetadataFactory();
 
   private static Logger _log = LoggerFactory.getLogger(
-    YoutubeStreamerFactory.class);
+    YoutubeMetadataFactory.class);
 
   private PyObject _youtubeStreamerClass;
 

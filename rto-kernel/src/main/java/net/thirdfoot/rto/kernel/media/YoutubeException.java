@@ -7,9 +7,9 @@ import net.thirdfoot.rto.kernel.exception.SystemException;
 /**
  * @author lcsontos
  */
-public class YoutubeStreamerException extends SystemException {
+public class YoutubeException extends SystemException {
 
-  public YoutubeStreamerException(PyException cause) {
+  public YoutubeException(PyException cause) {
     super(cause);
   }
 
