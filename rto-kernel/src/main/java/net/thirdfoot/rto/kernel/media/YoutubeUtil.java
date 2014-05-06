@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import net.thirdfoot.rto.kernel.jython.PyObjectFactory;
 import net.thirdfoot.rto.kernel.jython.PyObjectFactoryUtil;
 
+import org.python.core.PyException;
 import org.python.core.PyObject;
 import org.python.core.PyString;
 
@@ -17,15 +18,20 @@ import jodd.util.StringUtil;
 public class YoutubeUtil {
 
   public static YoutubeMetadata getYoutubeMetadata(String url) {
-    PyObjectFactory pyYoutubeMetadataFactory =
-      PyObjectFactoryUtil.getFactory("youtube", "youtube_metadata");
+    try {
+      PyObjectFactory pyYoutubeMetadataFactory =
+        PyObjectFactoryUtil.getFactory("youtube", "youtube_metadata");
 
-    PyObject pyYoutubeMetadata = pyYoutubeMetadataFactory.create(
-      new PyString(url));
+      PyObject pyYoutubeMetadata = pyYoutubeMetadataFactory.create(
+        new PyString(url));
 
-    YoutubeMetadata youtubeMetadata = new YoutubeMetadata(pyYoutubeMetadata);
+      YoutubeMetadata youtubeMetadata = new YoutubeMetadata(pyYoutubeMetadata);
 
-    return youtubeMetadata;
+      return youtubeMetadata;
+    }
+    catch (PyException pye) {
+      throw new YoutubeException(pye);
+    }
   }
 
   public static String parseUrl(String url) {

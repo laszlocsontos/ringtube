@@ -33,11 +33,15 @@ public class PyObjectFactoryUtil {
     return pyObjectFactory;
   }
 
-  static {
-    _init();
-  }
+  private static Logger _log = LoggerFactory.getLogger(
+    PyObjectFactoryUtil.class);
 
-  private static void _init() {
+  private static ConcurrentMap<FactoryKey, PyObjectFactory> _pyObjectFactories =
+    new ConcurrentHashMap<FactoryKey, PyObjectFactory>();
+
+  private static PySystemState _pySystemState = Py.getSystemState();
+
+  static {
     try {
       _pySystemState.path.append(
         new PyString("/home/lcsontos/devtools/jython-2.7b1/Lib"));
@@ -46,14 +50,6 @@ public class PyObjectFactoryUtil {
       _log.error(e.getMessage(), e);
     }
   }
-
-  private static Logger _log = LoggerFactory.getLogger(
-    PyObjectFactoryUtil.class);
-
-  private static ConcurrentMap<FactoryKey, PyObjectFactory> _pyObjectFactories =
-    new ConcurrentHashMap<FactoryKey, PyObjectFactory>();
-
-  private static PySystemState _pySystemState = Py.getSystemState();
 
   private PyObjectFactoryUtil() {
   }
