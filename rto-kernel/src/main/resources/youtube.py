@@ -1,69 +1,32 @@
-from net.thirdfoot.rto.kernel.media import YoutubeStream
-from net.thirdfoot.rto.kernel.media import YoutubeMetadata
-
 import pafy
 
-class youtube_metadata(YoutubeMetadata):
+class youtube_metadata(object):
   """ Wrapper class for pafy """
 
   def __init__(self, url, stream_type = "audio"):
     video = pafy.new(url)
 
-    self.video_author = video.author
-    self.video_length = video.length
-    self.video_rating = video.rating
-    self.video_title = video.title
+    self.author = video.author
+    self.category = video.category
+    self.length = video.length
+    self.videoid = video.videoid
+    self.published = video.published
+    self.title = video.title
 
-    self.all_streams = []
+    self.streams = []
 
     streams = video.audiostreams if stream_type == "audio" else video.streams
 
-    for s in streams:
-      ys = youtube_stream(
-        s.extension, s.mediatype, s.quality, s.resolution,
-        s.get_filesize(), s.url);
-      self.all_streams.append(ys)
+    for stream in streams:
+      self.streams.append(youtube_stream(stream))
 
-  def getAllStreams(self):
-    return self.all_streams
-
-  def getVideoAuthor(self):
-    return self.video_author
-
-  def getVideoLength(self):
-    return self.video_length
-
-  def getVideoRating(self):
-    return self.video_rating
-
-  def getVideoTitle(self):
-    return self.video_title
-
-class youtube_stream(YoutubeStream):
+class youtube_stream(object):
   """ Wrapper class for holding data of Youtube streams """
 
-  def __init__(self, extension, mediatype, quality, resolution, size, url):
-    self.stream_extension = extension
-    self.stream_mediatype = mediatype
-    self.stream_quality = quality
-    self.stream_resolution = resolution
-    self.stream_size = size
-    self.stream_url = url
-
-  def getExtension(self):
-    return self.stream_extension
-
-  def getMediaType(self):
-    return self.stream_mediatype
-
-  def getResolution(self):
-    return self.stream_resolution
-
-  def getQuality(self):
-    return self.stream_quality
-
-  def getSize(self):
-    return self.stream_size
-
-  def getUrl(self):
-    return self.stream_url
+  def __init__(self, stream):
+    self.stream_extension = stream.extension
+    self.stream_mediatype = stream.mediatype
+    self.stream_quality = stream.quality
+    self.stream_resolution = stream.resolution
+    self.stream_size = stream.size
+    self.stream_url = stream.url

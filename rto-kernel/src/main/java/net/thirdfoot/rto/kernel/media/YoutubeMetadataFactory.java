@@ -24,15 +24,14 @@ public class YoutubeMetadataFactory {
         stopWatch = new JStopWatch();
       }
 
-      PyObject youtubeStreamer = _getInstance()._youtubeStreamerClass.__call__(
+      PyObject pyYoutubeMetadata = _getInstance()._youtubeStreamerClass.__call__(
         new PyString(url));
 
       if (stopWatch != null) {
         _log.debug("Object created under " + stopWatch.elapsed() + " ms");
       }
 
-      return (YoutubeMetadata)youtubeStreamer.__tojava__(
-        YoutubeMetadata.class);
+      return new YoutubeMetadata(pyYoutubeMetadata);
     } catch (PyException pye) {
       throw new YoutubeException(pye);
     }
