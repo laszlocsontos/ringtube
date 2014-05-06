@@ -1,7 +1,7 @@
 package net.thirdfoot.rto.service;
 
 import jodd.util.StringUtil;
-import net.thirdfoot.rto.kernel.jython.YoutubeMetadataFactory;
+import net.thirdfoot.rto.kernel.jython.PyObjectFactory;
 import net.thirdfoot.rto.kernel.media.YoutubeMetadata;
 import net.thirdfoot.rto.kernel.media.YoutubeUtil;
 import net.thirdfoot.rto.model.exception.InvalidVideoUrlException;
@@ -22,7 +22,7 @@ public class VideoServiceImpl implements VideoService {
       throw new InvalidVideoUrlException();
     }
 
-    YoutubeMetadata youtubeStreamer = YoutubeMetadataFactory.create(url);
+    YoutubeMetadata youtubeStreamer = PyObjectFactory.create(url);
 
     return null;
   }

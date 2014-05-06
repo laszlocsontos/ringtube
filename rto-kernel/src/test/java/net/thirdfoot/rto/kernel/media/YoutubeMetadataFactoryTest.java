@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import jodd.util.ObjectUtil;
-import net.thirdfoot.rto.kernel.jython.YoutubeMetadataFactory;
+import net.thirdfoot.rto.kernel.jython.PyObjectFactory;
 import net.thirdfoot.rto.kernel.media.YoutubeStream;
 import net.thirdfoot.rto.kernel.media.YoutubeMetadata;
 
@@ -20,12 +20,12 @@ public class YoutubeMetadataFactoryTest {
 
   @Test(expected = YoutubeException.class)
   public void testCreateWithWrongUrl() {
-    YoutubeMetadataFactory.create(_INVALID_URL);
+    YoutubeUtil.getYoutubeMetadata(_INVALID_URL);
   }
 
   @Test
   public void testCreate() {
-    YoutubeMetadata streamer = YoutubeMetadataFactory.create(_VALID_URL);
+    YoutubeMetadata streamer = YoutubeUtil.getYoutubeMetadata(_VALID_URL);
 
     Assert.assertNotNull(streamer);
 
@@ -58,26 +58,6 @@ public class YoutubeMetadataFactoryTest {
     Assert.assertNotNull(stream.getUrl());
 
     _log.info("URL: " + stream.getUrl());
-  }
-
-  @Test
-  public void testSerialize() throws Exception {
-    YoutubeMetadata expectedMetadata = YoutubeMetadataFactory.create(
-      _VALID_URL);
-
-    byte[] data = ObjectUtil.objectToByteArray(expectedMetadata);
-    System.out.println(data.length);
-    YoutubeMetadata actualMetadata =
-      (YoutubeMetadata)ObjectUtil.byteArrayToObject(data);
-
-    /*Assert.assertEquals(
-      expectedMetadata.getStreams(), actualMetadata.getStreams());*/
-    Assert.assertEquals(
-      expectedMetadata.getAuthor(), actualMetadata.getAuthor());
-    Assert.assertEquals(
-      expectedMetadata.getLength(), actualMetadata.getLength());
-    Assert.assertEquals(
-      expectedMetadata.getTitle(), actualMetadata.getTitle());
   }
 
   private static Logger _log = LoggerFactory.getLogger(
