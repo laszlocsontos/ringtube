@@ -4,10 +4,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import jodd.util.ObjectUtil;
-
+import net.thirdfoot.rto.kernel.jython.YoutubeMetadataFactory;
 import net.thirdfoot.rto.kernel.media.YoutubeStream;
 import net.thirdfoot.rto.kernel.media.YoutubeMetadata;
-import net.thirdfoot.rto.kernel.media.YoutubeMetadataFactory;
 
 import org.junit.Assert;
 import org.junit.Test;

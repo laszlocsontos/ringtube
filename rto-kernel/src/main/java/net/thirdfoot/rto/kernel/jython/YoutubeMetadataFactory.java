@@ -1,6 +1,9 @@
-package net.thirdfoot.rto.kernel.media;
+package net.thirdfoot.rto.kernel.jython;
 
 import jodd.datetime.JStopWatch;
+
+import net.thirdfoot.rto.kernel.media.YoutubeException;
+import net.thirdfoot.rto.kernel.media.YoutubeMetadata;
 
 import org.python.core.Py;
 import org.python.core.PyException;

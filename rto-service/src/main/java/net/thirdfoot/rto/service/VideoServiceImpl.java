@@ -1,8 +1,8 @@
 package net.thirdfoot.rto.service;
 
 import jodd.util.StringUtil;
+import net.thirdfoot.rto.kernel.jython.YoutubeMetadataFactory;
 import net.thirdfoot.rto.kernel.media.YoutubeMetadata;
-import net.thirdfoot.rto.kernel.media.YoutubeMetadataFactory;
 import net.thirdfoot.rto.kernel.media.YoutubeUtil;
 import net.thirdfoot.rto.model.exception.InvalidVideoUrlException;
 import net.thirdfoot.rto.model.exception.NoSuchVideoException;
