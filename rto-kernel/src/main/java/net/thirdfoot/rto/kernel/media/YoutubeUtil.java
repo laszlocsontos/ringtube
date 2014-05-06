@@ -1,5 +1,7 @@
 package net.thirdfoot.rto.kernel.media;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,20 +20,23 @@ import jodd.util.StringUtil;
 public class YoutubeUtil {
 
   public static YoutubeMetadata getYoutubeMetadata(String url) {
-    try {
-      PyObjectFactory pyYoutubeMetadataFactory =
-        PyObjectFactoryUtil.getFactory("youtube", "youtube_metadata");
+    String videoId = parseUrl(url);
 
-      PyObject pyYoutubeMetadata = pyYoutubeMetadataFactory.create(
-        new PyString(url));
+    if (StringUtil.isBlank(url)) {
+      return null;
+    }
 
-      YoutubeMetadata youtubeMetadata = new YoutubeMetadata(pyYoutubeMetadata);
+    YoutubeMetadata youtubeMetadata = youtubeMetadataCache.get(videoId);
 
+    if (youtubeMetadata != null) {
       return youtubeMetadata;
     }
-    catch (PyException pye) {
-      throw new YoutubeException(pye);
-    }
+
+    youtubeMetadata = _getYoutubeMetadata(url);
+
+    youtubeMetadataCache.putIfAbsent(videoId, youtubeMetadata);
+
+    return youtubeMetadata;
   }
 
   public static String parseUrl(String url) {
@@ -48,8 +53,30 @@ public class YoutubeUtil {
     return matcher.group(1);
   }
 
+  private static YoutubeMetadata _getYoutubeMetadata(String url) {
+    try {
+      PyObjectFactory pyYoutubeMetadataFactory =
+        PyObjectFactoryUtil.getFactory("youtube", "youtube_metadata");
+
+      PyObject pyYoutubeMetadata = pyYoutubeMetadataFactory.create(
+        new PyString(url));
+
+      YoutubeMetadata youtubeMetadata = new YoutubeMetadata(pyYoutubeMetadata);
+
+      return youtubeMetadata;
+    }
+    catch (PyException pye) {
+      throw new YoutubeException(pye);
+    }
+  }
+
   private static final Pattern _YOUTUBE_URL_PATTERN =
     Pattern.compile("http.+youtube\\.com\\/watch\\?v=(\\S+)");
+
+  // TODO Apply a real, distributed LRU cache later !!!
+
+  private static final ConcurrentMap<String, YoutubeMetadata>
+    youtubeMetadataCache = new ConcurrentHashMap<String, YoutubeMetadata>();
 
   private YoutubeUtil() {
   }
