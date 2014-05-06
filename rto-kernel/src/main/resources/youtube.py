@@ -24,9 +24,9 @@ class youtube_stream(object):
   """ Wrapper class for holding data of Youtube streams """
 
   def __init__(self, stream):
-    self.stream_extension = stream.extension
-    self.stream_mediatype = stream.mediatype
-    self.stream_quality = stream.quality
-    self.stream_resolution = stream.resolution
-    self.stream_size = stream.size
-    self.stream_url = stream.url
+    self.extension = stream.extension
+    self.mediatype = stream.mediatype
+    self.quality = stream.quality
+    self.resolution = stream.resolution
+    self.size = stream.get_filesize()
+    self.url = stream.url
