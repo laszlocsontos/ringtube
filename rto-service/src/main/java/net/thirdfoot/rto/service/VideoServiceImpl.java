@@ -1,7 +1,7 @@
 package net.thirdfoot.rto.service;
 
 import jodd.util.StringUtil;
-import net.thirdfoot.rto.kernel.jython.PyObjectFactory;
+
 import net.thirdfoot.rto.kernel.media.YoutubeMetadata;
 import net.thirdfoot.rto.kernel.media.YoutubeUtil;
 import net.thirdfoot.rto.model.exception.InvalidVideoUrlException;
@@ -16,13 +16,13 @@ public class VideoServiceImpl implements VideoService {
   public String checkVideo(String url)
     throws InvalidVideoUrlException, NoSuchVideoException {
 
-    String nativeId = YoutubeUtil.parseUrl(url);
+    String videoId = YoutubeUtil.parseUrl(url);
 
-    if (StringUtil.isBlank(nativeId)) {
+    if (StringUtil.isBlank(videoId)) {
       throw new InvalidVideoUrlException();
     }
 
-    YoutubeMetadata youtubeStreamer = PyObjectFactory.create(url);
+    YoutubeMetadata youtubeMetadata = YoutubeUtil.getYoutubeMetadata(url);
 
     return null;
   }
