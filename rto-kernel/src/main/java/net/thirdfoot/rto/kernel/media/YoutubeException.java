@@ -1,7 +1,5 @@
 package net.thirdfoot.rto.kernel.media;
 
-import org.python.core.PyException;
-
 import net.thirdfoot.rto.kernel.exception.SystemException;
 
 /**
@@ -9,7 +7,7 @@ import net.thirdfoot.rto.kernel.exception.SystemException;
  */
 public class YoutubeException extends SystemException {
 
-  public YoutubeException(PyException cause) {
+  public YoutubeException(Exception cause) {
     super(cause);
   }
 

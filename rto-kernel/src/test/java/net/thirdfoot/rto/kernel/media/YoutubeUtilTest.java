@@ -1,5 +1,6 @@
 package net.thirdfoot.rto.kernel.media;
 
+import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
@@ -59,6 +60,13 @@ public class YoutubeUtilTest {
   }
 
   @Test
+  public void testGetYoutubeVideo() {
+    File youtubeVideo = YoutubeUtil.getYoutubeVideo(_DOWNLOAD_URL);
+
+    Assert.assertNotNull(youtubeVideo);
+  }
+
+  @Test
   public void testParseUrl() {
     Assert.assertNull(YoutubeUtil.parseUrl(null));
     Assert.assertNull(YoutubeUtil.parseUrl(StringPool.EMPTY));
@@ -80,6 +88,8 @@ public class YoutubeUtilTest {
   private static Logger _log = LoggerFactory.getLogger(
     YoutubeUtilTest.class);
 
+  private final String _DOWNLOAD_URL =
+    "http://www.youtube.com/watch?v=nGdFHJXciAQ";
   private final String _INVALID_URL = "https://www.youtube.com/watch?v=wrongId";
   private final String _VALID_URL =
     "https://www.youtube.com/watch?v=W2yk1lsi9RM";
