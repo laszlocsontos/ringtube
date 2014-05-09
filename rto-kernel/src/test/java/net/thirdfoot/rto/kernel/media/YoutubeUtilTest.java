@@ -8,7 +8,6 @@ import jodd.util.StringPool;
 
 import org.junit.Assert;
 import org.junit.Test;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +15,12 @@ import org.slf4j.LoggerFactory;
  * @author lcsontos
  */
 public class YoutubeUtilTest {
+
+  @Test
+  public void testCutYoutubeVideo() throws Exception {
+    String outFileUrl = YoutubeUtil.cutYoutubeVideo("/home/lcsontos/Music/jodd-1620230518342849577.m4a", 1, 10);
+    System.out.println(outFileUrl);
+  }
 
   @Test(expected = YoutubeException.class)
   public void testgetYoutubeMetadataWithWrongUrl() {

@@ -1,13 +1,17 @@
 package net.thirdfoot.rto.kernel.media;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
@@ -24,10 +28,24 @@ import org.python.core.PyException;
 import org.python.core.PyObject;
 import org.python.core.PyString;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author lcsontos
  */
 public class YoutubeUtil {
+
+  public static String cutYoutubeVideo(String fileName, int from, int to) throws Exception {
+    File outFile = new File("/tmp/test.mp3");
+
+    // TODO The last two args should define the region to convert
+    Converter converter = new AudioConverter(fileName, outFile.getPath(), null, null);
+
+    converter.convert();
+
+    return outFile.getPath();
+  }
 
   public static YoutubeMetadata getYoutubeMetadata(String url) {
     if (StringUtil.isBlank(url)) {
@@ -137,6 +155,8 @@ public class YoutubeUtil {
     Pattern.compile("http.+youtube\\.com\\/watch\\?v=(\\S+)");
 
   // TODO Apply a real, distributed LRU cache later !!!
+
+  private static Logger _log = LoggerFactory.getLogger(YoutubeUtil.class);
 
   private static final ConcurrentMap<String, YoutubeMetadata>
     youtubeMetadataCache = new ConcurrentHashMap<String, YoutubeMetadata>();
