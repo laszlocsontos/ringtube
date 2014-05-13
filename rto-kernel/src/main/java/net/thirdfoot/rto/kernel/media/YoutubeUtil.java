@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
 public class YoutubeUtil {
 
   public static String cutYoutubeVideo(String fileName, int from, int to) throws Exception {
-    File outFile = new File("/tmp/test.mp3");
+    File outFile = new File("/tmp/test.aac");
 
     // TODO The last two args should define the region to convert
     Converter converter = new AudioConverter(fileName, outFile.getPath(), null, null);

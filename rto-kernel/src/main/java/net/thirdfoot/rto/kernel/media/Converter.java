@@ -606,6 +606,8 @@ public abstract class Converter {
 
     int value = 0;
 
+    // TODO Guess in/out format automatically
+
     if (writeContainer) {
       value = iContainer.open(url, IContainer.Type.WRITE, null);
     }
@@ -653,8 +655,10 @@ public abstract class Converter {
     ICodec iCodec = getAudioEncodingICodec(outputIContainer);
 
     if (iCodec == null) {
+      // TODO specify output encoding properly
+
       iCodec = ICodec.guessEncodingCodec(
-        null, null, outputURL, null, inputICodecType);
+        null, "mp3", outputURL, null, inputICodecType);
     }
 
     if (iCodec == null) {
