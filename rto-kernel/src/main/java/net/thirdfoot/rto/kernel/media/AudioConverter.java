@@ -105,11 +105,27 @@ public class AudioConverter extends Converter {
 
     int previousPacketSize = -1;
 
+    IStream is = _inputIContainer.getStream(0);
+    System.out.println(is.getDuration());
+    int den = is.getTimeBase().getDenominator();
+
+    // TODO add these as new parameters
+
+    final int startTimeStamp = 450;
+    final int endTimeStamp = 480;
+
+    if (_inputIContainer.seekKeyFrame(0, startTimeStamp * den, IContainer.SEEK_FLAG_ANY) < 0) {
+      throw new RuntimeException("Unable to seek");
+    }
+
     _inputIContainer.readNextPacket(inputIPacket);
+
+    // TODO Wouldn't IRational be a better alternative?
+    double duration = 0;
 
     while (_inputIContainer.readNextPacket(inputIPacket) == 0) {
       if (_log.isDebugEnabled()) {
-        _log.debug("Current packet size " + inputIPacket.getSize());
+        _log.debug("Current packet size " + inputIPacket.getDuration());
       }
 
       int streamIndex = inputIPacket.getStreamIndex();
@@ -123,6 +139,12 @@ public class AudioConverter extends Converter {
 
       if (inputIStreamCoder.getCodecType() ==
           ICodec.Type.CODEC_TYPE_AUDIO) {
+
+        duration += ((double)inputIPacket.getDuration()) / den;
+
+        if (duration > (endTimeStamp - startTimeStamp)) {
+          break;
+        }
 
         IStream iStream = _inputIContainer.getStream(streamIndex);
 
@@ -139,6 +161,8 @@ public class AudioConverter extends Converter {
 
       previousPacketSize = inputIPacket.getSize();
     }
+
+    System.out.println(duration);
 
     flush(outputIStreamCoders, _outputIContainer);
 
