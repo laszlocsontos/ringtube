@@ -1,7 +1,6 @@
 package net.thirdfoot.rto.kernel.media;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,11 +35,21 @@ import org.slf4j.LoggerFactory;
  */
 public class YoutubeUtil {
 
-  public static String cutYoutubeVideo(String fileName, int from, int to) throws Exception {
+  public static String cutYoutubeVideo(
+      String fileName, int startTimestamp, int endTimestamp)
+    throws Exception {
+
+    // TODO proper file creation
+
     File outFile = new File("/tmp/test.mp3");
 
-    // TODO The last two args should define the region to convert
-    Converter converter = new AudioConverter(fileName, outFile.getPath(), null, null);
+    ConversionContext context = new ConversionContext();
+
+    context.set(ConversionAttribute.START_TIMESTAMP, startTimestamp);
+    context.set(ConversionAttribute.END_TIMESTAMP, endTimestamp);
+
+    Converter converter = new AudioConverter(
+      fileName, outFile.getPath(), context);
 
     converter.convert();
 

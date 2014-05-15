@@ -18,7 +18,9 @@ public class YoutubeUtilTest {
 
   @Test
   public void testCutYoutubeVideo() throws Exception {
-    String outFileUrl = YoutubeUtil.cutYoutubeVideo("/home/lcsontos/Music/jodd-1620230518342849577.m4a", 1, 10);
+    String outFileUrl = YoutubeUtil.cutYoutubeVideo(
+      "/home/lcsontos/Music/jodd-1620230518342849577.m4a", 450, 480);
+
     System.out.println(outFileUrl);
   }
 

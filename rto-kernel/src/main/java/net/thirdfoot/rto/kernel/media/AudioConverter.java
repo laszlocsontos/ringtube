@@ -18,19 +18,22 @@ import org.slf4j.LoggerFactory;
  * @author Sergio González
  * @author Brian Wing Shun Chan
  * @author Alexander Chow
+ *
+ * Adopted for RTO
+ * @author lcsontos
  */
 public class AudioConverter extends Converter {
 
   public AudioConverter(
-    String inputURL, String outputURL, String audioContainer,
-    Properties audioProperties) {
+    String inputURL, String outputURL, ConversionContext conversionContext) {
+
+    super(conversionContext);
 
     _inputURL = inputURL;
     _outputURL = outputURL;
-    //_audioContainer = audioContainer;
 
-    initAudioBitRate(audioProperties);
-    initAudioSampleRate(audioProperties);
+    initAudioBitRate();
+    initAudioSampleRate();
   }
 
   @Override
@@ -105,14 +108,14 @@ public class AudioConverter extends Converter {
 
     int previousPacketSize = -1;
 
+    // TODO implement seeking properly
+
     IStream is = _inputIContainer.getStream(0);
     System.out.println(is.getDuration());
     int den = is.getTimeBase().getDenominator();
 
-    // TODO add these as new parameters
-
-    final int startTimeStamp = 450;
-    final int endTimeStamp = 480;
+    int startTimeStamp = getAttribute(ConversionAttribute.START_TIMESTAMP);
+    int endTimeStamp = getAttribute(ConversionAttribute.END_TIMESTAMP);
 
     if (_inputIContainer.seekKeyFrame(0, startTimeStamp * den, IContainer.SEEK_FLAG_ANY) < 0) {
       throw new RuntimeException("Unable to seek");
@@ -124,8 +127,8 @@ public class AudioConverter extends Converter {
     double duration = 0;
 
     while (_inputIContainer.readNextPacket(inputIPacket) == 0) {
-      if (_log.isDebugEnabled()) {
-        _log.debug("Current packet size " + inputIPacket.getDuration());
+      if (_log.isTraceEnabled()) {
+        _log.trace("Current packet size " + inputIPacket.getDuration());
       }
 
       int streamIndex = inputIPacket.getStreamIndex();
@@ -194,21 +197,20 @@ public class AudioConverter extends Converter {
     return _inputIContainer;
   }
 
-  protected void initAudioBitRate(Properties audioProperties) {
+  protected void initAudioBitRate() {
     // TODO Fix
     _audioBitRate = AUDIO_BIT_RATE_DEFAULT;
   }
 
-  protected void initAudioSampleRate(Properties audioProperties) {
+  protected void initAudioSampleRate() {
     // TODO fix
     _audioSampleRate = AUDIO_SAMPLE_RATE_DEFAULT;
   }
 
   private static Logger _log = LoggerFactory.getLogger(AudioConverter.class);
 
-  private int _audioBitRate;
   // TODO Needed?
-  //private String _audioContainer;
+  private int _audioBitRate;
   private int _audioSampleRate;
   private IContainer _inputIContainer;
   private String _inputURL;

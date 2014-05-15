@@ -40,6 +40,10 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class Converter {
 
+  public Converter(ConversionContext conversionContext) {
+    _conversionContext = conversionContext;
+  }
+
   public abstract void convert() throws Exception;
 
   protected void cleanUp(IPacket inputIPacket, IPacket outputIPacket) {
@@ -401,6 +405,20 @@ public abstract class Converter {
         flush(outputIStreamCoder, outputIContainer, iPacket);
       }
     }
+  }
+
+  protected <T> T getAttribute(ConversionAttribute attribute) {
+    return getAttribute(attribute, null);
+  }
+
+  protected <T> T getAttribute(ConversionAttribute attribute, T defaultValue) {
+    T value = _conversionContext.get(attribute);
+
+    if (value == null) {
+      value = defaultValue;
+    }
+
+    return value;
   }
 
   protected int getAudioBitRate(ICodec outputICodec, int originalBitRate) {
@@ -885,6 +903,7 @@ public abstract class Converter {
 
   private static Logger _log = LoggerFactory.getLogger(Converter.class);
 
+  private ConversionContext _conversionContext;
   private ConverterFactory.Type _converterFactoryType;
   private IConverter _videoIConverter;
 
