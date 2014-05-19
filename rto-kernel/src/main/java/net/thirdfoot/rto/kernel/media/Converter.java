@@ -20,14 +20,14 @@ import com.xuggle.xuggler.video.IConverter;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
-
 import java.io.File;
 import java.io.FileOutputStream;
-
 import java.util.List;
 import java.util.Properties;
 
 import javax.imageio.ImageIO;
+
+import net.thirdfoot.rto.kernel.config.PropsUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -494,8 +494,6 @@ public abstract class Converter {
 
   protected abstract IContainer getInputIContainer();
 
-  // TODO Add support for dynamic propertiess
-  /*
   protected int getProperty(
     int originalValue, int defaultValue, int maxValue) {
 
@@ -509,27 +507,11 @@ public abstract class Converter {
     return originalValue;
   }
 
-  protected int getProperty(
-    Properties properties, String propertyName, String prettyPropertyName,
-    String container, int defaultValue, int maxValue) {
+  protected int getProperty(String key, int defaultValue, int maxValue) {
+    int property = PropsUtil.getInteger(key, defaultValue);
 
-    int property = GetterUtil.getInteger(
-      properties.getProperty(propertyName + "[" + container + "]"),
-      defaultValue);
-
-    if (property > maxValue) {
-      property = maxValue;
-    }
-
-    if (_log.isInfoEnabled()) {
-      _log.info(
-        "Default " + prettyPropertyName + " for " + container +
-          " configured to " + property);
-    }
-
-    return property;
+    return getProperty(property, defaultValue, maxValue);
   }
-    */
 
   protected long getSeekTimeStamp(int percentage) throws Exception {
     IContainer inputIContainer = getInputIContainer();

@@ -8,8 +8,6 @@ import com.xuggle.xuggler.IPacket;
 import com.xuggle.xuggler.IStream;
 import com.xuggle.xuggler.IStreamCoder;
 
-import java.util.Properties;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -182,9 +180,7 @@ public class AudioConverter extends Converter {
 
   @Override
   protected int getAudioBitRate(ICodec outputICodec, int originalBitRate) {
-    // TODO Fix
-    return AUDIO_BIT_RATE_DEFAULT;
-    // return getProperty(originalBitRate, _audioBitRate, AUDIO_BIT_RATE_MAX);
+    return super.getAudioBitRate(outputICodec, _audioBitRate);
   }
 
   @Override
@@ -198,18 +194,17 @@ public class AudioConverter extends Converter {
   }
 
   protected void initAudioBitRate() {
-    // TODO Fix
-    _audioBitRate = AUDIO_BIT_RATE_DEFAULT;
+    _audioBitRate = getProperty(
+      "converter.audio.bit.rate", AUDIO_BIT_RATE_DEFAULT, AUDIO_BIT_RATE_MAX);
   }
 
   protected void initAudioSampleRate() {
-    // TODO fix
-    _audioSampleRate = AUDIO_SAMPLE_RATE_DEFAULT;
+    _audioSampleRate = getProperty(
+      "audio.sample.rate", AUDIO_SAMPLE_RATE_DEFAULT, AUDIO_SAMPLE_RATE_MAX);
   }
 
   private static Logger _log = LoggerFactory.getLogger(AudioConverter.class);
 
-  // TODO Needed?
   private int _audioBitRate;
   private int _audioSampleRate;
   private IContainer _inputIContainer;

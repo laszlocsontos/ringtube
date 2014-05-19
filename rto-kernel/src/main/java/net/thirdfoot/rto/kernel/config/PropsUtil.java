@@ -3,6 +3,7 @@ package net.thirdfoot.rto.kernel.config;
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.management.JMException;
 import javax.management.MBeanServer;
@@ -23,7 +24,11 @@ import org.slf4j.LoggerFactory;
 public class PropsUtil {
 
   public static void init() {
-    // TODO Add utility to get the actual context name
+    // TODO Think about this
+    if (!_initialized.compareAndSet(false, true)) {
+      return;
+    }
+
     _contextName = "rto";
 
     File[] propertyFiles = new File[2];
@@ -51,19 +56,61 @@ public class PropsUtil {
   }
 
   public static Boolean getBoolean(String key) {
-    return Convert.toBoolean(getString(key));
+    return getBoolean(key, false);
+  }
+
+  public static Boolean getBoolean(String key, boolean defaultValue) {
+    Boolean value = Convert.toBoolean(getString(key));
+
+    if (value != null) {
+      return value;
+    }
+
+    return defaultValue;
   }
 
   public static boolean[] getBooleanArray(String key) {
-    return Convert.toBooleanArray(getString(key));
+    return getBooleanArray(key, null);
+  }
+
+  public static boolean[] getBooleanArray(
+    String key, boolean[] defaultValue) {
+
+    boolean[] value = Convert.toBooleanArray(getString(key));
+
+    if (value != null) {
+      return value;
+    }
+
+    return defaultValue;
   }
 
   public static Integer getInteger(String key) {
-    return Convert.toInteger(getString(key));
+    return getInteger(key, 0);
+  }
+
+  public static Integer getInteger(String key, int defaultValue) {
+    Integer value = Convert.toInteger(getString(key));
+
+    if (value != null) {
+      return value;
+    }
+
+    return defaultValue;
   }
 
   public static int[] getIntegerArray(String key) {
-    return Convert.toIntegerArray(getString(key));
+    return getIntegerArray(key, null);
+  }
+
+  public static int[] getIntegerArray(String key, int[] defaultValue) {
+    int[] value = Convert.toIntegerArray(getString(key));
+
+    if (value != null) {
+      return value;
+    }
+
+    return defaultValue;
   }
 
   public static Map<String, String> getSection(String section) {
@@ -71,11 +118,21 @@ public class PropsUtil {
   }
 
   public static String getString(String key) {
+    return getString(key, null);
+  }
+
+  public static String getString(String key, String defaultValue) {
     if (StringUtil.isBlank(key)) {
       return null;
     }
 
-    return _propsMBean.getProperty(key);
+    String value = _propsMBean.getProperty(key);
+
+    if (StringUtil.isNotBlank(value)) {
+      return value;
+    }
+
+    return defaultValue;
   }
 
   public static String[] getStringArray(String key) {
@@ -121,6 +178,7 @@ public class PropsUtil {
   private static Logger _log = LoggerFactory.getLogger(PropsUtil.class);
 
   private static String _contextName;
+  private static AtomicBoolean _initialized = new AtomicBoolean(false);
   private static PropsMBean _propsMBean;
 
 }
