@@ -127,6 +127,9 @@ public class PropsMBeanImpl implements PropsMBean {
   protected Props load() {
     Props props = new Props();
 
+    // Load system properties
+    props.loadSystemProperties("env");
+
     try {
       for (File propertyFile : _propertyFiles) {
         if (propertyFile == null) {
