@@ -17,11 +17,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import jodd.io.FileUtil;
+import jodd.io.FileUtilParams;
 import jodd.io.StreamUtil;
+import jodd.util.StringBand;
+import jodd.util.StringPool;
 import jodd.util.StringUtil;
 
 import net.thirdfoot.rto.kernel.jython.PyObjectFactory;
 import net.thirdfoot.rto.kernel.jython.PyObjectFactoryUtil;
+import net.thirdfoot.rto.kernel.util.FileSystemUtil;
 
 import org.python.core.PyException;
 import org.python.core.PyObject;
@@ -93,19 +97,24 @@ public class YoutubeUtil {
 
     try {
       youtubeUrl = new URL(youtubeStream.getUrl());
-    } catch (MalformedURLException e) {
-      // TODO log here
     }
+    catch (MalformedURLException mue) {
+      _log.error(mue.getMessage(), mue);
+    }
+
+    // Download video
 
     File tempFile = null;
     FileOutputStream fileOutputStream = null;
+
+    String videoId = youtubeMetadata.getVideoId();
 
     try {
       InputStream inputStream = youtubeUrl.openStream();
       ReadableByteChannel in = Channels.newChannel(inputStream);
 
-      // TODO refine temp file creation here!
-      tempFile = FileUtil.createTempFile();
+      tempFile = FileSystemUtil.createTempFile(
+        YoutubeUtil.class.getName(), videoId, youtubeStream.getExtension());
 
       fileOutputStream = new FileOutputStream(tempFile);
 
@@ -119,7 +128,43 @@ public class YoutubeUtil {
       StreamUtil.close(fileOutputStream);
     }
 
-    return tempFile;
+    // Move to video repository
+
+    final int grp = 2;
+    int len = videoId.length();
+
+    StringBand sb = new StringBand(8 + len + len / grp);
+
+    for (int index = 0; index < len; index++) {
+      if (index % grp == 0) {
+        sb.append(File.separatorChar);
+      }
+
+      sb.append(videoId.charAt(index));
+    }
+
+    sb.append(File.separator);
+    sb.append(videoId);
+    sb.append(StringPool.UNDERSCORE);
+    sb.append(youtubeStream.getMediaType());
+    sb.append(StringPool.UNDERSCORE);
+    sb.append(youtubeStream.getQuality());
+    sb.append(StringPool.DOT);
+    sb.append(youtubeStream.getExtension());
+
+    File videoDir = FileSystemUtil.getDataDir(YoutubeUtil.class.getName());
+    File videoFile = new File(videoDir, sb.toString());
+
+    FileUtilParams params = new FileUtilParams();
+
+    try {
+      FileUtil.moveFile(tempFile, videoFile, params.setCreateDirs(true));
+    }
+    catch (IOException ioe) {
+      throw new YoutubeException(ioe);
+    }
+
+    return videoFile;
   }
 
   public static String parseUrl(String url) {

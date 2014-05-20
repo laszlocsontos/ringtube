@@ -13,11 +13,12 @@ import net.thirdfoot.rto.kernel.config.PropsUtil;
 public class FileSystemUtil {
 
   public static File createTempFile(
-    String owner, String prefix, String suffix) throws IOException {
+      String owner, String prefix, String suffix)
+    throws IOException {
 
-    File dataDir = getDataDir(owner);
+    File tempDir = getTempDir(owner);
 
-    return FileUtil.createTempFile(prefix, suffix, dataDir);
+    return FileUtil.createTempFile(prefix, suffix, tempDir);
   }
 
   public static String getBaseDir() {
@@ -25,15 +26,23 @@ public class FileSystemUtil {
   }
 
   public static File getDataDir(String owner) {
-    String dataParentDir = PropsUtil.getString("fs.data.dir");
+    return _getDir("fs.data.dir", owner);
+  }
 
-    File dataDir = new File(dataParentDir + File.separator + owner);
+  public static File getTempDir(String owner) {
+    return _getDir("fs.temp.dir", owner);
+  }
 
-    if (!dataDir.exists()) {
-      dataDir.mkdirs();
+  private static File _getDir(String dirName, String owner) {
+    String parentDir = PropsUtil.getString(dirName);
+
+    File dir = new File(parentDir, owner);
+
+    if (!dir.exists()) {
+      dir.mkdirs();
     }
 
-    return dataDir;
+    return dir;
   }
 
   private FileSystemUtil() {

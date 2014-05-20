@@ -4,17 +4,43 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 
+import jodd.io.FileUtil;
+import jodd.util.ClassLoaderUtil;
 import jodd.util.StringPool;
+import net.thirdfoot.rto.kernel.config.PropsUtil;
+import net.thirdfoot.rto.kernel.util.FileSystemUtil;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Matchers;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author lcsontos
  */
+@PrepareForTest(FileSystemUtil.class)
+@RunWith(PowerMockRunner.class)
 public class YoutubeUtilTest {
+
+  @BeforeClass
+  public static void setUpClass() throws Exception {
+    PowerMockito.spy(FileSystemUtil.class);
+
+    File mockDir = FileUtil.createTempDirectory();
+
+    _log.info("mockDir: " + mockDir);
+
+    PowerMockito.doReturn(
+      mockDir).when(
+        FileSystemUtil.class, "_getDir", Matchers.anyString(),
+        Matchers.anyString());
+  }
 
   @Test
   public void testCutYoutubeVideo() throws Exception {
@@ -25,12 +51,12 @@ public class YoutubeUtilTest {
   }
 
   @Test(expected = YoutubeException.class)
-  public void testgetYoutubeMetadataWithWrongUrl() {
+  public void testGetYoutubeMetadataWithWrongUrl() {
     YoutubeUtil.getYoutubeMetadata(_INVALID_URL);
   }
 
   @Test
-  public void testgetYoutubeMetadata() {
+  public void testGetYoutubeMetadata() {
     YoutubeMetadata streamer = YoutubeUtil.getYoutubeMetadata(_VALID_URL);
 
     Assert.assertNotNull(streamer);
