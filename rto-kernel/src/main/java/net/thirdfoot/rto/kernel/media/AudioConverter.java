@@ -51,6 +51,9 @@ public class AudioConverter extends Converter {
   }
 
   protected void doConvert() throws Exception {
+
+    // Prepare
+
     _inputIContainer = IContainer.make();
     _outputIContainer = IContainer.make();
 
@@ -74,15 +77,16 @@ public class AudioConverter extends Converter {
     IStream[] outputIStreams = new IStream[inputStreamsCount];
 
     IStreamCoder[] inputIStreamCoders = new IStreamCoder[inputStreamsCount];
-    IStreamCoder[] outputIStreamCoders =
-      new IStreamCoder[inputStreamsCount];
+    IStreamCoder[] outputIStreamCoders = new IStreamCoder[inputStreamsCount];
 
-    for (int i = 0; i < inputStreamsCount; i++) {
-      IStream inputIStream = _inputIContainer.getStream(i);
+    int firstAudioIndex = -1;
+
+    for (int index = 0; index < inputStreamsCount; index++) {
+      IStream inputIStream = _inputIContainer.getStream(index);
 
       IStreamCoder inputIStreamCoder = inputIStream.getStreamCoder();
 
-      inputIStreamCoders[i] = inputIStreamCoder;
+      inputIStreamCoders[index] = inputIStreamCoder;
 
       ICodec.Type inputICodecType = inputIStreamCoder.getCodecType();
 
@@ -90,11 +94,15 @@ public class AudioConverter extends Converter {
         prepareAudio(
           iAudioResamplers, inputIAudioSamples, outputIAudioSamples,
           inputIStreamCoder, outputIStreamCoders, _outputIContainer,
-          outputIStreams, inputICodecType, _outputURL, i);
+          outputIStreams, inputICodecType, _outputURL, index);
+
+        if (firstAudioIndex < 0) {
+          firstAudioIndex = index;
+        }
       }
 
-      openStreamCoder(inputIStreamCoders[i]);
-      openStreamCoder(outputIStreamCoders[i]);
+      openStreamCoder(inputIStreamCoders[index]);
+      openStreamCoder(outputIStreamCoders[index]);
     }
 
     if (_outputIContainer.writeHeader() < 0) {
@@ -104,25 +112,36 @@ public class AudioConverter extends Converter {
     IPacket inputIPacket = IPacket.make();
     IPacket outputIPacket = IPacket.make();
 
-    int previousPacketSize = -1;
+    // Seek
 
-    // TODO implement seeking properly
+    IStream firstAudioStream = _inputIContainer.getStream(firstAudioIndex);
 
-    IStream is = _inputIContainer.getStream(0);
-    System.out.println(is.getDuration());
-    int den = is.getTimeBase().getDenominator();
+    int denominator = firstAudioStream.getTimeBase().getDenominator();
 
     int startTimeStamp = getAttribute(ConversionAttribute.START_TIMESTAMP);
-    int endTimeStamp = getAttribute(ConversionAttribute.END_TIMESTAMP);
+    boolean seekFailed = false;
 
-    if (_inputIContainer.seekKeyFrame(0, startTimeStamp * den, IContainer.SEEK_FLAG_ANY) < 0) {
-      throw new RuntimeException("Unable to seek");
+    int seekResult = _inputIContainer.seekKeyFrame(
+      firstAudioIndex, startTimeStamp * denominator, IContainer.SEEK_FLAG_ANY);
+
+    if (seekResult < 0) {
+      if (_log.isWarnEnabled()) {
+        _log.warn("Unable to seek audio stream " + firstAudioStream);
+      }
+
+      seekFailed = true;
     }
+
+    // Read
 
     _inputIContainer.readNextPacket(inputIPacket);
 
     // TODO Wouldn't IRational be a better alternative?
     double duration = 0;
+
+    int endTimeStamp = getAttribute(ConversionAttribute.END_TIMESTAMP);
+
+    int previousPacketSize = -1;
 
     while (_inputIContainer.readNextPacket(inputIPacket) == 0) {
       if (_log.isTraceEnabled()) {
@@ -141,7 +160,11 @@ public class AudioConverter extends Converter {
       if (inputIStreamCoder.getCodecType() ==
           ICodec.Type.CODEC_TYPE_AUDIO) {
 
-        duration += ((double)inputIPacket.getDuration()) / den;
+        duration += ((double)inputIPacket.getDuration()) / denominator;
+
+        if (seekFailed && duration < startTimeStamp) {
+          continue;
+        }
 
         if (duration > (endTimeStamp - startTimeStamp)) {
           break;
@@ -163,7 +186,7 @@ public class AudioConverter extends Converter {
       previousPacketSize = inputIPacket.getSize();
     }
 
-    System.out.println(duration);
+    // Cleanup
 
     flush(outputIStreamCoders, _outputIContainer);
 
