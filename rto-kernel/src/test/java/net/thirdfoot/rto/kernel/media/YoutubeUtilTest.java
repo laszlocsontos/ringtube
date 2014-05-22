@@ -5,8 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import jodd.io.FileUtil;
-import jodd.util.ClassLoaderUtil;
 import jodd.util.StringPool;
+
 import net.thirdfoot.rto.kernel.config.PropsUtil;
 import net.thirdfoot.rto.kernel.util.FileSystemUtil;
 
@@ -14,16 +14,21 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.mockito.Matchers;
+
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author lcsontos
  */
+@PowerMockIgnore("javax.management.*")
 @PrepareForTest(FileSystemUtil.class)
 @RunWith(PowerMockRunner.class)
 public class YoutubeUtilTest {
@@ -40,12 +45,20 @@ public class YoutubeUtilTest {
       mockDir).when(
         FileSystemUtil.class, "_getDir", Matchers.anyString(),
         Matchers.anyString());
+
+    PropsUtil.init();
   }
 
   @Test
   public void testCutYoutubeVideo() throws Exception {
+    ConversionContext context =
+      new ConversionContext()
+        .set(ConversionAttribute.START_TIMESTAMP, 450)
+        .set(ConversionAttribute.END_TIMESTAMP, 480)
+        .set(ConversionAttribute.OUTPUT_FORMAT, "mp3");
+
     String outFileUrl = YoutubeUtil.cutYoutubeVideo(
-      "/home/lcsontos/Music/jodd-1620230518342849577.m4a", 450, 480);
+      "/home/lcsontos/Music/jodd-1620230518342849577.m4a", context);
 
     System.out.println(outFileUrl);
   }

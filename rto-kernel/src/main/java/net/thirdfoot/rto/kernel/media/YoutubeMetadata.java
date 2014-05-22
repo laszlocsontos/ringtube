@@ -2,6 +2,7 @@ package net.thirdfoot.rto.kernel.media;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.python.core.PyObject;
@@ -39,6 +40,26 @@ public class YoutubeMetadata implements Serializable {
 
   public String getCategory() {
     return _category;
+  }
+
+  public YoutubeStream getFirstStream() {
+    if (_firstStream == null) {
+      return _firstStream;
+    }
+
+    int len = _streams.size();
+
+    if (len < 1) {
+      return null;
+    }
+
+    YoutubeStream[] streams = new YoutubeStream[len];
+
+    streams = _streams.toArray(streams);
+
+    Arrays.sort(streams);
+
+    return (_firstStream = streams[0]);
   }
 
   public int getLength() {
@@ -82,6 +103,7 @@ public class YoutubeMetadata implements Serializable {
   }
 
   public void setStreams(List<YoutubeStream> streams) {
+    _firstStream = null;
     _streams = streams;
   }
 
@@ -91,6 +113,7 @@ public class YoutubeMetadata implements Serializable {
 
   private String _author;
   private String _category;
+  private YoutubeStream _firstStream;
   private int _length;
   private String _videoId;
   private String _published;

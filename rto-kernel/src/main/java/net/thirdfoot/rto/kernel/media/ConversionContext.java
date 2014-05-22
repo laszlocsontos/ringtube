@@ -11,11 +11,12 @@ public class ConversionContext {
   public ConversionContext() {
   }
 
+  @SuppressWarnings("unchecked")
   public <T> T get(ConversionAttribute attribute) {
     return (T)_attributes.get(attribute);
   }
 
-  public void set(ConversionAttribute attribute, Object value) {
+  public ConversionContext set(ConversionAttribute attribute, Object value) {
     if (attribute == null) {
       throw new IllegalArgumentException("Attribute cannot be null");
     }
@@ -25,6 +26,8 @@ public class ConversionContext {
     }
 
     _attributes.put(attribute, value);
+
+    return this;
   }
 
   private Map<ConversionAttribute, Object> _attributes =

@@ -24,8 +24,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.imageio.ImageIO;
+
+import jodd.util.MimeTypes;
+import jodd.util.StringUtil;
 
 import net.thirdfoot.rto.kernel.config.PropsUtil;
 
@@ -42,6 +46,8 @@ public abstract class Converter {
 
   public Converter(ConversionContext conversionContext) {
     _conversionContext = conversionContext;
+
+    _initMimeTypes();
   }
 
   public abstract void convert() throws Exception;
@@ -608,20 +614,28 @@ public abstract class Converter {
 
     // TODO Guess in/out format automatically
 
+    IContainerFormat format = IContainerFormat.make();
+
     if (writeContainer) {
-      value = iContainer.open(url, IContainer.Type.WRITE, null);
+      String shortName =
+        _conversionContext.get(ConversionAttribute.OUTPUT_FORMAT);
+
+      if (StringUtil.isNotBlank(shortName)) {
+        String mimeType = MimeTypes.getMimeType(shortName);
+
+        format.setOutputFormat(shortName, url, mimeType);
+      }
+
+      value = iContainer.open(url, IContainer.Type.WRITE, format);
     }
     else {
-      value = iContainer.open(url, IContainer.Type.READ, null);
+      value = iContainer.open(url, IContainer.Type.READ, format);
     }
 
     if (value < 0) {
-      if (writeContainer) {
-        throw new RuntimeException("Unable to open output URL");
-      }
-      else {
-        throw new RuntimeException("Unable to open input URL");
-      }
+      // TODO Use specialized exceptions instead
+      throw new RuntimeException(
+        "Unable to open output URL: " + iContainer.getURL());
     }
   }
 
@@ -873,6 +887,21 @@ public abstract class Converter {
     }
   }
 
+  private void _initMimeTypes() {
+    if (!_mimeTypesInitialized.compareAndSet(false, true)) {
+      return;
+    }
+
+    MimeTypes.registerMimeType("aac", "audio/aac");
+    MimeTypes.registerMimeType("m4a", "audio/aac");
+    MimeTypes.registerMimeType("mp4", "audio/mp4");
+    MimeTypes.registerMimeType("mp3", "audio/mpeg");
+    MimeTypes.registerMimeType("oga", "audio/ogg");
+    MimeTypes.registerMimeType("ogg", "audio/ogg");
+    MimeTypes.registerMimeType("wav", "audio/wav");
+    MimeTypes.registerMimeType("webm", "audio/webm");
+  }
+
   protected static final int AUDIO_BIT_RATE_DEFAULT = 64000;
 
   protected static final int AUDIO_BIT_RATE_MAX = 500000;
@@ -884,6 +913,9 @@ public abstract class Converter {
   protected static final int DECODE_VIDEO_THUMBNAIL = 2;
 
   private static Logger _log = LoggerFactory.getLogger(Converter.class);
+
+  private static AtomicBoolean _mimeTypesInitialized =
+    new AtomicBoolean(false);
 
   private ConversionContext _conversionContext;
   private ConverterFactory.Type _converterFactoryType;

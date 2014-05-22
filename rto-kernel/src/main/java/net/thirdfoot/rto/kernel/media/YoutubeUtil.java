@@ -39,21 +39,14 @@ import org.slf4j.LoggerFactory;
  */
 public class YoutubeUtil {
 
-  public static String cutYoutubeVideo(
-      String fileName, int startTimestamp, int endTimestamp)
+  public static String cutYoutubeVideo(String inFile, ConversionContext context)
     throws Exception {
 
-    // TODO proper file creation
-
-    File outFile = new File("/tmp/test.mp3");
-
-    ConversionContext context = new ConversionContext();
-
-    context.set(ConversionAttribute.START_TIMESTAMP, startTimestamp);
-    context.set(ConversionAttribute.END_TIMESTAMP, endTimestamp);
+    File outFile = FileSystemUtil.createTempFile(
+      YoutubeUtil.class.getName(), null, null);
 
     Converter converter = new AudioConverter(
-      fileName, outFile.getPath(), context);
+      inFile, outFile.getPath(), context);
 
     converter.convert();
 
@@ -201,17 +194,16 @@ public class YoutubeUtil {
   private static YoutubeStream _selectYoutubeStream(
     YoutubeMetadata youtubeMetadata) {
 
-    // TODO Implement stream selection here
-    return youtubeMetadata.getStreams().get(0);
+    // TODO A more sophisticated implementation may go here
+    return youtubeMetadata.getFirstStream();
   }
 
   private static final Pattern _YOUTUBE_URL_PATTERN =
     Pattern.compile("http.+youtube\\.com\\/watch\\?v=(\\S+)");
 
-  // TODO Apply a real, distributed LRU cache later !!!
-
   private static Logger _log = LoggerFactory.getLogger(YoutubeUtil.class);
 
+  // TODO Apply a real, distributed LRU cache later !!!
   private static final ConcurrentMap<String, YoutubeMetadata>
     youtubeMetadataCache = new ConcurrentHashMap<String, YoutubeMetadata>();
 

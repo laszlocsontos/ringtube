@@ -2,12 +2,14 @@ package net.thirdfoot.rto.kernel.media;
 
 import java.io.Serializable;
 
+import jodd.util.StringUtil;
+
 import org.python.core.PyObject;
 
 /**
  * @author lcsontos
  */
-public class YoutubeStream implements Serializable {
+public class YoutubeStream implements Comparable<YoutubeStream>, Serializable {
 
   public YoutubeStream() {
   }
@@ -19,6 +21,18 @@ public class YoutubeStream implements Serializable {
     _quality = pyYoutubeStream.__getattr__("quality").asString();
     _size = pyYoutubeStream.__getattr__("size").asInt();
     _url = pyYoutubeStream.__getattr__("url").asString();
+  }
+
+  @Override
+  public int compareTo(YoutubeStream other) {
+    if (other == null) {
+      throw new IllegalArgumentException("parameter cannot be null");
+    }
+
+    int otherQuality = doGetQuality(other.getQuality());
+    int thisQuality = doGetQuality(_quality);
+
+    return (thisQuality - otherQuality);
   }
 
   public String getExtension() {
@@ -67,6 +81,32 @@ public class YoutubeStream implements Serializable {
 
   public void setUrl(String url) {
     _url = url;
+  }
+
+  protected int doGetQuality(String quality) {
+    if (StringUtil.isBlank(quality)) {
+      throw new IllegalArgumentException("quality cannot be null or empty");
+    }
+
+    if (StringUtil.endsWithChar(quality, 'k')) {
+      int len = quality.length();
+
+      quality = quality.substring(0, len - 1);
+
+      return Integer.valueOf(quality);
+    }
+
+    String[] tokens = StringUtil.splitc(quality, 'x');
+
+    if (tokens.length != 2) {
+      throw new IllegalArgumentException(
+        "The value of quality could not be parsed");
+    }
+
+    int w = Integer.valueOf(tokens[0]);
+    int h = Integer.valueOf(tokens[1]);
+
+    return (w * h);
   }
 
   private String _extension;

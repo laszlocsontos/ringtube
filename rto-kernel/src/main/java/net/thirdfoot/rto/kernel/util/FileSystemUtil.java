@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import jodd.io.FileUtil;
-
+import jodd.util.StringUtil;
 import net.thirdfoot.rto.kernel.config.PropsUtil;
 
 /**
@@ -18,7 +18,16 @@ public class FileSystemUtil {
 
     File tempDir = getTempDir(owner);
 
-    return FileUtil.createTempFile(prefix, suffix, tempDir);
+    // Fix NPE in File.createTempFile()
+    if (StringUtil.isBlank(prefix)) {
+      prefix = String.valueOf(System.currentTimeMillis());
+    }
+
+    File tempFile = FileUtil.createTempFile(prefix, suffix, tempDir);
+
+    tempFile.deleteOnExit();
+
+    return tempFile;
   }
 
   public static String getBaseDir() {
