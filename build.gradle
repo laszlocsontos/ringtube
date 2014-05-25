@@ -38,21 +38,29 @@ subprojects {
     testCompile 'junit:junit:4.11'
     testCompile 'org.powermock:powermock-api-mockito:1.5.4'
     testCompile 'org.powermock:powermock-module-junit4:1.5.4'
-    testCompile 'org.springframework:spring-context:3.2.5.RELEASE'
-    testCompile 'org.springframework:spring-test:3.2.5.RELEASE'
+    testCompile 'org.springframework:spring-context:3.2.9.RELEASE'
+    testCompile 'org.springframework:spring-test:3.2.9.RELEASE'
   }
 }
 
 project(':rto-kernel') {
   dependencies {
+    compile 'com.mchange:c3p0:0.9.5-pre8'
+    compile 'org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final'
+    compile 'org.jodd:jodd-bean:3.5.1'
     compile 'org.jodd:jodd-http:3.5.1'
     compile 'org.jodd:jodd-props:3.5.1'
     compile 'org.mortbay.jetty:servlet-api:3.0.20100224'
     compile 'org.python:jython:2.7-b1'
     compile 'org.slf4j:slf4j-api:1.7.7'
+    compile 'org.springframework:spring-beans:3.2.9.RELEASE'
+    compile 'org.springframework:spring-orm:3.2.9.RELEASE'
     compile 'xuggle:xuggle-xuggler:5.4'
 
     runtime 'ch.qos.logback:logback-classic:1.1.2'
+    runtime 'com.h2database:h2:1.4.178'
+    runtime 'org.hibernate:hibernate-entitymanager:4.2.12.Final'
+    runtime 'org.springframework.data:spring-data-jpa:1.6.0.RELEASE'
   }
 }
  
@@ -75,7 +83,7 @@ project(':rto-web') {
   dependencies {
     compile project(':rto-service')
 
-    compile 'org.springframework:spring-webmvc:3.2.5.RELEASE'
+    compile 'org.springframework:spring-webmvc:3.2.9.RELEASE'
 
     tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
       "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"

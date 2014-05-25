@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+
+  <bean id="dataSourceFactoryBean"
+    class="net.thirdfoot.rto.kernel.spring.C3P0DataSourceFactoryBean" />
+
+  <bean id="entityManagerFactory"
+    class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+    depends-on="transactionManager">
+
+    <property name="persistenceUnitName" value="pu" />
+    <property name="persistenceUnitManager" ref="persistenceUnitManager" />
+    <property name="jpaVendorAdapter" ref="hibernateConfigurationAdapter" />
+
+    <property name="jpaDialect">
+      <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+    </property>
+  </bean>
+
+  <bean id="hibernateConfigurationAdapter"
+    class="net.thirdfoot.rto.kernel.spring.HibernateConfigurationAdapter" />
+
+  <bean id="persistenceUnitManager"
+    class="org.springframework.data.jpa.support.MergingPersistenceUnitManager">
+    <property name="persistenceXmlLocations">
+      <list>
+        <value>classpath:META-INF/kernel-persistence.xml</value>
+        <value>classpath*:META-INF/persistence.xml</value>
+      </list>
+    </property>
+    <property name="defaultDataSource" ref="dataSourceFactoryBean" />
+  </bean>
+
+  <bean id="transactionManager"
+    class="org.springframework.orm.jpa.JpaTransactionManager" />
+
+</beans>

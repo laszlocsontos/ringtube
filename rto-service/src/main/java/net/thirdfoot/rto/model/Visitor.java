@@ -1,11 +1,11 @@
 package net.thirdfoot.rto.model;
 
-import net.thirdfoot.rto.kernel.model.UUIDModel;
+import net.thirdfoot.rto.kernel.model.BaseModel;
 
 /**
  * @author lcsontos
  */
-public class Visitor extends UUIDModel {
+public class Visitor extends BaseModel<Long> {
 
   public String getCountryCode() {
     return _countryCode;

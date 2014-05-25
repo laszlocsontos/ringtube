@@ -1,11 +1,11 @@
 package net.thirdfoot.rto.model;
 
-import net.thirdfoot.rto.kernel.model.LongModel;
+import net.thirdfoot.rto.kernel.model.BaseModel;
 
 /**
  * @author lcsontos
  */
-public class Visit extends LongModel {
+public class Visit extends BaseModel<Long> {
 
   public String getCity() {
     return _city;
