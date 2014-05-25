@@ -21,6 +21,9 @@ public class HibernateConfigurationAdapter extends HibernateJpaVendorAdapter {
       new HashMap<String, Object>(
         hibernateProperties.size() + parentProperties.size(), 1.0f);
 
+    jpaProperties.putAll(parentProperties);
+    jpaProperties.putAll(hibernateProperties);
+
     return jpaProperties;
   }
 
