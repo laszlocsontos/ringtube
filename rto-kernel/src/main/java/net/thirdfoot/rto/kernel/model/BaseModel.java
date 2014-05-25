@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
@@ -115,6 +117,7 @@ public abstract class BaseModel<K> implements Serializable {
   private Date _dateModified;
 
   @Column(name = "ID")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
   @Id
   private K _primaryKey;
 
