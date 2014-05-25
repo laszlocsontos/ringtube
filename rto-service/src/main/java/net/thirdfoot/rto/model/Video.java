@@ -1,10 +1,13 @@
 package net.thirdfoot.rto.model;
 
+import javax.persistence.Entity;
+
 import net.thirdfoot.rto.kernel.model.BaseModel;
 
 /**
  * @author lcsontos
  */
+@Entity
 public class Video extends BaseModel<Long> {
 
   public String getAuthor() {
@@ -71,6 +74,7 @@ public class Video extends BaseModel<Long> {
     _viewCount = viewCount;
   }
 
+  // TODO Fix column names
   private String _author;
   private int _convertCount;
   private int _length;

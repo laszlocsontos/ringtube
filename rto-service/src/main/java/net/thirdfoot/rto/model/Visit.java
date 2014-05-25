@@ -1,10 +1,13 @@
 package net.thirdfoot.rto.model;
 
+import javax.persistence.Entity;
+
 import net.thirdfoot.rto.kernel.model.BaseModel;
 
 /**
  * @author lcsontos
  */
+@Entity
 public class Visit extends BaseModel<Long> {
 
   public String getCity() {
@@ -83,6 +86,7 @@ public class Visit extends BaseModel<Long> {
     this._visitor = _visitor;
   }
 
+  // TODO Fix column names
   private String _city;
   private String _countryCode;
   private String _countryName;
