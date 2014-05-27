@@ -43,7 +43,7 @@ public class YoutubeMetadata implements Serializable {
   }
 
   public YoutubeStream getFirstStream() {
-    if (_firstStream == null) {
+    if (_firstStream != null) {
       return _firstStream;
     }
 
