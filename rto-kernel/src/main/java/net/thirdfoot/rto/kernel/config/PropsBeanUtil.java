@@ -1,7 +1,11 @@
 package net.thirdfoot.rto.kernel.config;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.management.ManagementFactory;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -9,7 +13,6 @@ import javax.management.JMException;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
-import jodd.io.FileUtil;
 import jodd.typeconverter.Convert;
 import jodd.util.ClassLoaderUtil;
 import jodd.util.StringBand;
@@ -33,12 +36,12 @@ public class PropsBeanUtil {
 
   public static PropsBean getInstance() {
     if (_initialized.compareAndSet(false, true)) {
-      File[] propertyFiles = new File[2];
+      InputStream[] propertyInputStreams = new InputStream[2];
 
-      propertyFiles[0] = _getDefaultPropertyFile();
-      propertyFiles[1] = _getExternalPropertyFile();
+      propertyInputStreams[0] = _getDefaultPropertyInputStream();
+      propertyInputStreams[1] = _getExternalPropertyInputStream();
 
-      _instance = new PropsBeanImpl(propertyFiles);
+      _instance = new PropsBeanImpl(propertyInputStreams);
     }
 
     return _instance;
@@ -156,11 +159,13 @@ public class PropsBeanUtil {
     }
   }
 
-  private static File _getDefaultPropertyFile() {
-    return ClassLoaderUtil.getResourceFile(_DEFAULT_PROPERTY_FILE);
+  private static InputStream _getDefaultPropertyInputStream() {
+    URL resourceUrl = ClassLoaderUtil.getResourceUrl(_DEFAULT_PROPERTY_FILE);
+
+    return _openStream(resourceUrl);
   }
 
-  private static File _getExternalPropertyFile() {
+  private static InputStream _getExternalPropertyInputStream() {
     String catalinaBase = System.getProperty("catalina.base");
 
     if (StringUtil.isBlank(catalinaBase)) {
@@ -169,24 +174,45 @@ public class PropsBeanUtil {
       return null;
     }
 
-    StringBand sb = new StringBand(4);
+    StringBand sb = new StringBand(5);
 
-    sb.append(FileUtil.getParentFile(new File(catalinaBase)));
+    sb.append("file://");
+    sb.append(catalinaBase);
     sb.append(File.separator);
-    sb.append(_contextName);
-    sb.append(".properies");
 
-    File file = new File(sb.toString());
+    // TODO This his questionable here
+    // sb.append(_contextName);
 
-    if (!file.exists() || !file.canRead()) {
-      _log.warn(
-        "Property file " + file.getAbsolutePath() + 
-          " does not exists or cannot be read");
+    sb.append("app.properies");
 
+    URL url = null;
+
+    try {
+      url = new URL(sb.toString());
+    }
+    catch (MalformedURLException mue) {
+      _log.error(mue.getMessage(), mue);
+    }
+
+    return _openStream(url);
+  }
+
+  private static InputStream _openStream(URL url) {
+    if (url == null) {
       return null;
     }
 
-    return file;
+    InputStream inputStream = null;
+
+    
+    try {
+      inputStream = url.openStream();
+    }
+    catch (IOException ioe) {
+      _log.error(ioe.getMessage(), ioe);
+    }
+
+    return inputStream;
   }
 
   private static final String _DEFAULT_PROPERTY_FILE =
@@ -199,5 +225,4 @@ public class PropsBeanUtil {
 
   private static Logger _log = LoggerFactory.getLogger(PropsBeanUtil.class);
 
-  private static String _contextName;
 }

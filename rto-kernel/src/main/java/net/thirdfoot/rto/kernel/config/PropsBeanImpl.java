@@ -1,7 +1,7 @@
 package net.thirdfoot.rto.kernel.config;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -11,11 +11,10 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import jodd.io.StreamUtil;
 import jodd.props.Props;
 import jodd.props.PropsEntries;
 import jodd.props.PropsEntry;
-
-import net.thirdfoot.rto.kernel.exception.SystemException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,15 +27,15 @@ import org.springframework.core.env.PropertySource;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class PropsBeanImpl extends PropertySource implements PropsBean {
 
-  PropsBeanImpl(File[] propertyFiles) {
-    super(PropsBeanImpl.class.getName(), null);
+  PropsBeanImpl(InputStream[] propertyInputStreams) {
+    super(PropsBeanImpl.class.getName(), new Object());
 
-    if (propertyFiles == null || propertyFiles.length < 1) {
+    if (propertyInputStreams == null || propertyInputStreams.length < 1) {
       throw new IllegalArgumentException(
-        "propertyFiles cannot be null or empty");
+        "propertyInputStreams cannot be null or empty");
     }
 
-    _propertyFiles = propertyFiles;
+    _propertyInputStreams = propertyInputStreams;
 
     ReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
 
@@ -128,25 +127,36 @@ public class PropsBeanImpl extends PropertySource implements PropsBean {
     }
   }
 
+  protected void doLoad(Props props, InputStream propertyInputStream) {
+    try {
+      props.load(propertyInputStream);
+    }
+    catch (IOException ioe) {
+      _log.error(ioe.getMessage(), ioe);
+    }
+    finally {
+      StreamUtil.close(propertyInputStream);
+    }
+  }
+
   protected Props load() {
     Props props = new Props();
 
     // Load system properties
     props.loadSystemProperties("env");
 
-    try {
-      for (File propertyFile : _propertyFiles) {
-        if (propertyFile == null) {
-          continue;
+    int streamIndex = 0;
+
+    for (InputStream propertyInputStream : _propertyInputStreams) {
+      if (propertyInputStream == null) {
+        if (_log.isWarnEnabled()) {
+          _log.warn("Skipping property input stream #" + (streamIndex++));
         }
 
-        _log.info("Loading property file " + propertyFile.getAbsolutePath());
-
-        props.load(propertyFile);
+        continue;
       }
-    }
-    catch (IOException ioe) {
-      throw new SystemException(ioe);
+
+      doLoad(props, propertyInputStream);
     }
 
     return props;
@@ -154,7 +164,7 @@ public class PropsBeanImpl extends PropertySource implements PropsBean {
 
   private static Logger _log = LoggerFactory.getLogger(PropsBeanImpl.class);
 
-  private final File[] _propertyFiles;
+  private final InputStream[] _propertyInputStreams;
 
   private final Lock _readLock;
   private final Lock _writeLock;

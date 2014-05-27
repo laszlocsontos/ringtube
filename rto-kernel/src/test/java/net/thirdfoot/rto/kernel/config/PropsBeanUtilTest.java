@@ -1,6 +1,6 @@
 package net.thirdfoot.rto.kernel.config;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.Map;
 
 import jodd.util.ClassLoaderUtil;
@@ -21,18 +21,19 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PowerMockIgnore("javax.management.*")
 @PrepareForTest(PropsBeanUtil.class)
 @RunWith(PowerMockRunner.class)
-public class PropsUtilTest {
+public class PropsBeanUtilTest {
 
   @BeforeClass
   public static void setUpClass() throws Exception {
     PowerMockito.spy(PropsBeanUtil.class);
 
-    File mockFile = ClassLoaderUtil.getResourceFile(_TEST_PROPERTY_FILE);
+    InputStream mockInputStream = ClassLoaderUtil.getResourceUrl(
+      _TEST_PROPERTY_FILE).openStream();
 
     PowerMockito.doReturn(
-      mockFile).when(PropsBeanUtil.class, "_getExternalPropertyFile");
+      mockInputStream).when(
+        PropsBeanUtil.class, "_getExternalPropertyInputStream");
 
-    PropsBeanUtil.init();
   }
 
   @Test
@@ -60,6 +61,6 @@ public class PropsUtilTest {
   }
 
   private static final String _TEST_PROPERTY_FILE =
-    "/META-INF/rto-test.properties";
+    "/META-INF/kernel-test.properties";
 
 }
