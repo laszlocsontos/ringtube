@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -21,12 +20,17 @@ import net.thirdfoot.rto.kernel.exception.SystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.core.env.PropertySource;
+
 /**
  * @author lcsontos
  */
-public class PropsMBeanImpl implements PropsMBean {
+@SuppressWarnings({"rawtypes", "unchecked"})
+public class PropsBeanImpl extends PropertySource implements PropsBean {
 
-  public PropsMBeanImpl(File[] propertyFiles) {
+  PropsBeanImpl(File[] propertyFiles) {
+    super(PropsBeanImpl.class.getName(), null);
+
     if (propertyFiles == null || propertyFiles.length < 1) {
       throw new IllegalArgumentException(
         "propertyFiles cannot be null or empty");
@@ -49,7 +53,7 @@ public class PropsMBeanImpl implements PropsMBean {
     _readLock.lock();
 
     try {
-      _props.get().extractProps(properties);
+      _props.extractProps(properties);
     }
     finally {
       _readLock.unlock();
@@ -67,7 +71,7 @@ public class PropsMBeanImpl implements PropsMBean {
     _readLock.lock();
 
     try {
-      propsEntries = _props.get().entries().section(section);
+      propsEntries = _props.entries().section(section);
     }
     finally {
       _readLock.unlock();
@@ -89,7 +93,7 @@ public class PropsMBeanImpl implements PropsMBean {
     _readLock.lock();
 
     try {
-      return _props.get().getValue(key);
+      return _props.getValue(key);
     }
     finally {
       _readLock.unlock();
@@ -101,7 +105,7 @@ public class PropsMBeanImpl implements PropsMBean {
     _writeLock.lock();
 
     try {
-      _props.get().setValue(key, value);
+      _props.setValue(key, value);
     }
     finally {
       _writeLock.unlock();
@@ -117,7 +121,7 @@ public class PropsMBeanImpl implements PropsMBean {
 
       props.entries();
 
-      _props.set(props);
+      _props = props;
     }
     finally {
       _writeLock.unlock();
@@ -148,12 +152,13 @@ public class PropsMBeanImpl implements PropsMBean {
     return props;
   }
 
-  private static Logger _log = LoggerFactory.getLogger(PropsMBeanImpl.class);
+  private static Logger _log = LoggerFactory.getLogger(PropsBeanImpl.class);
 
   private final File[] _propertyFiles;
 
-  private final AtomicReference<Props> _props = new AtomicReference<Props>();
-
   private final Lock _readLock;
   private final Lock _writeLock;
+
+  private volatile Props _props;
+
 }

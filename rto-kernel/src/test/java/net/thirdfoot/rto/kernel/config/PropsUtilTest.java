@@ -19,25 +19,25 @@ import org.powermock.modules.junit4.PowerMockRunner;
  * @author lcsontos
  */
 @PowerMockIgnore("javax.management.*")
-@PrepareForTest(PropsUtil.class)
+@PrepareForTest(PropsBeanUtil.class)
 @RunWith(PowerMockRunner.class)
 public class PropsUtilTest {
 
   @BeforeClass
   public static void setUpClass() throws Exception {
-    PowerMockito.spy(PropsUtil.class);
+    PowerMockito.spy(PropsBeanUtil.class);
 
     File mockFile = ClassLoaderUtil.getResourceFile(_TEST_PROPERTY_FILE);
 
     PowerMockito.doReturn(
-      mockFile).when(PropsUtil.class, "_getExternalPropertyFile");
+      mockFile).when(PropsBeanUtil.class, "_getExternalPropertyFile");
 
-    PropsUtil.init();
+    PropsBeanUtil.init();
   }
 
   @Test
   public void testGetInteger() {
-  Integer audioBitRateDefault = PropsUtil.getInteger(
+  Integer audioBitRateDefault = PropsBeanUtil.getInteger(
     "converter.audio.bit.rate.default");
 
     Assert.assertNotNull(audioBitRateDefault);
@@ -45,7 +45,7 @@ public class PropsUtilTest {
 
   @Test
   public void testGetSection() {
-    Map<String, String> properties = PropsUtil.getSection("db");
+    Map<String, String> properties = PropsBeanUtil.getSection("db");
 
     Assert.assertNotNull(properties);
 
@@ -56,7 +56,7 @@ public class PropsUtilTest {
 
   @Test
   public void testGetString() {
-    Assert.assertNotNull(PropsUtil.getString("db.driver"));
+    Assert.assertNotNull(PropsBeanUtil.getString("db.driver"));
   }
 
   private static final String _TEST_PROPERTY_FILE =

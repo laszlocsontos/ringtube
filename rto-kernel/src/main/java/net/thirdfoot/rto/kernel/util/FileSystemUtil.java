@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import jodd.io.FileUtil;
 import jodd.util.StringUtil;
-import net.thirdfoot.rto.kernel.config.PropsUtil;
+import net.thirdfoot.rto.kernel.config.PropsBeanUtil;
 
 /**
  * @author lcsontos
@@ -31,7 +31,7 @@ public class FileSystemUtil {
   }
 
   public static String getBaseDir() {
-    return PropsUtil.getString("fs.base.dir");
+    return PropsBeanUtil.getString("fs.base.dir");
   }
 
   public static File getDataDir(String owner) {
@@ -43,7 +43,7 @@ public class FileSystemUtil {
   }
 
   private static File _getDir(String dirName, String owner) {
-    String parentDir = PropsUtil.getString(dirName);
+    String parentDir = PropsBeanUtil.getString(dirName);
 
     File dir = new File(parentDir, owner);
 

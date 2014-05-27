@@ -31,7 +31,7 @@ import javax.imageio.ImageIO;
 import jodd.util.MimeTypes;
 import jodd.util.StringUtil;
 
-import net.thirdfoot.rto.kernel.config.PropsUtil;
+import net.thirdfoot.rto.kernel.config.PropsBeanUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -514,7 +514,7 @@ public abstract class Converter {
   }
 
   protected int getProperty(String key, int defaultValue, int maxValue) {
-    int property = PropsUtil.getInteger(key, defaultValue);
+    int property = PropsBeanUtil.getInteger(key, defaultValue);
 
     return getProperty(property, defaultValue, maxValue);
   }

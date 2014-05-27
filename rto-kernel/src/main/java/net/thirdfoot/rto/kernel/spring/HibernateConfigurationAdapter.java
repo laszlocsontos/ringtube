@@ -3,7 +3,7 @@ package net.thirdfoot.rto.kernel.spring;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.thirdfoot.rto.kernel.config.PropsUtil;
+import net.thirdfoot.rto.kernel.config.PropsBeanUtil;
 
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
@@ -14,7 +14,7 @@ public class HibernateConfigurationAdapter extends HibernateJpaVendorAdapter {
 
   @Override
   public Map<String, Object> getJpaPropertyMap() {
-    Map<String, String> hibernateProperties = PropsUtil.getSection("hibernate");
+    Map<String, String> hibernateProperties = PropsBeanUtil.getSection("hibernate");
     Map<String, Object> parentProperties = super.getJpaPropertyMap();
 
     Map<String, Object> jpaProperties =

@@ -15,44 +15,33 @@ import jodd.util.ClassLoaderUtil;
 import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
+import net.thirdfoot.rto.kernel.util.JMXUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.springframework.core.env.PropertySource;
 
 /**
  * @author lcsontos
  */
-public class PropsUtil {
+public class PropsBeanUtil {
 
-  public static void init() {
-    // TODO Think about this
-    if (!_initialized.compareAndSet(false, true)) {
-      return;
+  public static PropertySource<?> getPropertySource() {
+    return (PropertySource<?>)getInstance();
+  }
+
+  public static PropsBean getInstance() {
+    if (_initialized.compareAndSet(false, true)) {
+      File[] propertyFiles = new File[2];
+
+      propertyFiles[0] = _getDefaultPropertyFile();
+      propertyFiles[1] = _getExternalPropertyFile();
+
+      _instance = new PropsBeanImpl(propertyFiles);
     }
 
-    _contextName = "rto";
-
-    File[] propertyFiles = new File[2];
-
-    propertyFiles[0] = _getDefaultPropertyFile();
-    propertyFiles[1] = _getExternalPropertyFile();
-
-    _propsMBean = new PropsMBeanImpl(propertyFiles);
-
-    try {
-      MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-
-      ObjectName objectName = new ObjectName(
-        _contextName, "type", PropsMBean.class.getName());
-
-      if (_log.isDebugEnabled()) {
-        _log.debug("Registering MBean");
-      }
-
-      mBeanServer.registerMBean(_propsMBean, objectName);
-    }
-    catch (JMException jme) {
-      _log.error("MBean registration failed", jme);
-    }
+    return _instance;
   }
 
   public static Boolean getBoolean(String key) {
@@ -114,7 +103,7 @@ public class PropsUtil {
   }
 
   public static Map<String, String> getSection(String section) {
-    return _propsMBean.getPropertiesBySection(section);
+    return getInstance().getPropertiesBySection(section);
   }
 
   public static String getString(String key) {
@@ -126,7 +115,7 @@ public class PropsUtil {
       return null;
     }
 
-    String value = _propsMBean.getProperty(key);
+    String value = getInstance().getProperty(key);
 
     if (StringUtil.isNotBlank(value)) {
       return value;
@@ -137,6 +126,34 @@ public class PropsUtil {
 
   public static String[] getStringArray(String key) {
     return Convert.toStringArray(getString(key));
+  }
+
+  public static void registerMBean(String contextName) {
+    if (!_mbeanRegistered.compareAndSet(false, true)) {
+      if (_log.isWarnEnabled()) {
+        _log.warn("MBean has already registered");
+      }
+
+      return;
+    }
+
+    if (_log.isDebugEnabled()) {
+      _log.debug("Registering MBean");
+    }
+
+    try {
+      PropsBean instance = getInstance();
+
+      ObjectName objectName = JMXUtil.createObjectName(
+        contextName, instance.getClass());
+  
+      MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+
+      mBeanServer.registerMBean(instance, objectName);
+    }
+    catch (JMException jme) {
+      _log.error("MBean registration failed", jme);
+    }
   }
 
   private static File _getDefaultPropertyFile() {
@@ -173,12 +190,14 @@ public class PropsUtil {
   }
 
   private static final String _DEFAULT_PROPERTY_FILE =
-    "/META-INF/rto.properties";
+    "META-INF/kernel.properties";
 
-  private static Logger _log = LoggerFactory.getLogger(PropsUtil.class);
+  private static PropsBean _instance;
+
+  private static AtomicBoolean _initialized = new AtomicBoolean(false);
+  private static AtomicBoolean _mbeanRegistered = new AtomicBoolean(false);
+
+  private static Logger _log = LoggerFactory.getLogger(PropsBeanUtil.class);
 
   private static String _contextName;
-  private static AtomicBoolean _initialized = new AtomicBoolean(false);
-  private static PropsMBean _propsMBean;
-
 }

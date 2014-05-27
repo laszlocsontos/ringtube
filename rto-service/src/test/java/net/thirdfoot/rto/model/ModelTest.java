@@ -3,7 +3,7 @@ package net.thirdfoot.rto.model;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import net.thirdfoot.rto.kernel.config.PropsUtil;
+import net.thirdfoot.rto.kernel.config.PropsBeanUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,7 +21,7 @@ public class ModelTest {
   @Test
   public void testJpa() {
     // TODO Remove this
-    PropsUtil.init();
+    PropsBeanUtil.init();
 
     Assert.assertNotNull(_em);
   }

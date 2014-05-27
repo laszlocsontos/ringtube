@@ -7,7 +7,7 @@ import java.util.List;
 import jodd.io.FileUtil;
 import jodd.util.StringPool;
 
-import net.thirdfoot.rto.kernel.config.PropsUtil;
+import net.thirdfoot.rto.kernel.config.PropsBeanUtil;
 import net.thirdfoot.rto.kernel.util.FileSystemUtil;
 
 import org.junit.Assert;
@@ -46,7 +46,7 @@ public class YoutubeUtilTest {
         FileSystemUtil.class, "_getDir", Matchers.anyString(),
         Matchers.anyString());
 
-    PropsUtil.init();
+    PropsBeanUtil.init();
   }
 
   @Test

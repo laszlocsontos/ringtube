@@ -8,7 +8,7 @@ import javax.management.MXBean;
  * @author lcsontos
  */
 @MXBean
-public interface PropsMBean {
+public interface PropsBean {
 
   public Map<String, String> getProperties();
 

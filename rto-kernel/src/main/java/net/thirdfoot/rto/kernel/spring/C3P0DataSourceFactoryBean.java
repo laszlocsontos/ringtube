@@ -5,7 +5,7 @@ import java.util.Map;
 import jodd.bean.BeanUtil;
 import jodd.util.StringUtil;
 
-import net.thirdfoot.rto.kernel.config.PropsUtil;
+import net.thirdfoot.rto.kernel.config.PropsBeanUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,10 +38,7 @@ public final class C3P0DataSourceFactoryBean
     // TODO Add ContextUtil
     pooledDataSource.setDataSourceName("RTO");
 
-    // TODO Remove this
-    PropsUtil.init();
-
-    Map<String, String> properties = PropsUtil.getSection("jdbc");
+    Map<String, String> properties = PropsBeanUtil.getSection("jdbc");
 
     for (Map.Entry<String, String> property : properties.entrySet()) {
       String key = property.getKey();

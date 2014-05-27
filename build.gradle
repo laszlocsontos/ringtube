@@ -55,6 +55,7 @@ project(':rto-kernel') {
     compile 'org.slf4j:slf4j-api:1.7.7'
     compile 'org.springframework:spring-beans:3.2.9.RELEASE'
     compile 'org.springframework:spring-orm:3.2.9.RELEASE'
+    compile 'org.springframework:spring-web:3.2.9.RELEASE'
     compile 'xuggle:xuggle-xuggler:5.4'
 
     runtime 'ch.qos.logback:logback-classic:1.1.2'
