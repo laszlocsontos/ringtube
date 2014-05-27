@@ -12,13 +12,13 @@ public final class JMXUtil {
 
   public static final String DOMAIN = "net.thirdfoot";
 
-  public static ObjectName createObjectName(String name, Class<?> type)
+  public static ObjectName createObjectName(String type, Class<?> clazz)
     throws MalformedObjectNameException {
 
     Hashtable<String, String> properties = new Hashtable<String, String>(2);
 
-    properties.put("name", name);
-    properties.put("type", type.getName());
+    properties.put("name", clazz.getSimpleName());
+    properties.put("type", type);
 
     return new ObjectName(DOMAIN, properties);
   }

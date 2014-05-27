@@ -1,5 +1,6 @@
 package net.thirdfoot.rto.kernel.spring;
 
+import java.io.File;
 import java.net.URL;
 
 import javax.servlet.ServletContext;
@@ -11,6 +12,7 @@ import jodd.util.StringUtil;
 
 import net.thirdfoot.rto.kernel.config.PropsBeanUtil;
 import net.thirdfoot.rto.kernel.filter.ThreadLocalFilter;
+import net.thirdfoot.rto.kernel.util.FileSystemUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,8 +56,13 @@ public class MainContextInitializer extends AbstractContextLoaderInitializer {
     LoggerContext loggerContext =
       (LoggerContext)LoggerFactory.getILoggerFactory();
 
-    loggerContext.setName(_contextName);
     loggerContext.reset();
+
+    loggerContext.setName(_contextName);
+
+    File logDir = FileSystemUtil.getLogDir();
+
+    loggerContext.putProperty("log.dir", logDir.getAbsolutePath());
 
     try {
       JoranConfigurator loggerConfigurator = new JoranConfigurator();
@@ -77,6 +84,7 @@ public class MainContextInitializer extends AbstractContextLoaderInitializer {
   }
 
   protected void initProps() {
+    PropsBeanUtil.setString("context.name", _contextName);
     PropsBeanUtil.registerMBean(_contextName);
   }
 
@@ -123,8 +131,6 @@ public class MainContextInitializer extends AbstractContextLoaderInitializer {
   private static Logger _log =
     LoggerFactory.getLogger(MainContextInitializer.class);
 
-  private static PropertySource<?> _propertySource;
-
   private String _contextName;
 
   private static class PropsEnvironment extends AbstractEnvironment {
@@ -132,7 +138,9 @@ public class MainContextInitializer extends AbstractContextLoaderInitializer {
     protected void customizePropertySources(
       MutablePropertySources propertySources) {
 
-      propertySources.addFirst(_propertySource);
+      PropertySource<?> propertySource = PropsBeanUtil.getPropertySource();
+
+      propertySources.addFirst(propertySource);
     }
   }
 

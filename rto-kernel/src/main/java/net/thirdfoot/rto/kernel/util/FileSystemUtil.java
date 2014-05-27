@@ -3,8 +3,13 @@ package net.thirdfoot.rto.kernel.util;
 import java.io.File;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jodd.io.FileUtil;
+import jodd.util.StringPool;
 import jodd.util.StringUtil;
+
 import net.thirdfoot.rto.kernel.config.PropsBeanUtil;
 
 /**
@@ -31,11 +36,41 @@ public class FileSystemUtil {
   }
 
   public static String getBaseDir() {
-    return PropsBeanUtil.getString("fs.base.dir");
+    String baseDir = PropsBeanUtil.getString("fs.base.dir");
+
+    File dir = new File(baseDir);
+
+    if (!dir.exists()) {
+      if (_log.isWarnEnabled()) {
+        _log.warn("Specified base directory does not exist: " + baseDir);
+      }
+
+      baseDir = StringPool.EMPTY;
+
+      try {
+        File tempDir = FileUtil.createTempDirectory();
+
+        baseDir = tempDir.getAbsolutePath();
+      }
+      catch (IOException ioe) {
+        _log.error(ioe.getMessage(), ioe);
+      }
+
+      if (_log.isWarnEnabled()) {
+        _log.warn(
+          "Using the following temporary directory instead: " + baseDir);
+      }
+    }
+
+    return baseDir;
   }
 
   public static File getDataDir(String owner) {
     return _getDir("fs.data.dir", owner);
+  }
+
+  public static File getLogDir() {
+    return _getDir("fs.log.dir", null);
   }
 
   public static File getTempDir(String owner) {
@@ -45,7 +80,14 @@ public class FileSystemUtil {
   private static File _getDir(String dirName, String owner) {
     String parentDir = PropsBeanUtil.getString(dirName);
 
-    File dir = new File(parentDir, owner);
+    File dir = null;
+
+    if (StringUtil.isNotBlank(owner)) {
+      dir = new File(parentDir, owner);
+    }
+    else {
+      dir = new File(parentDir);
+    }
 
     if (!dir.exists()) {
       dir.mkdirs();
@@ -53,6 +95,9 @@ public class FileSystemUtil {
 
     return dir;
   }
+
+  private static final Logger _log = LoggerFactory.getLogger(
+    FileSystemUtil.class);
 
   private FileSystemUtil() {
   }

@@ -1,6 +1,7 @@
 package net.thirdfoot.rto.kernel.config;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
@@ -17,12 +18,10 @@ import jodd.typeconverter.Convert;
 import jodd.util.ClassLoaderUtil;
 import jodd.util.StringBand;
 import jodd.util.StringUtil;
-
 import net.thirdfoot.rto.kernel.util.JMXUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.core.env.PropertySource;
 
 /**
@@ -159,6 +158,10 @@ public class PropsBeanUtil {
     }
   }
 
+  public static void setString(String key, String value) {
+    getInstance().setProperty(key, value);
+  }
+
   private static InputStream _getDefaultPropertyInputStream() {
     URL resourceUrl = ClassLoaderUtil.getResourceUrl(_DEFAULT_PROPERTY_FILE);
 
@@ -207,6 +210,12 @@ public class PropsBeanUtil {
     
     try {
       inputStream = url.openStream();
+    }
+    catch (FileNotFoundException fnfe) {
+      if (_log.isWarnEnabled()) {
+        _log.warn(
+          "The following resource could not be found: " + url.toString());
+      }
     }
     catch (IOException ioe) {
       _log.error(ioe.getMessage(), ioe);

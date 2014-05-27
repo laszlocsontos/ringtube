@@ -35,8 +35,9 @@ public final class C3P0DataSourceFactoryBean
   protected PooledDataSource createInstance() throws Exception {
     PooledDataSource pooledDataSource = new ComboPooledDataSource();
 
-    // TODO Add ContextUtil
-    pooledDataSource.setDataSourceName("RTO");
+    String contextName = PropsBeanUtil.getString("context.name");
+
+    pooledDataSource.setDataSourceName(contextName);
 
     Map<String, String> properties = PropsBeanUtil.getSection("jdbc");
 
