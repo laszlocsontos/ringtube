@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,14 +14,16 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
 
+import jodd.util.HashCode;
 import jodd.util.StringPool;
 import jodd.util.StringUtil;
 
 /**
  * @author lcsontos
  */
+@EntityListeners(BaseModelListener.class)
 @MappedSuperclass
-public abstract class BaseModel<K> implements Serializable {
+public abstract class BaseModel implements Serializable {
 
   public Date getDateCreated() {
     return _dateCreated;
@@ -34,7 +37,7 @@ public abstract class BaseModel<K> implements Serializable {
     return _dateModified;
   }
 
-  public K getPrimaryKey() {
+  public long getPrimaryKey() {
     return _primaryKey;
   }
 
@@ -43,36 +46,23 @@ public abstract class BaseModel<K> implements Serializable {
   }
 
   public String getUuid() {
-    if (StringUtil.isBlank(_uuid)) {
-      UUID uuid = UUID.randomUUID();
-
-      _uuid = uuid.toString();
-    }
-
     return _uuid;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public boolean equals(Object obj) {
-    if ((_primaryKey == null) || (obj == null) ||
-        obj.getClass() != getClass()) {
-
+    if (obj == null || obj.getClass() != getClass()) {
       return false;
     }
 
-    BaseModel<K> model = (BaseModel<K>)obj;
+    BaseModel model = (BaseModel)obj;
 
-    if (model._primaryKey == null) {
-      return false;
-    }
-
-    return _primaryKey.equals(model._primaryKey);
+    return (_primaryKey == model._primaryKey);
   }
 
   @Override
   public int hashCode() {
-    return _primaryKey.hashCode();
+    return HashCode.hash(HashCode.SEED, _primaryKey);
   }
 
   public void setDateCreated(Date dateCreated) {
@@ -87,7 +77,7 @@ public abstract class BaseModel<K> implements Serializable {
     _dateModified = dateModified;
   }
 
-  public void setPrimaryKey(K primaryKey) {
+  public void setPrimaryKey(long primaryKey) {
     _primaryKey = primaryKey;
   }
 
@@ -119,7 +109,7 @@ public abstract class BaseModel<K> implements Serializable {
   @Column(name = "ID")
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
   @Id
-  private K _primaryKey;
+  private long _primaryKey;
 
   @Version
   @Column(name = "REVISION")

@@ -8,7 +8,7 @@ import net.thirdfoot.rto.kernel.model.BaseModel;
  * @author lcsontos
  */
 @Entity
-public class Visit extends BaseModel<Long> {
+public class Visit extends BaseModel {
 
   public String getCity() {
     return _city;

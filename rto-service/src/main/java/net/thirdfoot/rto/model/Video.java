@@ -8,7 +8,7 @@ import net.thirdfoot.rto.kernel.model.BaseModel;
  * @author lcsontos
  */
 @Entity
-public class Video extends BaseModel<Long> {
+public class Video extends BaseModel {
 
   public String getAuthor() {
     return _author;

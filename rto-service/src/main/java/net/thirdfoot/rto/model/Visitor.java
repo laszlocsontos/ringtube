@@ -8,7 +8,7 @@ import net.thirdfoot.rto.kernel.model.BaseModel;
  * @author lcsontos
  */
 @Entity
-public class Visitor extends BaseModel<Long> {
+public class Visitor extends BaseModel {
 
   public String getCountryCode() {
     return _countryCode;
