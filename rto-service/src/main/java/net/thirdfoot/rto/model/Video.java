@@ -1,6 +1,8 @@
 package net.thirdfoot.rto.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 
 import net.thirdfoot.rto.kernel.model.BaseModel;
 
@@ -22,10 +24,6 @@ public class Video extends BaseModel {
     return _length;
   }
 
-  public String getNativeId() {
-    return _nativeId;
-  }
-
   public double getRating() {
     return _rating;
   }
@@ -36,6 +34,10 @@ public class Video extends BaseModel {
 
   public VideoStatus getStatus() {
     return _status;
+  }
+
+  public String getVideoId() {
+    return _videoId;
   }
 
   public int getViewCount() {
@@ -54,10 +56,6 @@ public class Video extends BaseModel {
     _length = length;
   }
 
-  public void setNativeId(String nativeId) {
-    _nativeId = nativeId;
-  }
-
   public void setRating(double rating) {
     _rating = rating;
   }
@@ -70,18 +68,37 @@ public class Video extends BaseModel {
     _status = status;
   }
 
+  public void setVideoId(String videoId) {
+    _videoId = videoId;
+  }
+
   public void setViewCount(int viewCount) {
     _viewCount = viewCount;
   }
 
-  // TODO Fix column names
+  @Column(name = "AUTHOR")
   private String _author;
+
+  @Column(name = "CONVERT_COUNT")
   private int _convertCount;
+
+  @Column(name = "LENGTH")
   private int _length;
-  private String _nativeId;
+
+  @Column(name = "VIDEO_ID")
+  private String _videoId;
+
+  @Column(name = "RATING")
   private double _rating;
+
+  @Column(name = "SIZE")
   private int _size;
+
+  @Column(name = "STATUS")
+  @Enumerated
   private VideoStatus _status;
+
+  @Column(name = "VIEW_COUNT")
   private int _viewCount;
 
 }
