@@ -1,4 +1,4 @@
-package net.thirdfoot.rto.kernel.media;
+package net.thirdfoot.rto.media;
 
 import net.thirdfoot.rto.kernel.exception.SystemException;
 

@@ -1,4 +1,4 @@
-package net.thirdfoot.rto.kernel.media;
+package net.thirdfoot.rto.media;
 
 import com.xuggle.ferry.RefCounted;
 import com.xuggle.xuggler.Global;

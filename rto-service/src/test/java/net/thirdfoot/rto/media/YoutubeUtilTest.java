@@ -1,4 +1,4 @@
-package net.thirdfoot.rto.kernel.media;
+package net.thirdfoot.rto.media;
 
 import java.io.File;
 import java.util.Iterator;
@@ -8,6 +8,12 @@ import jodd.io.FileUtil;
 import jodd.util.StringPool;
 
 import net.thirdfoot.rto.kernel.util.FileSystemUtil;
+import net.thirdfoot.rto.media.ConversionAttribute;
+import net.thirdfoot.rto.media.ConversionContext;
+import net.thirdfoot.rto.media.YoutubeException;
+import net.thirdfoot.rto.media.YoutubeMetadata;
+import net.thirdfoot.rto.media.YoutubeStream;
+import net.thirdfoot.rto.media.YoutubeUtil;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;

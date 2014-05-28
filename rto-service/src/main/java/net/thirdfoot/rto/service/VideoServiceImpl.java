@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jodd.util.StringUtil;
-import net.thirdfoot.rto.kernel.media.YoutubeMetadata;
-import net.thirdfoot.rto.kernel.media.YoutubeUtil;
+
+import net.thirdfoot.rto.media.YoutubeMetadata;
+import net.thirdfoot.rto.media.YoutubeUtil;
 import net.thirdfoot.rto.model.Video;
 import net.thirdfoot.rto.model.dao.VideoRepository;
 import net.thirdfoot.rto.model.exception.InvalidVideoUrlException;

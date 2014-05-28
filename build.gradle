@@ -73,6 +73,14 @@ project(':rto-service') {
 
     compile 'org.hibernate:hibernate-core:4.1.7.Final'
   }
+
+  sourceSets {
+    main {
+      java {
+        srcDirs = ["src/main/java", "src/main/python"]
+      }
+    }
+  }
 }
 
 project(':rto-web') {
