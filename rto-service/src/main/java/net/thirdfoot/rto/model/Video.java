@@ -2,6 +2,7 @@ package net.thirdfoot.rto.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -16,6 +17,14 @@ import net.thirdfoot.rto.kernel.model.BaseModel;
  */
 @Entity
 public class Video extends BaseModel {
+
+  public Video() {
+  }
+
+  public Video(VideoMetadata videoMetadata) {
+    setVideoMetadata(videoMetadata);
+    setVideoStreams(videoMetadata.getStreams());
+  }
 
   public int getConvertCount() {
     return _convertCount;
@@ -67,7 +76,7 @@ public class Video extends BaseModel {
   @Embedded
   private VideoMetadata _videoMetadata;
 
-  @OneToMany(mappedBy = "_video")
+  @OneToMany(mappedBy = "_video", cascade = CascadeType.MERGE)
   private List<VideoStream> _videoStreams;
 
   @Column(name = "VIEW_COUNT")
