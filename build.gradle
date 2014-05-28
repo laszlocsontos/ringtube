@@ -106,15 +106,11 @@ project(':rto-web') {
   task deploy(dependsOn: war) << {
     println "Copy from ${libsDir.getPath()} into ${tomcatHome}/webapps"
 
-    delete fileTree(dir: "${tomcatHome}/work", include: '**/*')
-    delete fileTree(dir: "${tomcatHome}/temp", include: '**/*')
-    delete fileTree(dir: "${tomcatHome}/webapps", include: '**/*')
+    delete "${tomcatHome}/work"
+    delete "${tomcatHome}/temp"
+    delete "${tomcatHome}/webapps"
 
-    copy {
-      from libsDir
-      into "${tomcatHome}/webapps"
-      include '*.war'
-    }
+    ant.unzip(src: war.archivePath, dest: "${tomcatHome}/webapps/${projectName}")
   }
 }
  
