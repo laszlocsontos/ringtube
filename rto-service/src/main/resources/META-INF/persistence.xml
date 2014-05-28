@@ -7,5 +7,7 @@
     <mapping-file>META-INF/orm.xml</mapping-file>
 
     <class>net.thirdfoot.rto.model.Video</class>
+    <class>net.thirdfoot.rto.model.VideoMetadata</class>
+    <class>net.thirdfoot.rto.model.VideoStream</class>
   </persistence-unit>
 </persistence>

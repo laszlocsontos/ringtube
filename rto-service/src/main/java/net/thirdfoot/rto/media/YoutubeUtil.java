@@ -19,15 +19,17 @@ import jodd.io.StreamUtil;
 import jodd.util.StringBand;
 import jodd.util.StringPool;
 import jodd.util.StringUtil;
+
 import net.thirdfoot.rto.kernel.jython.PyObjectFactory;
 import net.thirdfoot.rto.kernel.jython.PyObjectFactoryUtil;
 import net.thirdfoot.rto.kernel.util.FileSystemUtil;
-import net.thirdfoot.rto.model.YoutubeMetadata;
-import net.thirdfoot.rto.model.YoutubeStream;
+import net.thirdfoot.rto.model.VideoMetadata;
+import net.thirdfoot.rto.model.VideoStream;
 
 import org.python.core.PyException;
 import org.python.core.PyObject;
 import org.python.core.PyString;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +52,7 @@ public class YoutubeUtil {
     return outFile.getPath();
   }
 
-  public static YoutubeMetadata getYoutubeMetadata(String url) {
+  public static VideoMetadata getYoutubeMetadata(String url) {
     if (StringUtil.isBlank(url)) {
       throw new NullPointerException("url is null or empty");
     }
@@ -61,7 +63,7 @@ public class YoutubeUtil {
       return null;
     }
 
-    YoutubeMetadata youtubeMetadata = youtubeMetadataCache.get(videoId);
+    VideoMetadata youtubeMetadata = youtubeMetadataCache.get(videoId);
 
     if (youtubeMetadata != null) {
       return youtubeMetadata;
@@ -75,13 +77,13 @@ public class YoutubeUtil {
   }
 
   public static File getYoutubeVideo(String url) {
-    YoutubeMetadata youtubeMetadata = getYoutubeMetadata(url);
+    VideoMetadata youtubeMetadata = getYoutubeMetadata(url);
 
     if (youtubeMetadata == null) {
       throw new IllegalArgumentException("youtubeMetadata is null");
     }
 
-    YoutubeStream youtubeStream = _selectYoutubeStream(youtubeMetadata);
+    VideoStream youtubeStream = _selectYoutubeStream(youtubeMetadata);
 
     URL youtubeUrl = null;
 
@@ -171,7 +173,7 @@ public class YoutubeUtil {
     return matcher.group(1);
   }
 
-  private static YoutubeMetadata _getYoutubeMetadata(String url) {
+  private static VideoMetadata _getYoutubeMetadata(String url) {
     try {
       PyObjectFactory pyYoutubeMetadataFactory =
         PyObjectFactoryUtil.getFactory("youtube", "youtube_metadata");
@@ -179,7 +181,7 @@ public class YoutubeUtil {
       PyObject pyYoutubeMetadata = pyYoutubeMetadataFactory.create(
         new PyString(url));
 
-      YoutubeMetadata youtubeMetadata = new YoutubeMetadata(pyYoutubeMetadata);
+      VideoMetadata youtubeMetadata = new VideoMetadata(pyYoutubeMetadata);
 
       return youtubeMetadata;
     }
@@ -188,8 +190,8 @@ public class YoutubeUtil {
     }
   }
 
-  private static YoutubeStream _selectYoutubeStream(
-    YoutubeMetadata youtubeMetadata) {
+  private static VideoStream _selectYoutubeStream(
+    VideoMetadata youtubeMetadata) {
 
     // TODO A more sophisticated implementation may go here
     return youtubeMetadata.getFirstStream();
@@ -201,8 +203,8 @@ public class YoutubeUtil {
   private static Logger _log = LoggerFactory.getLogger(YoutubeUtil.class);
 
   // TODO Apply a real, distributed LRU cache later !!!
-  private static final ConcurrentMap<String, YoutubeMetadata>
-    youtubeMetadataCache = new ConcurrentHashMap<String, YoutubeMetadata>();
+  private static final ConcurrentMap<String, VideoMetadata>
+    youtubeMetadataCache = new ConcurrentHashMap<String, VideoMetadata>();
 
   private YoutubeUtil() {
   }

@@ -2,7 +2,6 @@ package net.thirdfoot.rto.kernel.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -12,11 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
 import jodd.util.HashCode;
 import jodd.util.StringPool;
-import jodd.util.StringUtil;
 
 /**
  * @author lcsontos
@@ -115,8 +114,7 @@ public abstract class BaseModel implements Serializable {
   @Column(name = "REVISION")
   private long _revision;
 
-  @Column(name = "UUID")
-  @Id
+  @Column(name = "UUID", unique = true, updatable = false)
   private String _uuid;
 
 }

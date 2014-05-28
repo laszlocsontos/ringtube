@@ -2,19 +2,29 @@ package net.thirdfoot.rto.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+
 import jodd.util.StringUtil;
+import net.thirdfoot.rto.kernel.model.BaseModel;
 
 import org.python.core.PyObject;
 
 /**
  * @author lcsontos
  */
-public class YoutubeStream implements Comparable<YoutubeStream>, Serializable {
+@Entity
+public class VideoStream
+  extends BaseModel implements Comparable<VideoStream>, Serializable {
 
-  public YoutubeStream() {
+  public VideoStream() {
   }
 
-  public YoutubeStream(PyObject pyYoutubeStream) {
+  public VideoStream(PyObject pyYoutubeStream) {
     _extension = pyYoutubeStream.__getattr__("extension").asString();
     _mediaType = pyYoutubeStream.__getattr__("mediatype").asString();
     _resolution = pyYoutubeStream.__getattr__("resolution").asString();
@@ -24,7 +34,7 @@ public class YoutubeStream implements Comparable<YoutubeStream>, Serializable {
   }
 
   @Override
-  public int compareTo(YoutubeStream other) {
+  public int compareTo(VideoStream other) {
     if (other == null) {
       throw new IllegalArgumentException("parameter cannot be null");
     }
@@ -59,6 +69,10 @@ public class YoutubeStream implements Comparable<YoutubeStream>, Serializable {
     return _url;
   }
 
+  public Video getVideo() {
+    return _video;
+  }
+
   public void setExtension(String extension) {
     _extension = extension;
   }
@@ -81,6 +95,10 @@ public class YoutubeStream implements Comparable<YoutubeStream>, Serializable {
 
   public void setUrl(String url) {
     _url = url;
+  }
+
+  public void setVideo(Video video) {
+    _video = video;
   }
 
   protected int doGetQuality(String quality) {
@@ -109,11 +127,26 @@ public class YoutubeStream implements Comparable<YoutubeStream>, Serializable {
     return (w * h);
   }
 
+  @Column(name = "EXTENSION")
   private String _extension;
+
+  @Column(name = "MEDIA_TYPE")
   private String _mediaType;
+
+  @Column(name = "RESOLUTION")
   private String _resolution;
+
+  @Column(name = "QUALITY")
   private String _quality;
+
+  @Column(name = "SIZE")
   private int _size;
+
+  @Transient
   private String _url;
+
+  @JoinColumn(name = "VIDEO_ID")
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Video _video;
 
 }

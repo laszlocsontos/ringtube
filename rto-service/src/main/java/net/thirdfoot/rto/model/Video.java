@@ -1,8 +1,13 @@
 package net.thirdfoot.rto.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.OneToMany;
 
 import net.thirdfoot.rto.kernel.model.BaseModel;
 
@@ -12,91 +17,58 @@ import net.thirdfoot.rto.kernel.model.BaseModel;
 @Entity
 public class Video extends BaseModel {
 
-  public String getAuthor() {
-    return _author;
-  }
-
   public int getConvertCount() {
     return _convertCount;
-  }
-
-  public int getLength() {
-    return _length;
-  }
-
-  public double getRating() {
-    return _rating;
-  }
-
-  public int getSize() {
-    return _size;
   }
 
   public VideoStatus getStatus() {
     return _status;
   }
 
-  public String getVideoId() {
-    return _videoId;
+  public VideoMetadata getVideoMetadata() {
+    return _videoMetadata;
+  }
+
+  public List<VideoStream> getVideoStreams() {
+    return _videoStreams;
   }
 
   public int getViewCount() {
     return _viewCount;
   }
 
-  public void setAuthor(String author) {
-    _author = author;
-  }
-
   public void setConvertCount(int convertCount) {
     _convertCount = convertCount;
-  }
-
-  public void setLength(int length) {
-    _length = length;
-  }
-
-  public void setRating(double rating) {
-    _rating = rating;
-  }
-
-  public void setSize(int size) {
-    _size = size;
   }
 
   public void setStatus(VideoStatus status) {
     _status = status;
   }
 
-  public void setVideoId(String videoId) {
-    _videoId = videoId;
+  public void setVideoMetadata(VideoMetadata videoMetadata) {
+    _videoMetadata = videoMetadata;
+  }
+
+  public void setVideoStreams(List<VideoStream> videoStreams) {
+    _videoStreams = videoStreams;
   }
 
   public void setViewCount(int viewCount) {
     _viewCount = viewCount;
   }
 
-  @Column(name = "AUTHOR")
-  private String _author;
-
   @Column(name = "CONVERT_COUNT")
   private int _convertCount;
 
-  @Column(name = "LENGTH")
-  private int _length;
-
-  @Column(name = "VIDEO_ID")
-  private String _videoId;
-
-  @Column(name = "RATING")
-  private double _rating;
-
-  @Column(name = "SIZE")
-  private int _size;
-
   @Column(name = "STATUS")
-  @Enumerated
+  @Enumerated(EnumType.STRING)
   private VideoStatus _status;
+
+  @Embedded
+  private VideoMetadata _videoMetadata;
+
+  @OneToMany(mappedBy = "_video")
+  private List<VideoStream> _videoStreams;
 
   @Column(name = "VIEW_COUNT")
   private int _viewCount;

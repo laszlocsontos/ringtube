@@ -5,17 +5,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Transient;
+
 import org.python.core.PyObject;
 
 /**
  * @author lcsontos
  */
-public class YoutubeMetadata implements Serializable {
+@Embeddable
+public class VideoMetadata implements Serializable {
 
-  public YoutubeMetadata() {
+  public VideoMetadata() {
   }
 
-  public YoutubeMetadata(PyObject pyYoutubeMetadata) {
+  public VideoMetadata(PyObject pyYoutubeMetadata) {
     _author = pyYoutubeMetadata.__getattr__("author").asString();
     _category = pyYoutubeMetadata.__getattr__("category").asString();
     _length = pyYoutubeMetadata.__getattr__("length").asInt();
@@ -25,10 +30,10 @@ public class YoutubeMetadata implements Serializable {
     Iterable<PyObject> streams = pyYoutubeMetadata.__getattr__(
       "streams").asIterable();
 
-    _streams = new ArrayList<YoutubeStream>();
+    _streams = new ArrayList<VideoStream>();
 
     for (PyObject pyYoutubeStream : streams) {
-      _streams.add(new YoutubeStream(pyYoutubeStream));
+      _streams.add(new VideoStream(pyYoutubeStream));
     }
 
     _title = pyYoutubeMetadata.__getattr__("title").asString();
@@ -42,7 +47,7 @@ public class YoutubeMetadata implements Serializable {
     return _category;
   }
 
-  public YoutubeStream getFirstStream() {
+  public VideoStream getFirstStream() {
     if (_firstStream != null) {
       return _firstStream;
     }
@@ -53,7 +58,7 @@ public class YoutubeMetadata implements Serializable {
       return null;
     }
 
-    YoutubeStream[] streams = new YoutubeStream[len];
+    VideoStream[] streams = new VideoStream[len];
 
     streams = _streams.toArray(streams);
 
@@ -74,7 +79,7 @@ public class YoutubeMetadata implements Serializable {
     return _published;
   }
 
-  public List<YoutubeStream> getStreams() {
+  public List<VideoStream> getStreams() {
     return _streams;
   }
 
@@ -102,7 +107,7 @@ public class YoutubeMetadata implements Serializable {
     _published = published;
   }
 
-  public void setStreams(List<YoutubeStream> streams) {
+  public void setStreams(List<VideoStream> streams) {
     _firstStream = null;
     _streams = streams;
   }
@@ -111,13 +116,28 @@ public class YoutubeMetadata implements Serializable {
     _title = title;
   }
 
+  @Column(name = "AUTHOR")
   private String _author;
+
+  @Column(name = "CATEGORY")
   private String _category;
-  private YoutubeStream _firstStream;
+
+  @Transient
+  private VideoStream _firstStream;
+
+  @Column(name = "LENGTH")
   private int _length;
+
+  @Column(name = "VIDEO_ID")
   private String _videoId;
+
+  @Column(name = "PUBLISHED")
   private String _published;
-  private List<YoutubeStream> _streams;
+
+  @Transient
+  private List<VideoStream> _streams;
+
+  @Column(name = "TITLE")
   private String _title;
 
 }
