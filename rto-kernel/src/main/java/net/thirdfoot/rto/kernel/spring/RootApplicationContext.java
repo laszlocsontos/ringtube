@@ -27,7 +27,8 @@ class RootApplicationContext extends XmlWebApplicationContext {
     new PropsEnvironment();
 
   private static final String[] _RESOURCES = {
-    "classpath:META-INF/kernel-spring.xml", "classpath*:META-INF/*-spring.xml"
+    "classpath:META-INF/kernel-spring.xml",
+    "classpath*:META-INF/service-spring.xml"
   };
 
   private static class PropsEnvironment extends AbstractEnvironment {
