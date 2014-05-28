@@ -1,5 +1,7 @@
 package net.thirdfoot.rto.kernel.util;
 
+import static net.thirdfoot.rto.kernel.config.KernelKeys.*;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -11,6 +13,7 @@ import jodd.util.StringPool;
 import jodd.util.StringUtil;
 
 import net.thirdfoot.rto.kernel.config.PropsBeanUtil;
+import net.thirdfoot.rto.kernel.config.PropsKey;
 
 /**
  * @author lcsontos
@@ -36,7 +39,7 @@ public class FileSystemUtil {
   }
 
   public static File getBaseDir() {
-    String baseDir = PropsBeanUtil.getString("fs.base.dir");
+    String baseDir = PropsBeanUtil.getString(FS_BASE_DIR);
 
     File dir = new File(baseDir);
 
@@ -66,19 +69,19 @@ public class FileSystemUtil {
   }
 
   public static File getDataDir(String owner) {
-    return _getDir("fs.data.dir", owner);
+    return _getDir(FS_DATA_DIR, owner);
   }
 
   public static File getLogDir() {
-    return _getDir("fs.log.dir", null);
+    return _getDir(FS_LOG_DIR, null);
   }
 
   public static File getTempDir(String owner) {
-    return _getDir("fs.temp.dir", owner);
+    return _getDir(FS_TEMP_DIR, owner);
   }
 
-  private static File _getDir(String dirName) {
-    File dir = new File(PropsBeanUtil.getString(dirName));
+  private static File _getDir(PropsKey dirKey) {
+    File dir = new File(PropsBeanUtil.getString(dirKey));
 
     File parentDir = dir.getParentFile();
 
@@ -97,8 +100,8 @@ public class FileSystemUtil {
     return dir;
   }
 
-  private static File _getDir(String dirName, String owner) {
-    File parentDir = _getDir(dirName);
+  private static File _getDir(PropsKey dirKey, String owner) {
+    File parentDir = _getDir(dirKey);
 
     if (StringUtil.isBlank(owner)) {
       return parentDir;

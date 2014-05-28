@@ -8,13 +8,12 @@ import javax.servlet.ServletContextEvent;
 import jodd.util.ClassLoaderUtil;
 import jodd.util.StringPool;
 import jodd.util.StringUtil;
-
+import net.thirdfoot.rto.kernel.config.KernelKeys;
 import net.thirdfoot.rto.kernel.config.PropsBeanUtil;
 import net.thirdfoot.rto.kernel.util.FileSystemUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -61,7 +60,8 @@ class RootContextLoaderListener extends ContextLoaderListener {
 
     File logDir = FileSystemUtil.getLogDir();
 
-    _loggerContext.putProperty("log.dir", logDir.getAbsolutePath());
+    _loggerContext.putProperty(
+      KernelKeys.FS_LOG_DIR.getKey(), logDir.getAbsolutePath());
 
     try {
       JoranConfigurator loggerConfigurator = new JoranConfigurator();

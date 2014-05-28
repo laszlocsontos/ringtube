@@ -42,8 +42,7 @@ public class YoutubeUtilTest {
 
     PowerMockito.doReturn(
       mockDir).when(
-        FileSystemUtil.class, "_getDir", Matchers.anyString(),
-        Matchers.anyString());
+        FileSystemUtil.class, "_getDir", Matchers.any(), Matchers.any());
   }
 
   @Test

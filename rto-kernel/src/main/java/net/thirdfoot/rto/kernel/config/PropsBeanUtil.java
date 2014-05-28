@@ -4,24 +4,24 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.management.JMException;
-import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
 import jodd.typeconverter.Convert;
 import jodd.util.ClassLoaderUtil;
 import jodd.util.StringBand;
 import jodd.util.StringUtil;
+
 import net.thirdfoot.rto.kernel.util.JMXUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.core.env.PropertySource;
 
 /**
@@ -46,8 +46,16 @@ public class PropsBeanUtil {
     return _instance;
   }
 
+  public static Boolean getBoolean(PropsKey key) {
+    return getBoolean(key, false);
+  }
+
   public static Boolean getBoolean(String key) {
     return getBoolean(key, false);
+  }
+
+  public static Boolean getBoolean(PropsKey key, boolean defaultValue) {
+    return getBoolean(key.getKey(), defaultValue);
   }
 
   public static Boolean getBoolean(String key, boolean defaultValue) {
@@ -59,9 +67,18 @@ public class PropsBeanUtil {
 
     return defaultValue;
   }
+  public static boolean[] getBooleanArray(PropsKey key) {
+    return getBooleanArray(key, null);
+  }
 
   public static boolean[] getBooleanArray(String key) {
     return getBooleanArray(key, null);
+  }
+
+  public static boolean[] getBooleanArray(
+    PropsKey key, boolean[] defaultValue) {
+
+    return getBooleanArray(key.getKey(), defaultValue);
   }
 
   public static boolean[] getBooleanArray(
@@ -76,8 +93,16 @@ public class PropsBeanUtil {
     return defaultValue;
   }
 
+  public static Integer getInteger(PropsKey key) {
+    return getInteger(key, 0);
+  }
+
   public static Integer getInteger(String key) {
     return getInteger(key, 0);
+  }
+
+  public static Integer getInteger(PropsKey key, int defaultValue) {
+    return getInteger(key.getKey(), defaultValue);
   }
 
   public static Integer getInteger(String key, int defaultValue) {
@@ -90,8 +115,16 @@ public class PropsBeanUtil {
     return defaultValue;
   }
 
+  public static int[] getIntegerArray(PropsKey key) {
+    return getIntegerArray(key, null);
+  }
+
   public static int[] getIntegerArray(String key) {
     return getIntegerArray(key, null);
+  }
+
+  public static int[] getIntegerArray(PropsKey key, int[] defaultValue) {
+    return getIntegerArray(key.getKey(), defaultValue);
   }
 
   public static int[] getIntegerArray(String key, int[] defaultValue) {
@@ -108,8 +141,16 @@ public class PropsBeanUtil {
     return getInstance().getPropertiesBySection(section);
   }
 
+  public static String getString(PropsKey key) {
+    return getString(key, null);
+  }
+
   public static String getString(String key) {
     return getString(key, null);
+  }
+
+  public static String getString(PropsKey key, String defaultValue) {
+    return getString(key.getKey(), defaultValue);
   }
 
   public static String getString(String key, String defaultValue) {
@@ -124,6 +165,10 @@ public class PropsBeanUtil {
     }
 
     return defaultValue;
+  }
+
+  public static String[] getStringArray(PropsKey key) {
+    return getStringArray(key.getKey());
   }
 
   public static String[] getStringArray(String key) {

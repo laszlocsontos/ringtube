@@ -1,6 +1,6 @@
 <configuration debug="true">
   <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-    <file>${log.dir}/app.log</file>
+    <file>${fs.log.dir}/app.log</file>
 
     <encoder>
       <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n</pattern>
