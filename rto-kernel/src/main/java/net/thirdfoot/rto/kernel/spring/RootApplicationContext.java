@@ -20,16 +20,11 @@ class RootApplicationContext extends XmlWebApplicationContext {
 
   @Override
   protected String[] getDefaultConfigLocations() {
-    return _RESOURCES;
+    return RootContextConstants.RESOURCES;
   }
 
   private static final ConfigurableEnvironment _ENVIRONMENT =
     new PropsEnvironment();
-
-  private static final String[] _RESOURCES = {
-    "classpath:META-INF/kernel-spring.xml",
-    "classpath*:META-INF/service-spring.xml"
-  };
 
   private static class PropsEnvironment extends AbstractEnvironment {
 

@@ -76,14 +76,12 @@ public class YoutubeUtil {
     return youtubeMetadata;
   }
 
-  public static File getYoutubeVideo(String url) {
-    VideoMetadata youtubeMetadata = getYoutubeMetadata(url);
-
+  public static File getYoutubeVideo(VideoMetadata youtubeMetadata) {
     if (youtubeMetadata == null) {
       throw new IllegalArgumentException("youtubeMetadata is null");
     }
 
-    VideoStream youtubeStream = _selectYoutubeStream(youtubeMetadata);
+    VideoStream youtubeStream = youtubeMetadata.getFirstStream();
 
     URL youtubeUrl = null;
 
@@ -120,43 +118,7 @@ public class YoutubeUtil {
       StreamUtil.close(fileOutputStream);
     }
 
-    // Move to video repository
-
-    final int grp = 2;
-    int len = videoId.length();
-
-    StringBand sb = new StringBand(8 + len + len / grp);
-
-    for (int index = 0; index < len; index++) {
-      if (index % grp == 0) {
-        sb.append(File.separatorChar);
-      }
-
-      sb.append(videoId.charAt(index));
-    }
-
-    sb.append(File.separator);
-    sb.append(videoId);
-    sb.append(StringPool.UNDERSCORE);
-    sb.append(youtubeStream.getMediaType());
-    sb.append(StringPool.UNDERSCORE);
-    sb.append(youtubeStream.getQuality());
-    sb.append(StringPool.DOT);
-    sb.append(youtubeStream.getExtension());
-
-    File videoDir = FileSystemUtil.getDataDir(YoutubeUtil.class.getName());
-    File videoFile = new File(videoDir, sb.toString());
-
-    FileUtilParams params = new FileUtilParams();
-
-    try {
-      FileUtil.moveFile(tempFile, videoFile, params.setCreateDirs(true));
-    }
-    catch (IOException ioe) {
-      throw new YoutubeException(ioe);
-    }
-
-    return videoFile;
+    return tempFile;
   }
 
   public static String parseUrl(String url) {
@@ -188,13 +150,6 @@ public class YoutubeUtil {
     catch (PyException pye) {
       throw new YoutubeException(pye);
     }
-  }
-
-  private static VideoStream _selectYoutubeStream(
-    VideoMetadata youtubeMetadata) {
-
-    // TODO A more sophisticated implementation may go here
-    return youtubeMetadata.getFirstStream();
   }
 
   private static final Pattern _YOUTUBE_URL_PATTERN =

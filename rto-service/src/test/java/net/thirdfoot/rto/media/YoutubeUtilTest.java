@@ -38,6 +38,9 @@ import org.slf4j.LoggerFactory;
 @RunWith(PowerMockRunner.class)
 public class YoutubeUtilTest {
 
+  public static final String DOWNLOAD_URL =
+    "http://www.youtube.com/watch?v=nGdFHJXciAQ";
+
   @BeforeClass
   public static void setUpClass() throws Exception {
     PowerMockito.spy(FileSystemUtil.class);
@@ -109,7 +112,9 @@ public class YoutubeUtilTest {
 
   @Test
   public void testGetYoutubeVideo() {
-    File youtubeVideo = YoutubeUtil.getYoutubeVideo(_DOWNLOAD_URL);
+    VideoMetadata videoMetadata = YoutubeUtil.getYoutubeMetadata(DOWNLOAD_URL);
+
+    File youtubeVideo = YoutubeUtil.getYoutubeVideo(videoMetadata);
 
     Assert.assertNotNull(youtubeVideo);
   }
@@ -136,8 +141,6 @@ public class YoutubeUtilTest {
   private static Logger _log = LoggerFactory.getLogger(
     YoutubeUtilTest.class);
 
-  private final String _DOWNLOAD_URL =
-    "http://www.youtube.com/watch?v=nGdFHJXciAQ";
   private final String _INVALID_URL = "https://www.youtube.com/watch?v=wrongId";
   private final String _VALID_URL =
     "https://www.youtube.com/watch?v=W2yk1lsi9RM";

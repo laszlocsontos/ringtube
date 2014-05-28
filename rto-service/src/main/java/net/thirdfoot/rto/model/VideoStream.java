@@ -73,6 +73,10 @@ public class VideoStream
     return _video;
   }
 
+  public String getVideoFile() {
+    return _videoFile;
+  }
+
   public void setExtension(String extension) {
     _extension = extension;
   }
@@ -99,6 +103,10 @@ public class VideoStream
 
   public void setVideo(Video video) {
     _video = video;
+  }
+
+  public void setVideoFile(String videoFile) {
+    _videoFile = videoFile;
   }
 
   protected int doGetQuality(String quality) {
@@ -148,5 +156,8 @@ public class VideoStream
   @JoinColumn(name = "VIDEO_ID")
   @ManyToOne(fetch = FetchType.LAZY)
   private Video _video;
+
+  @Column(name = "VIDEO_FILE")
+  private String _videoFile;
 
 }

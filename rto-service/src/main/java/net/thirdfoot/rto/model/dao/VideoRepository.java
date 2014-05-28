@@ -2,7 +2,9 @@ package net.thirdfoot.rto.model.dao;
 
 import net.thirdfoot.rto.model.Video;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -10,4 +12,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface VideoRepository extends CrudRepository<Video, Long> {
+
+  @Query("SELECT v FROM Video v WHERE v._videoMetadata._videoId = :videoId")
+  public Video findByVideoId(@Param("videoId") String _videoId);
+
 }
