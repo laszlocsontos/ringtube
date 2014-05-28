@@ -6,5 +6,7 @@
   <persistence-unit name="pu" transaction-type="RESOURCE_LOCAL">
     <mapping-file>META-INF/kernel-orm.xml</mapping-file>
     <class>net.thirdfoot.rto.kernel.model.BaseModel</class>
+    <class>net.thirdfoot.rto.kernel.model.Visit</class>
+    <class>net.thirdfoot.rto.kernel.model.Visitor</class>
   </persistence-unit>
 </persistence>

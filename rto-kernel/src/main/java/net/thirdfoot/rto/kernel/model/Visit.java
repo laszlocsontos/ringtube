@@ -1,8 +1,6 @@
-package net.thirdfoot.rto.model;
+package net.thirdfoot.rto.kernel.model;
 
 import javax.persistence.Entity;
-
-import net.thirdfoot.rto.kernel.model.BaseModel;
 
 /**
  * @author lcsontos

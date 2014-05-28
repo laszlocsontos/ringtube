@@ -7,7 +7,5 @@
     <mapping-file>META-INF/orm.xml</mapping-file>
 
     <class>net.thirdfoot.rto.model.Video</class>
-    <class>net.thirdfoot.rto.model.Visit</class>
-    <class>net.thirdfoot.rto.model.Visitor</class>
   </persistence-unit>
 </persistence>
