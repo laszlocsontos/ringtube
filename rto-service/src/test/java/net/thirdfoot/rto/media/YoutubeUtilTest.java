@@ -6,27 +6,23 @@ import java.util.List;
 
 import jodd.io.FileUtil;
 import jodd.util.StringPool;
-
 import net.thirdfoot.rto.kernel.util.FileSystemUtil;
 import net.thirdfoot.rto.media.ConversionAttribute;
 import net.thirdfoot.rto.media.ConversionContext;
 import net.thirdfoot.rto.media.YoutubeException;
-import net.thirdfoot.rto.media.YoutubeMetadata;
-import net.thirdfoot.rto.media.YoutubeStream;
 import net.thirdfoot.rto.media.YoutubeUtil;
+import net.thirdfoot.rto.model.YoutubeMetadata;
+import net.thirdfoot.rto.model.YoutubeStream;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.mockito.Matchers;
-
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

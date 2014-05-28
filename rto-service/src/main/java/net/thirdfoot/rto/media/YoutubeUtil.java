@@ -4,13 +4,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
@@ -22,15 +19,15 @@ import jodd.io.StreamUtil;
 import jodd.util.StringBand;
 import jodd.util.StringPool;
 import jodd.util.StringUtil;
-
 import net.thirdfoot.rto.kernel.jython.PyObjectFactory;
 import net.thirdfoot.rto.kernel.jython.PyObjectFactoryUtil;
 import net.thirdfoot.rto.kernel.util.FileSystemUtil;
+import net.thirdfoot.rto.model.YoutubeMetadata;
+import net.thirdfoot.rto.model.YoutubeStream;
 
 import org.python.core.PyException;
 import org.python.core.PyObject;
 import org.python.core.PyString;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

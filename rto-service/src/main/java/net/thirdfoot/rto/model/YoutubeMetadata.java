@@ -1,4 +1,4 @@
-package net.thirdfoot.rto.media;
+package net.thirdfoot.rto.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
