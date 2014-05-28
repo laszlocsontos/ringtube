@@ -2,13 +2,17 @@ package net.thirdfoot.rto.kernel.util;
 
 import java.util.Hashtable;
 
+import javax.management.JMException;
+import javax.management.MBeanServer;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
+
+import org.springframework.jmx.support.JmxUtils;
 
 /**
  * @author lcsontos
  */
-public final class JMXUtil {
+public final class JMXUtil extends JmxUtils {
 
   public static final String DOMAIN = "net.thirdfoot";
 
@@ -21,6 +25,22 @@ public final class JMXUtil {
     properties.put("type", type);
 
     return new ObjectName(DOMAIN, properties);
+  }
+
+  public static void registerMBean(Object instance, ObjectName objectName)
+    throws JMException {
+
+    MBeanServer mbeanServer = locateMBeanServer();
+
+    mbeanServer.registerMBean(instance, objectName);
+  }
+
+  public static void unregisterMBean(ObjectName objectName)
+    throws JMException {
+
+    MBeanServer mbeanServer = locateMBeanServer();
+
+    mbeanServer.unregisterMBean(objectName);
   }
 
   private JMXUtil() {

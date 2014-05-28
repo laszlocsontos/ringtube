@@ -143,15 +143,13 @@ public class PropsBeanUtil {
       _log.debug("Registering MBean");
     }
 
-    try {
-      PropsBean instance = getInstance();
+    PropsBean instance = getInstance();
 
-      ObjectName objectName = JMXUtil.createObjectName(
+      try {
+      _mbeanObjectName = JMXUtil.createObjectName(
         contextName, instance.getClass());
-  
-      MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
 
-      mBeanServer.registerMBean(instance, objectName);
+      JMXUtil.registerMBean(instance, _mbeanObjectName);
     }
     catch (JMException jme) {
       _log.error("MBean registration failed", jme);
@@ -160,6 +158,15 @@ public class PropsBeanUtil {
 
   public static void setString(String key, String value) {
     getInstance().setProperty(key, value);
+  }
+
+  public static void unregisterMBean() {
+    try {
+      JMXUtil.unregisterMBean(_mbeanObjectName);
+    }
+    catch (JMException jme) {
+      _log.error("MBean unregistration failed", jme);
+    }
   }
 
   private static InputStream _getDefaultPropertyInputStream() {
@@ -230,6 +237,8 @@ public class PropsBeanUtil {
   private static PropsBean _instance;
 
   private static AtomicBoolean _initialized = new AtomicBoolean(false);
+
+  private static ObjectName _mbeanObjectName;
   private static AtomicBoolean _mbeanRegistered = new AtomicBoolean(false);
 
   private static Logger _log = LoggerFactory.getLogger(PropsBeanUtil.class);
