@@ -60,7 +60,7 @@ public class YoutubeUtil {
 
     String videoId = parseUrl(url);
 
-    if (StringUtil.isBlank(url)) {
+    if (StringUtil.isBlank(videoId)) {
       return null;
     }
 
