@@ -35,7 +35,7 @@ public class FileSystemUtil {
     return tempFile;
   }
 
-  public static String getBaseDir() {
+  public static File getBaseDir() {
     String baseDir = PropsBeanUtil.getString("fs.base.dir");
 
     File dir = new File(baseDir);
@@ -48,9 +48,9 @@ public class FileSystemUtil {
       baseDir = StringPool.EMPTY;
 
       try {
-        File tempDir = FileUtil.createTempDirectory();
+        dir = FileUtil.createTempDirectory();
 
-        baseDir = tempDir.getAbsolutePath();
+        baseDir = dir.getAbsolutePath();
       }
       catch (IOException ioe) {
         _log.error(ioe.getMessage(), ioe);
@@ -62,7 +62,7 @@ public class FileSystemUtil {
       }
     }
 
-    return baseDir;
+    return dir;
   }
 
   public static File getDataDir(String owner) {
@@ -77,17 +77,34 @@ public class FileSystemUtil {
     return _getDir("fs.temp.dir", owner);
   }
 
+  private static File _getDir(String dirName) {
+    File dir = new File(PropsBeanUtil.getString(dirName));
+
+    File parentDir = dir.getParentFile();
+
+    if (!parentDir.exists()) {
+      parentDir = getBaseDir();
+
+      String name = dir.getName();
+
+      dir = new File(parentDir, name);
+    }
+
+    if (!dir.exists()) {
+      dir.mkdirs();
+    }
+
+    return dir;
+  }
+
   private static File _getDir(String dirName, String owner) {
-    String parentDir = PropsBeanUtil.getString(dirName);
+    File parentDir = _getDir(dirName);
 
-    File dir = null;
+    if (StringUtil.isBlank(owner)) {
+      return parentDir;
+    }
 
-    if (StringUtil.isNotBlank(owner)) {
-      dir = new File(parentDir, owner);
-    }
-    else {
-      dir = new File(parentDir);
-    }
+    File dir = new File(parentDir, owner);
 
     if (!dir.exists()) {
       dir.mkdirs();

@@ -1,9 +1,12 @@
 def projectName = 'thirdfoot-rto'
 def langLevel = 1.7
+
 def tomcatVersion = '7.0.11'
+def tomcatHome = '/home/lcsontos/devtools/apache-tomcat-7.0.54'
 
 allprojects {
   apply plugin: 'eclipse'
+  apply plugin: 'java'
  
   group = 'net.thirdfoot.rto'
   version = '0.1'
@@ -20,7 +23,6 @@ buildscript {
 }
  
 subprojects {
-  apply plugin: 'java'
  
   sourceCompatibility = langLevel
   targetCompatibility = langLevel
@@ -90,6 +92,20 @@ project(':rto-web') {
       "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
     tomcat("org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}") {
       exclude group: 'org.eclipse.jdt.core.compiler', module: 'ecj'
+    }
+  }
+
+  task deploy(dependsOn: war) << {
+    println "Copy from ${libsDir.getPath()} into ${tomcatHome}/webapps"
+
+    delete fileTree(dir: "${tomcatHome}/work", include: '**/*')
+    delete fileTree(dir: "${tomcatHome}/temp", include: '**/*')
+    delete fileTree(dir: "${tomcatHome}/webapps", include: '**/*')
+
+    copy {
+      from libsDir
+      into "${tomcatHome}/webapps"
+      include '*.war'
     }
   }
 }

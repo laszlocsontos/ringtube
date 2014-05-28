@@ -43,11 +43,11 @@ class RootContextLoaderListener extends ContextLoaderListener {
 
   @Override
   public void contextInitialized(ServletContextEvent event) {
-    super.contextInitialized(event);
-
     initContextName(event);
     initLogger();
     initProps();
+
+    super.contextInitialized(event);
 
     _log.info("Application " + _contextName + " has been started.");
   }
@@ -99,7 +99,7 @@ class RootContextLoaderListener extends ContextLoaderListener {
       return;
     }
 
-    contextName = StringUtil.cutSuffix(contextName, StringPool.SLASH);
+    contextName = StringUtil.cutSurrounding(contextName, StringPool.SLASH);
 
     if (contextName.indexOf(StringPool.SLASH) != -1) {
       contextName = StringUtil.replace(
