@@ -10,8 +10,9 @@ page at http://checkstyle.sourceforge.net/config.html -->
 <module name="Checker">
 
 
+  <!--
   <module name="RegexpSingleline">
-    <!-- Requires a Google copyright notice in each file.
+    Requires a Google copyright notice in each file.
       Code intended to be open-sourced may have a multi-line copyright
       notice, so that this required text appears on the second line:
       <pre>
@@ -20,7 +21,6 @@ page at http://checkstyle.sourceforge.net/config.html -->
          *
          * (details of open-source license...)
       </pre>
-    -->
     <property name="format"
         value="^(//| \*) Copyright (\([cC]\) )?[\d]{4}(\-[\d]{4})? (Google Inc\.).*$" />
     <property name="minimum" value="1" />
@@ -28,6 +28,7 @@ page at http://checkstyle.sourceforge.net/config.html -->
     <property name="message" value="Google copyright is missing or malformed." />
     <property name="severity" value="error" />
   </module>
+  -->
 
   <module name="FileTabCharacter">
     <!-- Checks that there are no tab characters in the file.
@@ -69,7 +70,7 @@ page at http://checkstyle.sourceforge.net/config.html -->
       <!-- Checks for out of order import statements. -->
 
       <property name="severity" value="warning"/>
-      <property name="groups" value="com.google,android,junit,net,org,java,javax"/>
+      <property name="groups" value="jodd,junit,net.thirdfoot,org,java,javax"/>
       <!-- This ensures that static imports go first. -->
       <property name="option" value="top"/>
       <property name="tokens" value="STATIC_IMPORT, IMPORT"/>
