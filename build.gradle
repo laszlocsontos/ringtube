@@ -51,6 +51,12 @@ subprojects {
   }
 }
 
+project(':rto-bootstrap') {
+  dependencies {
+    compile 'org.mortbay.jetty:servlet-api:3.0.20100224'
+  }
+}
+
 project(':rto-kernel') {
   dependencies {
     compile 'com.mchange:c3p0:0.9.5-pre8'
@@ -101,6 +107,8 @@ project(':rto-web') {
     compile project(':rto-service')
 
     compile 'org.springframework:spring-webmvc:3.2.9.RELEASE'
+
+    runtime project(':rto-bootstrap')
 
     tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
       "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}"
