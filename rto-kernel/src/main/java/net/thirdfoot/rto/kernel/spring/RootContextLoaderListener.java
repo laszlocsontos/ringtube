@@ -8,6 +8,7 @@ import javax.servlet.ServletContextEvent;
 import jodd.util.ClassLoaderUtil;
 import jodd.util.StringPool;
 import jodd.util.StringUtil;
+
 import net.thirdfoot.rto.kernel.config.KernelKeys;
 import net.thirdfoot.rto.kernel.config.PropsBeanUtil;
 import net.thirdfoot.rto.kernel.util.FileSystemUtil;
@@ -33,6 +34,8 @@ class RootContextLoaderListener extends ContextLoaderListener {
 
   @Override
   public void contextDestroyed(ServletContextEvent event) {
+    _log.info("Application " + _contextName + " is being shut down.");
+
     super.contextDestroyed(event);
 
     PropsBeanUtil.unregisterMBean();
