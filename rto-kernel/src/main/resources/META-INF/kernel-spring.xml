@@ -36,4 +36,28 @@
   <bean id="transactionManager"
     class="org.springframework.orm.jpa.JpaTransactionManager" />
 
+  <bean id="viewController"
+    class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
+
+  <bean id="viewHandlerMapping"
+    class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping" >
+
+    <property name="mappings">
+      <props>
+        <prop key="/index.htm">viewController</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="viewResolver"
+    class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+
+    <property name="prefix">
+      <value>/WEB-INF/pages/</value>
+    </property>
+    <property name="suffix">
+      <value>.jsp</value>
+    </property>
+  </bean>
+
 </beans>
