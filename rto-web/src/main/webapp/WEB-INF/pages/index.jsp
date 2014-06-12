@@ -58,27 +58,28 @@
     
     <div class="col-md-8 input-group lead">
       <span class="input-group-addon glyphicon glyphicon-music"></span>
-      <input type="text" class="form-control" placeholder="YouTube URL">
+      <input id="youtube-url" type="text" class="form-control" placeholder="YouTube URL">
     </div>
 
-    <div class="col-md-8 input-group lead">
+    <div id="youtube-url-errmsg" class="col-md-8 alert alert-danger">This isn't a YouTube URL</div>
+
+    <div id="youtube-slider" class="col-md-8 input-group lead">
       <span class="input-group-addon glyphicon glyphicon-resize-horizontal"></span>
       <input id="slider" type="text" class="form-control">
     </div>
 
-    <div class="btn-group">
+    <div id="youtube-convert" class="btn-group">
       <button type="button" class="btn btn-lg btn-success">Convert</button>
       <button type="button" class="btn btn-lg btn-success dropdown-toggle" data-toggle="dropdown">
-      <span class="caret"></span>
-      <span class="sr-only">Toggle Dropdown</span>
-    </button>
-    <ul class="dropdown-menu" role="menu">
-      <li><a href="#">MP3</a></li>
-      <li><a href="#">AAC</a></li>
-      <li><a href="#">OGG</a></li>
-    </ul>
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="#">MP3</a></li>
+        <li><a href="#">AAC</a></li>
+        <li><a href="#">OGG</a></li>
+      </ul>
     </div>
-    </p>
   </div>
 
   <div class="container">
@@ -116,30 +117,10 @@ Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
     </footer>
   </div> <!-- /container -->
 
-
   <!-- Placed at the end of the document so the pages load faster -->
   <script src="html/js/jquery.min.js"></script>
   <script src="html/js/bootstrap.min.js"></script>
   <script src="html/js/bootstrap-slider.min.js"></script>
-  <script type="text/javascript">
-    $('#slider').slider({
-      formater: function(value) {
-        var hours = Math.floor(value / 3600);
-        var minutes = Math.floor((value % 3600) / 60);
-        var seconds = value - (hours * 3600) - (60 * minutes);
-
-        var sb = []
-
-        sb.push("(", hours, ":", minutes, ":", seconds, ")");
-
-        return sb.join("");
-      },
-
-      min: 0,
-      max: 3600,
-      step: 5,
-      value: [0, 10]
-    });
-  </script>
+  <script src="html/js/main.js"></script>
 </body>
 </html>
