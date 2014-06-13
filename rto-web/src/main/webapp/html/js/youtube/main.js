@@ -1,10 +1,10 @@
 (function ($) {
-  var FIELD_YOUTUBE_CONVERT = "#youtube-convert";
-  var FIELD_YOUTUBE_SLIDER = "#youtube-slider";
+  var FIELD_YOUTUBE_CONVERT = '#youtube-convert';
+  var FIELD_YOUTUBE_SLIDER = '#youtube-slider';
 
-  var FIELD_YOUTUBE_URL = "#youtube-url";
+  var FIELD_YOUTUBE_URL = '#youtube-url';
   var FIELD_YOUTUBE_URL_CHECK_INTERVAL = 250;
-  var FIELD_YOUTUBE_URL_ERRMSG = "#youtube-url-errmsg";
+  var FIELD_YOUTUBE_URL_ERRMSG = '#youtube-url-errmsg';
 
   var YOUTUBE_URL_REGEX = /http.+youtube\.com\/watch\?v\=\w+/;
 
@@ -19,7 +19,7 @@
       max: 3600,
       step: 5,
       value: [0, 10]
-    }).data("slider");
+    }).data('slider');
 
     _this.youtubeUrl = $(FIELD_YOUTUBE_URL);
 
@@ -52,7 +52,7 @@
     },
 
     detectChange: function(input, handler) {
-      var old = input.attr("data-old-value");
+      var old = input.attr('data-old-value');
       var current = input.val();
 
       if (old !== current) { 
@@ -60,17 +60,17 @@
           handler.call(this, input);
         }
 
-        input.attr("data-old-value", current);
+        input.attr('data-old-value', current);
       }
     },
 
     disableControls: function() {
-      this.youtubeConvert.children().prop("disabled", true);
+      this.youtubeConvert.children().prop('disabled', true);
       this.youtubeSlider.disable();
     },
 
     enableControls: function() {
-      this.youtubeConvert.children().prop("disabled", false);
+      this.youtubeConvert.children().prop('disabled', false);
       this.youtubeSlider.enable();
     },
 
@@ -81,11 +81,11 @@
 
       var sb = []
 
-      sb.push("(", hours, ":", minutes, ":", seconds, ")");
+      sb.push('(', hours, ':', minutes, ':', seconds, ')');
 
-      return sb.join("");
+      return sb.join('');
     }
   };
 
   new YouTube();
-})(window.jQuery);
+})(jQuery);
