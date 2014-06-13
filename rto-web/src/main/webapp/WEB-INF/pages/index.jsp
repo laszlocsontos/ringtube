@@ -118,9 +118,9 @@ Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
   </div> <!-- /container -->
 
   <!-- Placed at the end of the document so the pages load faster -->
-  <script src="html/js/jquery.min.js"></script>
-  <script src="html/js/bootstrap.min.js"></script>
-  <script src="html/js/bootstrap-slider.min.js"></script>
-  <script src="html/js/main.js"></script>
+  <script src="html/js/jquery/jquery.min.js"></script>
+  <script src="html/js/bootstrap/bootstrap.min.js"></script>
+  <script src="html/js/bootstrap-slider/bootstrap-slider.min.js"></script>
+  <script src="html/js/youtube/main.js"></script>
 </body>
 </html>
