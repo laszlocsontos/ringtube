@@ -19,7 +19,7 @@
       max: 3600,
       step: 5,
       value: [0, 10]
-    });
+    }).data("slider");
 
     _this.youtubeUrl = $(FIELD_YOUTUBE_URL);
 
@@ -66,12 +66,12 @@
 
     disableControls: function() {
       this.youtubeConvert.children().prop("disabled", true);
-      // this.youtubeSlider.disable();
+      this.youtubeSlider.disable();
     },
 
     enableControls: function() {
       this.youtubeConvert.children().prop("disabled", false);
-      // this.youtubeSlider.enable();
+      this.youtubeSlider.enable();
     },
 
     sliderFormatter: function(value) {
