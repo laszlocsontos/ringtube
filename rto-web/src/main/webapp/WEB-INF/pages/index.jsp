@@ -63,9 +63,9 @@
 
     <div id="youtube-url-errmsg" class="col-md-8 alert alert-danger">This isn't a YouTube URL</div>
 
-    <div id="youtube-slider" class="col-md-8 input-group lead">
+    <div class="col-md-8 input-group lead">
       <span class="input-group-addon glyphicon glyphicon-resize-horizontal"></span>
-      <input id="slider" type="text" class="form-control">
+      <input id="youtube-slider" type="text" class="form-control">
     </div>
 
     <div id="youtube-convert" class="btn-group">
