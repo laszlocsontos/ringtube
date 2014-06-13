@@ -1,24 +1,31 @@
+var FIELD_YOUTUBE_URL = "#youtube-url";
+var FIELD_YOUTUBE_URL_CHECK_INTERVAL = 250;
+var FIELD_YOUTUBE_URL_ERRMSG = "#youtube-url-errmsg";
+
+var FIELD_YOUTUBE_CONVERT = "#youtube-convert";
+var FIELD_YOUTUBE_SLIDER = "#youtube-slider";
+
 var YOUTUBE_URL_REGEX = /http.+youtube\.com\/watch\?v\=\w+/;
 
 function checkUrl(url) {
   if (url.match(YOUTUBE_URL_REGEX)) {
-    $("#youtube-url-errmsg").hide();
+    $(FIELD_YOUTUBE_URL_ERRMSG).hide();
     enableControls();
   }
   else {
-    $("#youtube-url-errmsg").show();
+    $(FIELD_YOUTUBE_URL_ERRMSG).show();
     disableControls();
   }
 }
 
 function disableControls() {
-  $("#youtube-convert").children().prop("disabled", true);
-  $("#youtube-slider").children().prop("disabled", true);
+  $(FIELD_YOUTUBE_CONVERT).children().prop("disabled", true);
+  $(FIELD_YOUTUBE_SLIDER).children().prop("disabled", true);
 }
 
 function enableControls() {
-  $("#youtube-convert").children().prop("disabled", false);
-  $("#youtube-slider").children().prop("disabled", false);
+  $(FIELD_YOUTUBE_CONVERT).children().prop("disabled", false);
+  $(FIELD_YOUTUBE_SLIDER).children().prop("disabled", false);
 }
 
 function formatter(value) {
@@ -41,10 +48,19 @@ $("#slider").slider({
   value: [0, 10]
 });
 
-$("#youtube-url").on("change, keydown, focusout", function() {
-  var url = $(this).val();
+setInterval(function() { 
+  var input = $(FIELD_YOUTUBE_URL);
 
-  checkUrl(url);
-});
+  var old = input.attr("data-old-value");
+  var current = input.val();
 
-$("#youtube-url-errmsg").hide();
+  if (old !== current) { 
+    if (typeof old != 'undefined') { 
+      checkUrl(current);
+    }
+
+    input.attr("data-old-value", current);
+  }
+}, FIELD_YOUTUBE_URL_CHECK_INTERVAL);
+
+$(FIELD_YOUTUBE_URL_ERRMSG).hide();
