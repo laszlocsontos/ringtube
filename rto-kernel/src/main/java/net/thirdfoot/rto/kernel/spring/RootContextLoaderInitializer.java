@@ -44,7 +44,8 @@ public class RootContextLoaderInitializer
     servletContext.addListener(new RootContextLoaderListener(rootContext));
   }
 
-  private static final String[] _DISPATCHER_SERVLET_MAPPINGS = {"*.htm"};
+  private static final String[] _DISPATCHER_SERVLET_MAPPINGS = {
+    "*.htm", "/service/*"};
 
   private WebApplicationContext _rootApplicationContext;
 

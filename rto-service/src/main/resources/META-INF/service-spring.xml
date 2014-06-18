@@ -18,7 +18,7 @@
   <bean parent="viewHandlerMapping">
     <property name="mappings">
       <props>
-        <prop key="/video.htm">videoController</prop>
+        <prop key="/service/video">videoController</prop>
       </props>
     </property>
   </bean>
