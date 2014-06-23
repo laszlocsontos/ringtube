@@ -21,12 +21,10 @@ import net.thirdfoot.rto.model.exception.InvalidVideoUrlException;
 import net.thirdfoot.rto.model.exception.NoSuchVideoException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * @author lcsontos
  */
-@Service
 public class VideoServiceImpl implements VideoService {
 
   @Override

@@ -1,5 +1,7 @@
 package net.thirdfoot.rto.service;
 
+import org.springframework.stereotype.Service;
+
 import net.thirdfoot.rto.kernel.exception.ApplicationException;
 import net.thirdfoot.rto.model.Video;
 import net.thirdfoot.rto.model.exception.InvalidVideoUrlException;
@@ -8,6 +10,7 @@ import net.thirdfoot.rto.model.exception.NoSuchVideoException;
 /**
  * @author lcsontos
  */
+@Service
 public interface VideoService {
 
   public void checkVideo(String url)

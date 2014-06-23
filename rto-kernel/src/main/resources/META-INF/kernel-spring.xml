@@ -7,8 +7,12 @@
 
   <context:component-scan base-package="net.thirdfoot" />
 
+  <!-- Data Source -->
+
   <bean id="dataSourceFactoryBean"
     class="net.thirdfoot.rto.kernel.spring.C3P0DataSourceFactoryBean" />
+
+  <!-- JPA/Hibernate -->
 
   <bean id="entityManagerFactory"
     class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
@@ -39,6 +43,12 @@
 
   <bean id="transactionManager"
     class="org.springframework.orm.jpa.JpaTransactionManager" />
+
+  <!-- MVC -->
+
+  <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" /> 
+  <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+  <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
 
   <bean id="viewController"
     class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />

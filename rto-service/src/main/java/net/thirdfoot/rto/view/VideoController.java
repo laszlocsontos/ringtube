@@ -1,37 +1,54 @@
 package net.thirdfoot.rto.view;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import net.thirdfoot.rto.kernel.exception.ApplicationException;
+import net.thirdfoot.rto.model.Video;
+import net.thirdfoot.rto.model.VideoMetadata;
+import net.thirdfoot.rto.service.VideoService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractController;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @author lcsontos
  */
 @Controller
-public class VideoController
-  extends AbstractController implements InitializingBean {
+@RequestMapping("/video")
+public class VideoController {
 
-  @Override
-  public void afterPropertiesSet() throws Exception {
-    _log.info("afterPropertiesSet");
+  @RequestMapping(
+      value="/test", method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseBody
+  public String test() {
+    return "test";
   }
 
-  @Override
-  protected ModelAndView handleRequestInternal(HttpServletRequest request,
-    HttpServletResponse response) throws Exception {
+  @RequestMapping(
+    value="/get/{videoId}", method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE,
+    consumes = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseBody
+  public VideoMetadata get(@PathVariable String videoId)
+    throws ApplicationException {
 
-    _log.info(request.getContextPath());
+    String url = "http://youtube.com/watch?v=" + videoId;
 
-    return null;
+    Video video = _videoService.getVideo(url);
+
+    return video.getVideoMetadata();
   }
 
   private static Logger _log = LoggerFactory.getLogger(VideoController.class);
+
+  @Autowired
+  private VideoService _videoService;
 
 }
