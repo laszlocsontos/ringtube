@@ -89,8 +89,8 @@ project(':rto-service') {
 
   sourceSets {
     main {
-      java {
-        srcDirs = ["src/main/java", "src/main/python"]
+      resources {
+        srcDirs = ["src/main/resources", "src/main/python"]
       }
     }
   }
