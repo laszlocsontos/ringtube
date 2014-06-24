@@ -74,6 +74,8 @@ project(':rto-kernel') {
     compile 'xuggle:xuggle-xuggler:5.4'
 
     runtime 'ch.qos.logback:logback-classic:1.1.2'
+    runtime 'com.fasterxml.jackson.core:jackson-core:2.3.3'
+    runtime 'com.fasterxml.jackson.core:jackson-databind:2.3.3'
     runtime 'com.h2database:h2:1.4.178'
     runtime 'org.hibernate:hibernate-entitymanager:4.2.12.Final'
     runtime 'org.springframework.data:spring-data-jpa:1.6.0.RELEASE'

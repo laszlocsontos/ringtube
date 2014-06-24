@@ -48,7 +48,18 @@
 
   <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" /> 
   <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
-  <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" />
+
+  <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+    <property name="messageConverters">
+      <list>
+        <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+          <property name="objectMapper">
+            <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean" />
+          </property>
+        </bean>
+      </list>
+    </property>
+  </bean>
 
   <bean id="viewController"
     class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
