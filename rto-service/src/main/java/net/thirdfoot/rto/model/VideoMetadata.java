@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.python.core.PyObject;
@@ -134,7 +136,7 @@ public class VideoMetadata implements Serializable {
   @Column(name = "PUBLISHED")
   private String _published;
 
-  @Transient
+  @OneToMany(mappedBy = "_video", cascade = CascadeType.MERGE)
   private List<VideoStream> _streams;
 
   @Column(name = "TITLE")

@@ -13,7 +13,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 /**
  * @author lcsontos
  */
-@ContextConfiguration(locations = {"/META-INF/kernel-spring.xml"})
+@ContextConfiguration(locations = {
+  "/META-INF/kernel-spring.xml", "/META-INF/service-spring.xml"
+})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ModelTest {
 

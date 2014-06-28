@@ -1,15 +1,12 @@
 package net.thirdfoot.rto.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.OneToMany;
 
 import net.thirdfoot.rto.kernel.model.BaseModel;
 
@@ -43,7 +40,7 @@ public class Video extends BaseModel {
   }
 
   public List<VideoStream> getVideoStreams() {
-    return _videoStreams;
+    return _videoMetadata.getStreams();
   }
 
   public int getViewCount() {
@@ -59,18 +56,11 @@ public class Video extends BaseModel {
   }
 
   public void setVideoMetadata(VideoMetadata videoMetadata) {
-    if (videoMetadata.getStreams() == null) {
-      List<VideoStream> videoStreams = getVideoStreams();
-
-      // TODO Class structure might be wrong, recheck later
-      videoMetadata.setStreams(new ArrayList<VideoStream>(videoStreams));
-    }
-
     _videoMetadata = videoMetadata;
   }
 
   public void setVideoStreams(List<VideoStream> videoStreams) {
-    _videoStreams = videoStreams;
+    _videoMetadata.setStreams(videoStreams);
   }
 
   public void setViewCount(int viewCount) {
@@ -86,9 +76,6 @@ public class Video extends BaseModel {
 
   @Embedded
   private VideoMetadata _videoMetadata;
-
-  @OneToMany(mappedBy = "_video", cascade = CascadeType.MERGE)
-  private List<VideoStream> _videoStreams;
 
   @Column(name = "VIEW_COUNT")
   private int _viewCount;
