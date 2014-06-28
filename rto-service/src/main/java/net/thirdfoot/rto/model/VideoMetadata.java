@@ -26,7 +26,6 @@ public class VideoMetadata implements Serializable {
     _author = pyYoutubeMetadata.__getattr__("author").asString();
     _category = pyYoutubeMetadata.__getattr__("category").asString();
     _length = pyYoutubeMetadata.__getattr__("length").asInt();
-    _videoId = pyYoutubeMetadata.__getattr__("videoid").asString();
     _published = pyYoutubeMetadata.__getattr__("published").asString();
 
     Iterable<PyObject> streams = pyYoutubeMetadata.__getattr__(
@@ -39,6 +38,8 @@ public class VideoMetadata implements Serializable {
     }
 
     _title = pyYoutubeMetadata.__getattr__("title").asString();
+
+    _youtubeId = pyYoutubeMetadata.__getattr__("videoid").asString();
   }
 
   public String getAuthor() {
@@ -73,10 +74,6 @@ public class VideoMetadata implements Serializable {
     return _length;
   }
 
-  public String getVideoId() {
-    return _videoId;
-  }
-
   public String getPublished() {
     return _published;
   }
@@ -89,6 +86,10 @@ public class VideoMetadata implements Serializable {
     return _title;
   }
 
+  public String getYoutubeId() {
+    return _youtubeId;
+  }
+
   public void setAuthor(String author) {
     _author = author;
   }
@@ -99,10 +100,6 @@ public class VideoMetadata implements Serializable {
 
   public void setLength(int length) {
     _length = length;
-  }
-
-  public void setVideoId(String videoId) {
-    _videoId = videoId;
   }
 
   public void setPublished(String published) {
@@ -118,6 +115,10 @@ public class VideoMetadata implements Serializable {
     _title = title;
   }
 
+  public void setYoutubeId(String youtubeId) {
+    _youtubeId = youtubeId;
+  }
+
   @Column(name = "AUTHOR")
   private String _author;
 
@@ -130,9 +131,6 @@ public class VideoMetadata implements Serializable {
   @Column(name = "LENGTH")
   private int _length;
 
-  @Column(name = "VIDEO_ID")
-  private String _videoId;
-
   @Column(name = "PUBLISHED")
   private String _published;
 
@@ -141,5 +139,8 @@ public class VideoMetadata implements Serializable {
 
   @Column(name = "TITLE")
   private String _title;
+
+  @Column(name = "YOUTUBE_ID")
+  private String _youtubeId;
 
 }

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VideoRepository extends CrudRepository<Video, Long> {
 
-  @Query("SELECT v FROM Video v WHERE v._videoMetadata._videoId = :videoId")
-  public Video findByVideoId(@Param("videoId") String _videoId);
+  @Query("SELECT v FROM Video v WHERE v._videoMetadata._youtubeId = :youtubeId")
+  public Video findByYoutubeId(@Param("youtubeId") String youtubeId);
 
 }

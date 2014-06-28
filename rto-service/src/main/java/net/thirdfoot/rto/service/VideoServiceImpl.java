@@ -42,9 +42,9 @@ public class VideoServiceImpl implements InitializingBean, VideoService {
   public void checkVideo(String url)
     throws InvalidVideoUrlException, NoSuchVideoException {
 
-    String videoId = YoutubeUtil.parseUrl(url);
+    String youtubeId = YoutubeUtil.parseUrl(url);
 
-    if (StringUtil.isBlank(videoId)) {
+    if (StringUtil.isBlank(youtubeId)) {
       throw new InvalidVideoUrlException();
     }
 
@@ -66,11 +66,11 @@ public class VideoServiceImpl implements InitializingBean, VideoService {
 
     VideoMetadata videoMetadata = YoutubeUtil.getYoutubeMetadata(url);
 
-    String videoId = videoMetadata.getVideoId();
+    String youtubeId = videoMetadata.getYoutubeId();
 
     // Query the DB
 
-    Video video = _videoRepository.findByVideoId(videoId);
+    Video video = _videoRepository.findByYoutubeId(youtubeId);
 
     if (video != null) {
       return video;
@@ -151,7 +151,7 @@ public class VideoServiceImpl implements InitializingBean, VideoService {
   
         VideoMetadata videoMetadata = video.getVideoMetadata();
   
-        String videoId = videoMetadata.getVideoId();
+        String youtubeId = videoMetadata.getYoutubeId();
   
         JStopWatch stopWatch = null;
   
@@ -160,7 +160,7 @@ public class VideoServiceImpl implements InitializingBean, VideoService {
   
           stopWatch.start();
   
-          _log.debug("Download of video " + videoId + " has started");
+          _log.debug("Download of video " + youtubeId + " has started");
         }
   
         File tempFile = YoutubeUtil.getYoutubeVideo(videoMetadata);
@@ -170,7 +170,7 @@ public class VideoServiceImpl implements InitializingBean, VideoService {
         }
   
         final int grp = 2;
-        int len = videoId.length();
+        int len = youtubeId.length();
   
         StringBand sb = new StringBand(8 + len + len / grp);
   
@@ -179,13 +179,13 @@ public class VideoServiceImpl implements InitializingBean, VideoService {
             sb.append(File.separatorChar);
           }
   
-          sb.append(videoId.charAt(index));
+          sb.append(youtubeId.charAt(index));
         }
   
         VideoStream youtubeStream = videoMetadata.getFirstStream();
   
         sb.append(File.separator);
-        sb.append(videoId);
+        sb.append(youtubeId);
         sb.append(StringPool.UNDERSCORE);
         sb.append(youtubeStream.getMediaType());
         sb.append(StringPool.UNDERSCORE);
@@ -210,7 +210,7 @@ public class VideoServiceImpl implements InitializingBean, VideoService {
         _instance.setVideoFile(video.getPrimaryKey(), videoFile);
 
         if (_log.isDebugEnabled()) {
-          _log.debug("Download of " + videoId + " has been finished");
+          _log.debug("Download of " + youtubeId + " has been finished");
         }
       }
       catch (Exception e) {

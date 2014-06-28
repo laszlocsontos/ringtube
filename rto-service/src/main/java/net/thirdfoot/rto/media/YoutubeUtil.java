@@ -57,13 +57,13 @@ public class YoutubeUtil {
       throw new NullPointerException("url is null or empty");
     }
 
-    String videoId = parseUrl(url);
+    String youtubeId = parseUrl(url);
 
-    if (StringUtil.isBlank(videoId)) {
+    if (StringUtil.isBlank(youtubeId)) {
       return null;
     }
 
-    VideoMetadata youtubeMetadata = youtubeMetadataCache.get(videoId);
+    VideoMetadata youtubeMetadata = youtubeMetadataCache.get(youtubeId);
 
     if (youtubeMetadata != null) {
       return youtubeMetadata;
@@ -71,7 +71,7 @@ public class YoutubeUtil {
 
     youtubeMetadata = _getYoutubeMetadata(url);
 
-    youtubeMetadataCache.putIfAbsent(videoId, youtubeMetadata);
+    youtubeMetadataCache.putIfAbsent(youtubeId, youtubeMetadata);
 
     return youtubeMetadata;
   }
@@ -97,14 +97,14 @@ public class YoutubeUtil {
     File tempFile = null;
     FileOutputStream fileOutputStream = null;
 
-    String videoId = youtubeMetadata.getVideoId();
+    String youtubeId = youtubeMetadata.getYoutubeId();
 
     try {
       InputStream inputStream = youtubeUrl.openStream();
       ReadableByteChannel in = Channels.newChannel(inputStream);
 
       tempFile = FileSystemUtil.createTempFile(
-        YoutubeUtil.class.getName(), videoId, youtubeStream.getExtension());
+        YoutubeUtil.class.getName(), youtubeId, youtubeStream.getExtension());
 
       fileOutputStream = new FileOutputStream(tempFile);
 
