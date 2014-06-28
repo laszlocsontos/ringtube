@@ -48,6 +48,7 @@ subprojects {
     testCompile 'org.powermock:powermock-module-junit4:1.5.4'
     testCompile 'org.springframework:spring-context:3.2.9.RELEASE'
     testCompile 'org.springframework:spring-test:3.2.9.RELEASE'
+    testCompile 'com.fasterxml.jackson.core:jackson-databind:2.3.3'
   }
 }
 

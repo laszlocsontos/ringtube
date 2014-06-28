@@ -13,6 +13,8 @@
 
   <jpa:repositories base-package="net.thirdfoot.rto.model.dao" />
 
+  <bean name="threadPoolExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolExecutorFactoryBean" />
+
   <bean name="videoService" class="net.thirdfoot.rto.service.VideoServiceImpl" />
 
   <!--

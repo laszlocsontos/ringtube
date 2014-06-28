@@ -1,5 +1,6 @@
 package net.thirdfoot.rto.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -19,9 +20,12 @@ import net.thirdfoot.rto.kernel.model.BaseModel;
 public class Video extends BaseModel {
 
   public Video() {
+    _status = VideoStatus.NEW;
   }
 
   public Video(VideoMetadata videoMetadata) {
+    this();
+
     setVideoMetadata(videoMetadata);
     setVideoStreams(videoMetadata.getStreams());
   }
@@ -55,6 +59,13 @@ public class Video extends BaseModel {
   }
 
   public void setVideoMetadata(VideoMetadata videoMetadata) {
+    if (videoMetadata.getStreams() == null) {
+      List<VideoStream> videoStreams = getVideoStreams();
+
+      // TODO Class structure might be wrong, recheck later
+      videoMetadata.setStreams(new ArrayList<VideoStream>(videoStreams));
+    }
+
     _videoMetadata = videoMetadata;
   }
 
