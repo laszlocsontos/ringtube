@@ -3,6 +3,7 @@ package net.thirdfoot.rto.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -126,6 +127,11 @@ public class VideoMetadata implements Cloneable, Serializable {
 
   public void setStreams(List<VideoStream> streams) {
     _firstStream = null;
+
+    if (streams == null) {
+      streams = Collections.emptyList();
+    }
+
     _streams = streams;
   }
 
