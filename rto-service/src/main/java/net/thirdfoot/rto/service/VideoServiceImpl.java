@@ -10,9 +10,8 @@ import jodd.io.FileUtilParams;
 import jodd.util.StringBand;
 import jodd.util.StringPool;
 import jodd.util.StringUtil;
-
 import net.thirdfoot.rto.kernel.exception.ApplicationException;
-import net.thirdfoot.rto.kernel.spring.BaseService;
+import net.thirdfoot.rto.kernel.spring.AbstractServiceBean;
 import net.thirdfoot.rto.kernel.util.FileSystemUtil;
 import net.thirdfoot.rto.media.YoutubeException;
 import net.thirdfoot.rto.media.YoutubeUtil;
@@ -27,14 +26,13 @@ import net.thirdfoot.rto.model.exception.NoSuchVideoException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author lcsontos
  */
 public class VideoServiceImpl
-  extends BaseService<VideoService> implements VideoService {
+  extends AbstractServiceBean<VideoService> implements VideoService {
 
   @Override
   public void checkVideo(String url)
@@ -86,6 +84,11 @@ public class VideoServiceImpl
     }
 
     throw new NoSuchVideoException();
+  }
+
+  @Override
+  public Class<VideoService> getServiceClass() {
+    return VideoService.class;
   }
 
   @Override

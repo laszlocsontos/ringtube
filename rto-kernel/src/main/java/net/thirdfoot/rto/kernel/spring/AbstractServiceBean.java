@@ -4,33 +4,32 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 /**
  * @author lcsontos
  */
-public class BaseService<S>
-  implements InitializingBean, ApplicationContextAware {
+public abstract class AbstractServiceBean<S extends ServiceBean>
+  implements ServiceBean{
 
   @Override
-  @SuppressWarnings("unchecked")
   public void afterPropertiesSet() {
     try {
-      instance = (S)applicationContext.getBean(this.getClass());
+      instance = applicationContext.getBean(getServiceClass());
     }
     catch (BeansException be) {
       _log.error(be.getMessage(), be);
     }
   }
 
+  public abstract Class<S> getServiceClass();
+
   @Override
   public void setApplicationContext(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
   }
 
-  private static Logger _log = LoggerFactory.getLogger(BaseService.class);
+  private static Logger _log = LoggerFactory.getLogger(AbstractServiceBean.class);
 
   protected ApplicationContext applicationContext;
 

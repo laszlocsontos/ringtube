@@ -17,7 +17,7 @@ import org.python.core.PyObject;
  * @author lcsontos
  */
 @Embeddable
-public class VideoMetadata implements Serializable {
+public class VideoMetadata implements Cloneable, Serializable {
 
   public VideoMetadata() {
   }
@@ -40,6 +40,24 @@ public class VideoMetadata implements Serializable {
     _title = pyYoutubeMetadata.__getattr__("title").asString();
 
     _youtubeId = pyYoutubeMetadata.__getattr__("videoid").asString();
+  }
+
+  @Override
+  public VideoMetadata clone() {
+    VideoMetadata videoMetadata = null;
+
+    try {
+      videoMetadata = (VideoMetadata)super.clone();
+    }
+    catch (CloneNotSupportedException cnse) {
+      // This isn't possible
+    }
+
+    // Do not copy streams
+
+    videoMetadata.setStreams(null);
+
+    return videoMetadata;
   }
 
   public String getAuthor() {

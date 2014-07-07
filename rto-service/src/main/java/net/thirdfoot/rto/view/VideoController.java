@@ -43,7 +43,9 @@ public class VideoController {
 
     Video video = _videoService.getVideo(url);
 
-    return video.getVideoMetadata();
+    VideoMetadata videoMetadata = video.getVideoMetadata();
+
+    return videoMetadata.clone();
   }
 
   private static Logger _log = LoggerFactory.getLogger(VideoController.class);
