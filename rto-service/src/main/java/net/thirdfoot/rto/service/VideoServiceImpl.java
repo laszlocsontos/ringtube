@@ -1,6 +1,7 @@
 package net.thirdfoot.rto.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
 import jodd.datetime.JStopWatch;
@@ -11,7 +12,9 @@ import jodd.util.StringPool;
 import jodd.util.StringUtil;
 
 import net.thirdfoot.rto.kernel.exception.ApplicationException;
+import net.thirdfoot.rto.kernel.spring.BaseService;
 import net.thirdfoot.rto.kernel.util.FileSystemUtil;
+import net.thirdfoot.rto.media.YoutubeException;
 import net.thirdfoot.rto.media.YoutubeUtil;
 import net.thirdfoot.rto.model.Video;
 import net.thirdfoot.rto.model.VideoMetadata;
@@ -25,18 +28,13 @@ import net.thirdfoot.rto.model.exception.NoSuchVideoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author lcsontos
  */
-public class VideoServiceImpl implements InitializingBean, VideoService {
-
-  @Override
-  public void afterPropertiesSet() throws Exception {
-    _instance = this;
-  }
+public class VideoServiceImpl
+  extends BaseService<VideoService> implements VideoService {
 
   @Override
   public void checkVideo(String url)
@@ -48,11 +46,46 @@ public class VideoServiceImpl implements InitializingBean, VideoService {
       throw new InvalidVideoUrlException();
     }
 
-    VideoMetadata youtubeMetadata = YoutubeUtil.getYoutubeMetadata(url);
+    Video video = _videoRepository.findByYoutubeId(youtubeId);
 
-    if (youtubeMetadata == null) {
-      throw new NoSuchVideoException();
+    VideoMetadata videoMetadata = null;
+
+    if (video != null) {
+      VideoStatus videoStatus = video.getStatus();
+
+      switch (videoStatus) {
+        case DELETED:
+          throw new NoSuchVideoException();
+
+        case EXPIRED:
+        case ORPHAN:
+          videoMetadata = YoutubeUtil.getYoutubeMetadata(url);
+
+          VideoStatus newStatus =
+            (videoMetadata == null) ? VideoStatus.DELETED : VideoStatus.NEW;
+
+          video.setStatus(newStatus);
+
+          _videoRepository.save(video);
+
+          if (VideoStatus.DELETED.equals(newStatus)) {
+            throw new NoSuchVideoException();
+          }
+
+        case NEW:
+        case VALID:
+          videoMetadata = video.getVideoMetadata();
+      }
     }
+    else {
+      videoMetadata = YoutubeUtil.getYoutubeMetadata(url);
+    }
+
+    if (videoMetadata != null) {
+      return;
+    }
+
+    throw new NoSuchVideoException();
   }
 
   @Override
@@ -106,7 +139,10 @@ public class VideoServiceImpl implements InitializingBean, VideoService {
       throw new NoSuchVideoException();
     }
 
-    video.setStatus(VideoStatus.VALID);
+    VideoStatus videoStatus =
+      (videoFile == null) ? VideoStatus.ORPHAN : VideoStatus.VALID;
+
+    video.setStatus(videoStatus);
 
     VideoMetadata videoMetadata = video.getVideoMetadata();
 
@@ -118,8 +154,6 @@ public class VideoServiceImpl implements InitializingBean, VideoService {
   }
 
   private static Logger _log = LoggerFactory.getLogger(VideoServiceImpl.class);
-
-  private VideoService _instance;
 
   @Autowired
   private ExecutorService _executorService;
@@ -138,31 +172,40 @@ public class VideoServiceImpl implements InitializingBean, VideoService {
 
     @Override
     public void run() {
-      try {
-        Video video = _instance.getVideo(_videoId);
-  
-        if (video == null) {
-          if (_log.isWarnEnabled()) {
-            _log.warn("Video with ID " + _videoId + " doesn't exist");
-          }
-  
-          return;
+      Video video = instance.getVideo(_videoId);
+
+      if (video == null) {
+        if (_log.isWarnEnabled()) {
+          _log.warn("Video with ID " + _videoId + " doesn't exist");
         }
-  
-        VideoMetadata videoMetadata = video.getVideoMetadata();
-  
-        String youtubeId = videoMetadata.getYoutubeId();
-  
-        JStopWatch stopWatch = null;
-  
+
+        return;
+      }
+      else if (!VideoStatus.NEW.equals(video.getStatus())) {
         if (_log.isDebugEnabled()) {
-          stopWatch = new JStopWatch();
-  
-          stopWatch.start();
-  
-          _log.debug("Download of video " + youtubeId + " has started");
+          _log.debug("Another process updated video with ID " + _videoId);
         }
-  
+
+        return;
+      }
+
+      VideoMetadata videoMetadata = video.getVideoMetadata();
+
+      String youtubeId = videoMetadata.getYoutubeId();
+
+      JStopWatch stopWatch = null;
+
+      if (_log.isDebugEnabled()) {
+        stopWatch = new JStopWatch();
+
+        stopWatch.start();
+
+        _log.debug("Download of video " + youtubeId + " has started");
+      }
+
+      String videoFile = null;
+
+      try {
         File tempFile = YoutubeUtil.getYoutubeVideo(videoMetadata);
   
         if (stopWatch != null) {
@@ -195,7 +238,7 @@ public class VideoServiceImpl implements InitializingBean, VideoService {
   
         File videoDir = FileSystemUtil.getDataDir(YoutubeUtil.class.getName());
   
-        String videoFile = sb.toString();
+        videoFile = sb.toString();
   
         File absoluteVideoFile = new File(videoDir, videoFile);
   
@@ -207,14 +250,26 @@ public class VideoServiceImpl implements InitializingBean, VideoService {
           tempFile, absoluteVideoFile,
           new FileUtilParams().setCreateDirs(true));
 
-        _instance.setVideoFile(video.getPrimaryKey(), videoFile);
-
         if (_log.isDebugEnabled()) {
           _log.debug("Download of " + youtubeId + " has been finished");
         }
       }
-      catch (Exception e) {
-        _log.error(e.getMessage(), e);
+      catch (IOException | YoutubeException e) {
+        videoFile = null;
+
+        if (_log.isDebugEnabled()) {
+          _log.debug(e.getMessage(), e);
+        }
+        else if (_log.isWarnEnabled()) {
+          _log.warn(e.getMessage());
+        }
+      }
+
+      try {
+        instance.setVideoFile(_videoId, videoFile);
+      }
+      catch (ApplicationException ae) {
+        _log.error(ae.getMessage(), ae);
       }
     }
 
