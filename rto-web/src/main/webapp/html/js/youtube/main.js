@@ -6,20 +6,15 @@
   var FIELD_YOUTUBE_URL_CHECK_INTERVAL = 250;
   var FIELD_YOUTUBE_URL_ERRMSG = '#youtube-url-errmsg';
 
-  var YOUTUBE_URL_REGEX = /http.+youtube\.com\/watch\?v\=\w+/;
+  var YOUTUBE_METADATA_URL = "service/video/get"
+  var YOUTUBE_URL_REGEX = /http.+youtube\.com\/watch\?v\=(\w+)/;
 
   var YouTube = function() {
     var _this = this;
 
     _this.youtubeConvert = $(FIELD_YOUTUBE_CONVERT);
 
-    _this.youtubeSlider = $(FIELD_YOUTUBE_SLIDER).slider({
-      formater: _this.sliderFormatter,
-      min: 0,
-      max: 3600,
-      step: 5,
-      value: [0, 10]
-    }).data('slider');
+    _this.youtubeSlider = _this.createSlider(0, 1);
 
     _this.youtubeUrl = $(FIELD_YOUTUBE_URL);
 
@@ -37,9 +32,12 @@
     checkUrl: function(input) {
       var url = input.val();
 
-      if (url.match(YOUTUBE_URL_REGEX)) {
-        this.enableControls();
-        this.youtubeUrlErrMsg.hide();
+      var match = url.match(YOUTUBE_URL_REGEX);
+
+      if (match && match[1]) {
+        var youtubeId = match[1];
+
+        this.getMetaData(youtubeId);
       }
       else {
         if (console && console.log) {
@@ -49,6 +47,20 @@
         this.disableControls();
         this.youtubeUrlErrMsg.show();
       }
+    },
+
+    createSlider: function(minValue, maxValue) {
+      var _this = this;
+
+      var youtubeSlider = $(FIELD_YOUTUBE_SLIDER).slider({
+        formater: _this.sliderFormatter,
+        min: minValue,
+        max: maxValue,
+        step: 1,
+        value: [minValue, maxValue]
+      });
+
+      return youtubeSlider.data('slider');
     },
 
     detectChange: function(input, handler) {
@@ -72,6 +84,34 @@
     enableControls: function() {
       this.youtubeConvert.children().prop('disabled', false);
       this.youtubeSlider.enable();
+    },
+
+    getMetaData: function(youtubeId) {
+      var _this = this;
+
+      var url = YOUTUBE_METADATA_URL + '/' + youtubeId;
+
+      $.get(url)
+        .done(function(result) {
+          _this.setMetaData(result);
+
+          _this.enableControls();
+          _this.youtubeUrlErrMsg.hide();
+        })
+        .fail(function(result) {
+          if (console && console.log) {
+            console.log(result);
+          }
+
+          _this.disableControls();
+          _this.youtubeUrlErrMsg.show();
+        });
+    },
+
+    setMetaData: function(metaData) {
+      var maxValue = (metaData && metaData.length) ? metaData.length : 0;
+
+      this.youtubeSlider = this.createSlider(0, maxValue);
     },
 
     sliderFormatter: function(value) {

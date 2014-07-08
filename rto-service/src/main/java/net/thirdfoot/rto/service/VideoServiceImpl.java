@@ -57,7 +57,12 @@ public class VideoServiceImpl
 
         case EXPIRED:
         case ORPHAN:
+        try {
           videoMetadata = YoutubeUtil.getYoutubeMetadata(url);
+        }
+        catch (YoutubeException ye) {
+          throw new InvalidVideoUrlException();
+        }
 
           VideoStatus newStatus =
             (videoMetadata == null) ? VideoStatus.DELETED : VideoStatus.NEW;
@@ -76,7 +81,12 @@ public class VideoServiceImpl
       }
     }
     else {
-      videoMetadata = YoutubeUtil.getYoutubeMetadata(url);
+      try {
+        videoMetadata = YoutubeUtil.getYoutubeMetadata(url);
+      }
+      catch (YoutubeException ye) {
+        throw new InvalidVideoUrlException();
+      }
     }
 
     if (videoMetadata != null) {
