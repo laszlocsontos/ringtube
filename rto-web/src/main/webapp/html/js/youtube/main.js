@@ -111,6 +111,10 @@
     setMetaData: function(metaData) {
       var maxValue = (metaData && metaData.length) ? metaData.length : 0;
 
+      if (this.youtubeSlider) {
+        this.youtubeSlider.destroy();
+      }
+
       this.youtubeSlider = this.createSlider(0, maxValue);
     },
 
