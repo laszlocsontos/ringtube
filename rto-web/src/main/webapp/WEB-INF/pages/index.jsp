@@ -58,17 +58,17 @@
     
     <div class="col-md-8 input-group lead">
       <span class="input-group-addon glyphicon glyphicon-music"></span>
-      <input id="youtube-url" type="text" class="form-control" placeholder="YouTube URL">
+      <input id="youTube-url" type="text" class="form-control" placeholder="YouTube URL">
     </div>
 
-    <div id="youtube-url-errmsg" class="col-md-8 alert alert-danger">This isn't a YouTube URL</div>
+    <div id="youTube-url-errmsg" class="col-md-8 alert alert-danger">This isn't a YouTube URL</div>
 
     <div class="col-md-8 input-group lead">
       <span class="input-group-addon glyphicon glyphicon-resize-horizontal"></span>
-      <input id="youtube-slider" type="text" class="form-control">
+      <input id="youTube-slider" type="text" class="form-control">
     </div>
 
-    <div id="youtube-convert" class="btn-group">
+    <div id="youTube-convert" class="btn-group">
       <button type="button" class="btn btn-lg btn-success">Convert</button>
       <button type="button" class="btn btn-lg btn-success dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
@@ -81,7 +81,7 @@
       </ul>
     </div>
 
-    <div id="youtube-player" class="col-md-4">
+    <div id="youTube-player" class="col-md-4">
     </div>
   </div>
 

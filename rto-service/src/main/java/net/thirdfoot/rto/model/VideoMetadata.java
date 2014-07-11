@@ -23,24 +23,24 @@ public class VideoMetadata implements Cloneable, Serializable {
   public VideoMetadata() {
   }
 
-  public VideoMetadata(PyObject pyYoutubeMetadata) {
-    _author = pyYoutubeMetadata.__getattr__("author").asString();
-    _category = pyYoutubeMetadata.__getattr__("category").asString();
-    _length = pyYoutubeMetadata.__getattr__("length").asInt();
-    _published = pyYoutubeMetadata.__getattr__("published").asString();
+  public VideoMetadata(PyObject pyYouTubeMetadata) {
+    _author = pyYouTubeMetadata.__getattr__("author").asString();
+    _category = pyYouTubeMetadata.__getattr__("category").asString();
+    _length = pyYouTubeMetadata.__getattr__("length").asInt();
+    _published = pyYouTubeMetadata.__getattr__("published").asString();
 
-    Iterable<PyObject> streams = pyYoutubeMetadata.__getattr__(
+    Iterable<PyObject> streams = pyYouTubeMetadata.__getattr__(
       "streams").asIterable();
 
     _streams = new ArrayList<VideoStream>();
 
-    for (PyObject pyYoutubeStream : streams) {
-      _streams.add(new VideoStream(pyYoutubeStream));
+    for (PyObject pyYouTubeStream : streams) {
+      _streams.add(new VideoStream(pyYouTubeStream));
     }
 
-    _title = pyYoutubeMetadata.__getattr__("title").asString();
+    _title = pyYouTubeMetadata.__getattr__("title").asString();
 
-    _youtubeId = pyYoutubeMetadata.__getattr__("videoid").asString();
+    _youTubeId = pyYouTubeMetadata.__getattr__("videoid").asString();
   }
 
   @Override
@@ -105,8 +105,8 @@ public class VideoMetadata implements Cloneable, Serializable {
     return _title;
   }
 
-  public String getYoutubeId() {
-    return _youtubeId;
+  public String getYouTubeId() {
+    return _youTubeId;
   }
 
   public void setAuthor(String author) {
@@ -139,8 +139,8 @@ public class VideoMetadata implements Cloneable, Serializable {
     _title = title;
   }
 
-  public void setYoutubeId(String youtubeId) {
-    _youtubeId = youtubeId;
+  public void setYouTubeId(String youTubeId) {
+    _youTubeId = youTubeId;
   }
 
   @Column(name = "AUTHOR")
@@ -165,6 +165,6 @@ public class VideoMetadata implements Cloneable, Serializable {
   private String _title;
 
   @Column(name = "YOUTUBE_ID")
-  private String _youtubeId;
+  private String _youTubeId;
 
 }

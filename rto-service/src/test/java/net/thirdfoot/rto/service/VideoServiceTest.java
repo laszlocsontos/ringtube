@@ -2,7 +2,7 @@ package net.thirdfoot.rto.service;
 
 import net.thirdfoot.rto.kernel.spring.RootContextConstants;
 import net.thirdfoot.rto.kernel.spring.RootContextTestLoader;
-import net.thirdfoot.rto.media.YoutubeUtilTest;
+import net.thirdfoot.rto.media.YouTubeUtilTest;
 import net.thirdfoot.rto.model.Video;
 
 import org.junit.Assert;
@@ -31,7 +31,7 @@ public class VideoServiceTest {
 
   @Test
   public void testGetVideo() throws Exception {
-    Video video = _videoService.getVideo(YoutubeUtilTest.DOWNLOAD_URL);
+    Video video = _videoService.getVideo(YouTubeUtilTest.DOWNLOAD_URL);
 
     Assert.assertNotNull(video);
   }

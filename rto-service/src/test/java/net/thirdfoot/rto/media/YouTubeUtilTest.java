@@ -10,8 +10,8 @@ import jodd.util.StringPool;
 import net.thirdfoot.rto.kernel.util.FileSystemUtil;
 import net.thirdfoot.rto.media.ConversionAttribute;
 import net.thirdfoot.rto.media.ConversionContext;
-import net.thirdfoot.rto.media.YoutubeException;
-import net.thirdfoot.rto.media.YoutubeUtil;
+import net.thirdfoot.rto.media.YouTubeException;
+import net.thirdfoot.rto.media.YouTubeUtil;
 import net.thirdfoot.rto.model.VideoMetadata;
 import net.thirdfoot.rto.model.VideoStream;
 
@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 @PowerMockIgnore("javax.management.*")
 @PrepareForTest(FileSystemUtil.class)
 @RunWith(PowerMockRunner.class)
-public class YoutubeUtilTest {
+public class YouTubeUtilTest {
 
   public static final String DOWNLOAD_URL =
     "http://www.youtube.com/watch?v=nGdFHJXciAQ";
@@ -55,27 +55,27 @@ public class YoutubeUtilTest {
   }
 
   @Test
-  public void testCutYoutubeVideo() throws Exception {
+  public void testCutYouTubeVideo() throws Exception {
     ConversionContext context =
       new ConversionContext()
         .set(ConversionAttribute.START_TIMESTAMP, 450)
         .set(ConversionAttribute.END_TIMESTAMP, 480)
         .set(ConversionAttribute.OUTPUT_FORMAT, "mp3");
 
-    String outFileUrl = YoutubeUtil.cutYoutubeVideo(
+    String outFileUrl = YouTubeUtil.cutYouTubeVideo(
       "/home/lcsontos/Music/jodd-1620230518342849577.m4a", context);
 
     System.out.println(outFileUrl);
   }
 
-  @Test(expected = YoutubeException.class)
-  public void testGetYoutubeMetadataWithWrongUrl() {
-    YoutubeUtil.getYoutubeMetadata(_INVALID_URL);
+  @Test(expected = YouTubeException.class)
+  public void testGetYouTubeMetadataWithWrongUrl() {
+    YouTubeUtil.getYouTubeMetadata(_INVALID_URL);
   }
 
   @Test
-  public void testGetYoutubeMetadata() {
-    VideoMetadata streamer = YoutubeUtil.getYoutubeMetadata(_VALID_URL);
+  public void testGetYouTubeMetadata() {
+    VideoMetadata streamer = YouTubeUtil.getYouTubeMetadata(_VALID_URL);
 
     Assert.assertNotNull(streamer);
 
@@ -111,27 +111,27 @@ public class YoutubeUtilTest {
   }
 
   @Test
-  public void testGetYoutubeVideo() {
-    VideoMetadata videoMetadata = YoutubeUtil.getYoutubeMetadata(DOWNLOAD_URL);
+  public void testGetYouTubeVideo() {
+    VideoMetadata videoMetadata = YouTubeUtil.getYouTubeMetadata(DOWNLOAD_URL);
 
-    File youtubeVideo = YoutubeUtil.getYoutubeVideo(videoMetadata);
+    File youTubeVideo = YouTubeUtil.getYouTubeVideo(videoMetadata);
 
-    Assert.assertNotNull(youtubeVideo);
+    Assert.assertNotNull(youTubeVideo);
   }
 
   @Test
   public void testParseUrl() {
-    Assert.assertNull(YoutubeUtil.parseUrl(null));
-    Assert.assertNull(YoutubeUtil.parseUrl(StringPool.EMPTY));
-    Assert.assertNull(YoutubeUtil.parseUrl("aaaaaaaaaa"));
-    Assert.assertNull(YoutubeUtil.parseUrl("http://index.hu"));
-    Assert.assertNull(YoutubeUtil.parseUrl("https://www.youtube.com/watch?v="));
+    Assert.assertNull(YouTubeUtil.parseUrl(null));
+    Assert.assertNull(YouTubeUtil.parseUrl(StringPool.EMPTY));
+    Assert.assertNull(YouTubeUtil.parseUrl("aaaaaaaaaa"));
+    Assert.assertNull(YouTubeUtil.parseUrl("http://index.hu"));
+    Assert.assertNull(YouTubeUtil.parseUrl("https://www.youtube.com/watch?v="));
 
     String[] results = new String[] {
-      YoutubeUtil.parseUrl("https://www.youtube.com/watch?v=qrx1vyvtRLY"),
-      YoutubeUtil.parseUrl("http://www.youtube.com/watch?v=qrx1vyvtRLY"),
-      YoutubeUtil.parseUrl("www.youtube.com/watch?v=qrx1vyvtRLY"),
-      YoutubeUtil.parseUrl("youtube.com/watch?v=qrx1vyvtRLY")
+      YouTubeUtil.parseUrl("https://www.youtube.com/watch?v=qrx1vyvtRLY"),
+      YouTubeUtil.parseUrl("http://www.youtube.com/watch?v=qrx1vyvtRLY"),
+      YouTubeUtil.parseUrl("www.youtube.com/watch?v=qrx1vyvtRLY"),
+      YouTubeUtil.parseUrl("youtube.com/watch?v=qrx1vyvtRLY")
     };
 
     Assert.assertArrayEquals(
@@ -139,7 +139,7 @@ public class YoutubeUtilTest {
   }
 
   private static Logger _log = LoggerFactory.getLogger(
-    YoutubeUtilTest.class);
+    YouTubeUtilTest.class);
 
   private final String _INVALID_URL = "https://www.youtube.com/watch?v=wrongId";
   private final String _VALID_URL =

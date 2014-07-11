@@ -32,14 +32,14 @@ public class VideoController {
   }
 
   @RequestMapping(
-    value="/get/{youtubeId}", method = RequestMethod.GET,
+    value="/get/{youTubeId}", method = RequestMethod.GET,
     produces = MediaType.APPLICATION_JSON_VALUE,
     consumes = MediaType.APPLICATION_JSON_VALUE)
   @ResponseBody
-  public VideoMetadata get(@PathVariable String youtubeId)
+  public VideoMetadata get(@PathVariable String youTubeId)
     throws ApplicationException {
 
-    String url = "http://youtube.com/watch?v=" + youtubeId;
+    String url = "http://youtube.com/watch?v=" + youTubeId;
 
     Video video = _videoService.getVideo(url);
 

@@ -13,8 +13,8 @@ import jodd.util.StringUtil;
 import net.thirdfoot.rto.kernel.exception.ApplicationException;
 import net.thirdfoot.rto.kernel.spring.AbstractServiceBean;
 import net.thirdfoot.rto.kernel.util.FileSystemUtil;
-import net.thirdfoot.rto.media.YoutubeException;
-import net.thirdfoot.rto.media.YoutubeUtil;
+import net.thirdfoot.rto.media.YouTubeException;
+import net.thirdfoot.rto.media.YouTubeUtil;
 import net.thirdfoot.rto.model.Video;
 import net.thirdfoot.rto.model.VideoMetadata;
 import net.thirdfoot.rto.model.VideoStatus;
@@ -38,13 +38,13 @@ public class VideoServiceImpl
   public void checkVideo(String url)
     throws InvalidVideoUrlException, NoSuchVideoException {
 
-    String youtubeId = YoutubeUtil.parseUrl(url);
+    String youTubeId = YouTubeUtil.parseUrl(url);
 
-    if (StringUtil.isBlank(youtubeId)) {
+    if (StringUtil.isBlank(youTubeId)) {
       throw new InvalidVideoUrlException();
     }
 
-    Video video = _videoRepository.findByYoutubeId(youtubeId);
+    Video video = _videoRepository.findByYouTubeId(youTubeId);
 
     VideoMetadata videoMetadata = null;
 
@@ -58,9 +58,9 @@ public class VideoServiceImpl
         case EXPIRED:
         case ORPHAN:
         try {
-          videoMetadata = YoutubeUtil.getYoutubeMetadata(url);
+          videoMetadata = YouTubeUtil.getYouTubeMetadata(url);
         }
-        catch (YoutubeException ye) {
+        catch (YouTubeException ye) {
           throw new InvalidVideoUrlException();
         }
 
@@ -82,9 +82,9 @@ public class VideoServiceImpl
     }
     else {
       try {
-        videoMetadata = YoutubeUtil.getYoutubeMetadata(url);
+        videoMetadata = YouTubeUtil.getYouTubeMetadata(url);
       }
-      catch (YoutubeException ye) {
+      catch (YouTubeException ye) {
         throw new InvalidVideoUrlException();
       }
     }
@@ -110,13 +110,13 @@ public class VideoServiceImpl
   public Video getVideo(String url) throws ApplicationException {
     checkVideo(url);
 
-    VideoMetadata videoMetadata = YoutubeUtil.getYoutubeMetadata(url);
+    VideoMetadata videoMetadata = YouTubeUtil.getYouTubeMetadata(url);
 
-    String youtubeId = videoMetadata.getYoutubeId();
+    String youTubeId = videoMetadata.getYouTubeId();
 
     // Query the DB
 
-    Video video = _videoRepository.findByYoutubeId(youtubeId);
+    Video video = _videoRepository.findByYouTubeId(youTubeId);
 
     if (video != null) {
       return video;
@@ -130,7 +130,7 @@ public class VideoServiceImpl
 
     // Download video
 
-    Runnable runnable = new GetYoutubeVideoRunnable(video.getPrimaryKey());
+    Runnable runnable = new GetYouTubeVideoRunnable(video.getPrimaryKey());
 
     _executorService.submit(runnable);
 
@@ -177,9 +177,9 @@ public class VideoServiceImpl
   @Autowired
   private VideoStreamRepository _videoStreamRepository;
 
-  private class GetYoutubeVideoRunnable implements Runnable {
+  private class GetYouTubeVideoRunnable implements Runnable {
 
-    public GetYoutubeVideoRunnable(long videoId) {
+    public GetYouTubeVideoRunnable(long videoId) {
       _videoId = videoId;
     }
 
@@ -204,7 +204,7 @@ public class VideoServiceImpl
 
       VideoMetadata videoMetadata = video.getVideoMetadata();
 
-      String youtubeId = videoMetadata.getYoutubeId();
+      String youTubeId = videoMetadata.getYouTubeId();
 
       JStopWatch stopWatch = null;
 
@@ -213,20 +213,20 @@ public class VideoServiceImpl
 
         stopWatch.start();
 
-        _log.debug("Download of video " + youtubeId + " has started");
+        _log.debug("Download of video " + youTubeId + " has started");
       }
 
       String videoFile = null;
 
       try {
-        File tempFile = YoutubeUtil.getYoutubeVideo(videoMetadata);
+        File tempFile = YouTubeUtil.getYouTubeVideo(videoMetadata);
   
         if (stopWatch != null) {
           _log.debug("Download completed under " + stopWatch.span() + "ms");
         }
   
         final int grp = 2;
-        int len = youtubeId.length();
+        int len = youTubeId.length();
   
         StringBand sb = new StringBand(8 + len + len / grp);
   
@@ -235,21 +235,21 @@ public class VideoServiceImpl
             sb.append(File.separatorChar);
           }
   
-          sb.append(youtubeId.charAt(index));
+          sb.append(youTubeId.charAt(index));
         }
   
-        VideoStream youtubeStream = videoMetadata.getFirstStream();
+        VideoStream youTubeStream = videoMetadata.getFirstStream();
   
         sb.append(File.separator);
-        sb.append(youtubeId);
+        sb.append(youTubeId);
         sb.append(StringPool.UNDERSCORE);
-        sb.append(youtubeStream.getMediaType());
+        sb.append(youTubeStream.getMediaType());
         sb.append(StringPool.UNDERSCORE);
-        sb.append(youtubeStream.getQuality());
+        sb.append(youTubeStream.getQuality());
         sb.append(StringPool.DOT);
-        sb.append(youtubeStream.getExtension());
+        sb.append(youTubeStream.getExtension());
   
-        File videoDir = FileSystemUtil.getDataDir(YoutubeUtil.class.getName());
+        File videoDir = FileSystemUtil.getDataDir(YouTubeUtil.class.getName());
   
         videoFile = sb.toString();
   
@@ -264,10 +264,10 @@ public class VideoServiceImpl
           new FileUtilParams().setCreateDirs(true));
 
         if (_log.isDebugEnabled()) {
-          _log.debug("Download of " + youtubeId + " has been finished");
+          _log.debug("Download of " + youTubeId + " has been finished");
         }
       }
-      catch (IOException | YoutubeException e) {
+      catch (IOException | YouTubeException e) {
         videoFile = null;
 
         if (_log.isDebugEnabled()) {
