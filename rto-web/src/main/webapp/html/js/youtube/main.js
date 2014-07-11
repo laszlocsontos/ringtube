@@ -55,15 +55,40 @@
     createSlider: function(minValue, maxValue) {
       var _this = this;
 
-      var youTubeSlider = $(FIELD_YOUTUBE_SLIDER).slider({
+      var youTubeSliderElement = $(FIELD_YOUTUBE_SLIDER).slider({
         formater: _this.sliderFormatter,
         min: minValue,
         max: maxValue,
         step: 1,
         value: [minValue, maxValue]
+      })
+
+      var youTubeSlider = youTubeSliderElement.data('slider');
+
+      youTubeSliderElement.mouseup(function(event) {
+        var old = youTubeSliderElement.attr('data-old-value');
+        var value = youTubeSlider.getValue();
+
+        if (Array.isArray(value)) {
+          if (value.length > 1) {
+            value = Math.min(value[0], value[1]);
+          }
+          else {
+            value = value[0];
+          }
+        }
+
+        if (old !== value) { 
+          if (typeof old != 'undefined') { 
+            _this.onSliderChange.call(_this, value);
+          }
+
+          youTubeSliderElement.attr('data-old-value', value);
+        }
+
       });
 
-      return youTubeSlider.data('slider');
+      return youTubeSlider;
     },
 
     createYouTubeAPI: function() {
@@ -151,6 +176,12 @@
       }
 
       return null;
+    },
+
+    onSliderChange: function(event) {
+      if (console && console.log) {
+        console.log(event);
+      }
     },
 
     onYouTubePlayerReady: function() {
