@@ -80,6 +80,9 @@
         <li><a href="#">OGG</a></li>
       </ul>
     </div>
+
+    <div id="youtube-player" class="col-md-4">
+    </div>
   </div>
 
   <div class="container">
