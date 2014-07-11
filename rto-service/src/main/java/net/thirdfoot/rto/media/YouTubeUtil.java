@@ -149,7 +149,7 @@ public class YouTubeUtil {
   }
 
   private static final Pattern _YOUTUBE_URL_PATTERN =
-    Pattern.compile("http.+youTube\\.com\\/watch\\?v=(\\S+)");
+    Pattern.compile("http.+youtube\\.com\\/watch\\?v=(\\S+)");
 
   private static Logger _log = LoggerFactory.getLogger(YouTubeUtil.class);
 

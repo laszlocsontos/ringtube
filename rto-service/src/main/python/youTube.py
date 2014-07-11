@@ -1,6 +1,6 @@
 import pafy
 
-class youtube_metadata(object):
+class youTube_metadata(object):
   """ Wrapper class for pafy """
 
   def __init__(self, url, stream_type = "audio"):
@@ -18,10 +18,10 @@ class youtube_metadata(object):
     streams = video.audiostreams if stream_type == "audio" else video.streams
 
     for stream in streams:
-      self.streams.append(youtube_stream(stream))
+      self.streams.append(youTube_stream(stream))
 
-class youtube_stream(object):
-  """ Wrapper class for holding data of Youtube streams """
+class youTube_stream(object):
+  """ Wrapper class for holding data of YouTube streams """
 
   def __init__(self, stream):
     self.extension = stream.extension

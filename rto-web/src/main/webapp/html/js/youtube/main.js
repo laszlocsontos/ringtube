@@ -36,8 +36,8 @@
   YouTube.prototype = {
     constructor: YouTube,
 
-    checkUrl: function(input) {
-      var youTubeId = getYouTubeId(url);
+    checkUrl: function(url) {
+      var youTubeId = this.getYouTubeId(url);
 
       if (youTubeId) {
         this.getMetaData(youTubeId);
@@ -72,8 +72,8 @@
       var youTubeId = _this.getYouTubeId(YOUTUBE_URL_FIRST);
 
       var youTubeEvents = {
-        onReady: _this.onYouTubePlayerReady,
-        onStateChange: _this.onYouTubePlayerStateChange
+        onReady: $.proxy(_this.onYouTubePlayerReady, _this),
+        onStateChange: $.proxy(_this.onYouTubePlayerStateChange, _this)
       };
 
       window.onYouTubeIframeAPIReady = function() {
@@ -100,7 +100,7 @@
 
       if (old !== current) { 
         if (typeof old != 'undefined') { 
-          handler.call(this, input);
+          handler.call(this, current);
         }
 
         input.attr('data-old-value', current);
@@ -109,13 +109,16 @@
 
     disableControls: function() {
       this.youTubeConvert.children().prop('disabled', true);
-      this.youTubePlayer.clearVideo();
       this.youTubeSlider.disable();
+
+      $('#' + FIELD_YOUTUBE_PLAYER).hide();
     },
 
     enableControls: function() {
       this.youTubeConvert.children().prop('disabled', false);
       this.youTubeSlider.enable();
+
+      $('#' + FIELD_YOUTUBE_PLAYER).show();
     },
 
     getMetaData: function(youTubeId) {
@@ -157,7 +160,7 @@
         console.log('onYouTubePlayerReady');
       }
 
-      _this.checkUrl(_this.youTubeUrl);
+      _this.checkUrl(_this.youTubeUrl.val());
 
       setInterval(function() {
         _this.detectChange(_this.youTubeUrl, _this.checkUrl);
