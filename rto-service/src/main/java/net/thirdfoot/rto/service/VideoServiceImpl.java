@@ -11,6 +11,7 @@ import jodd.util.StringBand;
 import jodd.util.StringPool;
 import jodd.util.StringUtil;
 import net.thirdfoot.rto.kernel.exception.ApplicationException;
+import net.thirdfoot.rto.kernel.exception.SystemException;
 import net.thirdfoot.rto.kernel.spring.AbstractServiceBean;
 import net.thirdfoot.rto.kernel.util.FileSystemUtil;
 import net.thirdfoot.rto.media.YouTubeException;
@@ -61,7 +62,7 @@ public class VideoServiceImpl
           videoMetadata = YouTubeUtil.getYouTubeMetadata(url);
         }
         catch (YouTubeException ye) {
-          throw new InvalidVideoUrlException();
+          throw new InvalidVideoUrlException(ye);
         }
 
           VideoStatus newStatus =
@@ -85,7 +86,7 @@ public class VideoServiceImpl
         videoMetadata = YouTubeUtil.getYouTubeMetadata(url);
       }
       catch (YouTubeException ye) {
-        throw new InvalidVideoUrlException();
+        throw new InvalidVideoUrlException(ye);
       }
     }
 
@@ -267,7 +268,7 @@ public class VideoServiceImpl
           _log.debug("Download of " + youTubeId + " has been finished");
         }
       }
-      catch (IOException | YouTubeException e) {
+      catch (IOException | SystemException e) {
         videoFile = null;
 
         if (_log.isDebugEnabled()) {

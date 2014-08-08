@@ -15,17 +15,18 @@ import java.util.regex.Pattern;
 
 import jodd.io.StreamUtil;
 import jodd.util.StringUtil;
-
+import net.thirdfoot.rto.kernel.exception.SystemException;
 import net.thirdfoot.rto.kernel.jython.PyObjectFactory;
 import net.thirdfoot.rto.kernel.jython.PyObjectFactoryUtil;
 import net.thirdfoot.rto.kernel.util.FileSystemUtil;
 import net.thirdfoot.rto.model.VideoMetadata;
 import net.thirdfoot.rto.model.VideoStream;
 
+import org.python.core.PyBaseException;
 import org.python.core.PyException;
 import org.python.core.PyObject;
 import org.python.core.PyString;
-
+import org.python.core.PyType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +49,9 @@ public class YouTubeUtil {
     return outFile.getPath();
   }
 
-  public static VideoMetadata getYouTubeMetadata(String url) {
+  public static VideoMetadata getYouTubeMetadata(String url)
+    throws YouTubeException {
+
     if (StringUtil.isBlank(url)) {
       throw new NullPointerException("url is null or empty");
     }
@@ -108,7 +111,7 @@ public class YouTubeUtil {
         in, 0, youTubeStream.getSize());
     }
     catch (IOException ioe) {
-      throw new YouTubeException(ioe);
+      throw new SystemException(ioe);
     }
     finally {
       StreamUtil.close(fileOutputStream);
@@ -131,7 +134,9 @@ public class YouTubeUtil {
     return matcher.group(1);
   }
 
-  private static VideoMetadata _getYouTubeMetadata(String url) {
+  private static VideoMetadata _getYouTubeMetadata(String url)
+    throws YouTubeException {
+
     try {
       PyObjectFactory pyYouTubeMetadataFactory =
         PyObjectFactoryUtil.getFactory("youTube", "youTube_metadata");
@@ -144,7 +149,22 @@ public class YouTubeUtil {
       return youTubeMetadata;
     }
     catch (PyException pye) {
-      throw new YouTubeException(pye);
+      PyObject value = pye.value;
+
+      if (value instanceof PyBaseException) {
+        PyBaseException baseException = (PyBaseException)value;
+
+        PyType type = baseException.getType();
+
+        if ("ValueError".equals(type.getName())) {
+          PyObject message = baseException.getMessage();
+
+          throw new YouTubeException(message.toString());
+        }
+      }
+
+
+      throw new SystemException(pye);
     }
   }
 

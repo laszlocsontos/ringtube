@@ -1,14 +1,14 @@
 package net.thirdfoot.rto.media;
 
-import net.thirdfoot.rto.kernel.exception.SystemException;
+import net.thirdfoot.rto.kernel.exception.ApplicationException;
 
 /**
  * @author lcsontos
  */
-public class YouTubeException extends SystemException {
+public class YouTubeException extends ApplicationException {
 
-  public YouTubeException(Exception cause) {
-    super(cause);
+  public YouTubeException(String message) {
+    super(message);
   }
 
 }

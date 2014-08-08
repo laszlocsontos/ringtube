@@ -1,9 +1,7 @@
 package net.thirdfoot.rto.kernel.exception;
 
-import java.util.Arrays;
-
+import net.thirdfoot.rto.kernel.config.PropsKey;
 import net.thirdfoot.rto.kernel.i18n.LanguageUtil;
-import jodd.util.ArraysUtil;
 import jodd.util.StringPool;
 import jodd.util.StringUtil;
 
@@ -12,38 +10,52 @@ import jodd.util.StringUtil;
  */
 public class ApplicationException extends Exception {
 
+  public static final Object[] EMPTY_MESSAGE_PARAMS = new Object[0];
+
   public ApplicationException() {
-    this(null, (Object)null);
+    this(null, EMPTY_MESSAGE_PARAMS);
   }
 
-  public ApplicationException(String messageKey) {
-    this(messageKey, (Object)null);
+  public ApplicationException(String message) {
+    this(null, EMPTY_MESSAGE_PARAMS);
+
+    _message = message;
   }
 
-  public ApplicationException(String messageKey, Object... messageParams) {
+  public ApplicationException(PropsKey messageKey, Object... messageParams) {
     _messageKey = messageKey;
-    _messageParams = messageParams;
+
+    if (messageParams != null) {
+      _messageParams = messageParams;
+    }
+    else {
+      _messageParams = EMPTY_MESSAGE_PARAMS;
+    }
   }
 
   @Override
   public String getMessage() {
-    if (StringUtil.isBlank(_messageKey)) {
+    if (StringUtil.isNotBlank(_message)) {
+      return _message;
+    }
+
+    if (_messageKey == null) {
       return StringPool.EMPTY;
     }
 
-    if (StringUtil.isBlank(_message)) {
-      if (_messageParams != null && _messageParams.length > 0) {
-        _message = LanguageUtil.format(_messageKey, _messageParams);
-      }
-      else {
-        _message = LanguageUtil.get(_messageKey);
-      }
+    String messageKey = _messageKey.getKey();
+
+    if (_messageParams.length > 0) {
+      _message = LanguageUtil.format(messageKey, _messageParams);
+    }
+    else {
+      _message = LanguageUtil.get(messageKey);
     }
 
     return _message;
   }
 
-  private final transient String _messageKey;
+  private final transient PropsKey _messageKey;
   private final transient Object[] _messageParams;
 
   private String _message;

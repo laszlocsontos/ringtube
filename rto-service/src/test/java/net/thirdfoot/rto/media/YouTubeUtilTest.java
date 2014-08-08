@@ -69,12 +69,12 @@ public class YouTubeUtilTest {
   }
 
   @Test(expected = YouTubeException.class)
-  public void testGetYouTubeMetadataWithWrongUrl() {
+  public void testGetYouTubeMetadataWithWrongUrl() throws YouTubeException {
     YouTubeUtil.getYouTubeMetadata(_INVALID_URL);
   }
 
   @Test
-  public void testGetYouTubeMetadata() {
+  public void testGetYouTubeMetadata() throws YouTubeException {
     VideoMetadata streamer = YouTubeUtil.getYouTubeMetadata(_VALID_URL);
 
     Assert.assertNotNull(streamer);
@@ -111,7 +111,7 @@ public class YouTubeUtilTest {
   }
 
   @Test
-  public void testGetYouTubeVideo() {
+  public void testGetYouTubeVideo() throws YouTubeException {
     VideoMetadata videoMetadata = YouTubeUtil.getYouTubeMetadata(DOWNLOAD_URL);
 
     File youTubeVideo = YouTubeUtil.getYouTubeVideo(videoMetadata);
@@ -143,6 +143,6 @@ public class YouTubeUtilTest {
 
   private final String _INVALID_URL = "https://www.youtube.com/watch?v=wrongId";
   private final String _VALID_URL =
-    "https://www.youtube.com/watch?v=W2yk1lsi9RM";
+    "https://www.youtube.com/watch?v=kRrIAqCdjCI";
 
 }
