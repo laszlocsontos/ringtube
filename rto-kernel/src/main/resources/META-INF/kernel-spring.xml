@@ -50,6 +50,16 @@
 
   <tx:annotation-driven transaction-manager="transactionManager"/>
 
+  <!-- JSON -->
+
+  <bean id="mappingJackson2HttpMessageConverter"
+    class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+
+    <property name="objectMapper">
+      <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean" />
+    </property>
+  </bean>
+
   <!-- MVC -->
 
   <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" /> 
@@ -58,11 +68,7 @@
   <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
     <property name="messageConverters">
       <list>
-        <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-          <property name="objectMapper">
-            <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean" />
-          </property>
-        </bean>
+        <ref bean="mappingJackson2HttpMessageConverter"/>
       </list>
     </property>
   </bean>
@@ -75,6 +81,7 @@
 
     <property name="mappings">
       <props>
+        <prop key="/error.htm">viewController</prop>
         <prop key="/index.htm">viewController</prop>
       </props>
     </property>
@@ -89,6 +96,12 @@
     <property name="suffix">
       <value>.jsp</value>
     </property>
+  </bean>
+
+  <bean id="handlerExceptionResolver"
+    class="net.thirdfoot.rto.kernel.spring.HandlerExceptionResolver">
+
+    <property name="httpMessageConverter" ref="mappingJackson2HttpMessageConverter" />
   </bean>
 
 </beans>
