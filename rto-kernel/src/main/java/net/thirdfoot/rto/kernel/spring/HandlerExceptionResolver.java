@@ -6,12 +6,15 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import jodd.util.StringBand;
 import jodd.util.StringUtil;
+
 import net.thirdfoot.rto.kernel.exception.ApplicationException;
+import net.thirdfoot.rto.kernel.exception.NoSuchObjectException;
+import net.thirdfoot.rto.kernel.exception.DuplicateObjectException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -81,13 +84,23 @@ public class HandlerExceptionResolver
     }
   }
 
+  @Override
+  protected void prepareResponse(Exception e, HttpServletResponse response) {
+    if (_isApplicationException(e)) {
+      return;
+    }
+
+    preventCaching(response);
+  }
+
   private void _handleApplicationException(
     HttpServletResponse response, Exception e) {
 
-    String exceptionName = e.getClass().getName();
-
-    if (exceptionName.startsWith("NoSuch")) {
+    if (e instanceof NoSuchObjectException) {
       response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+    }
+    else if (e instanceof DuplicateObjectException) {
+      response.setStatus(HttpServletResponse.SC_CONFLICT);
     }
     else {
       response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
