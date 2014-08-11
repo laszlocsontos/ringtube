@@ -4,14 +4,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Guru Meditation Error</title>
 </head>
 <body>
-  <h1>Error Page</h1>
-  <p>Application has encountered an error.</p>
-<!--
-Failed URL: ${url}
-Exception:  ${exception.message}
--->
+  <h1>Guru Meditation Error</h1>
+  <p>${REQUEST_ID}</p>
 </body>
 </html>

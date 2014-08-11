@@ -16,6 +16,8 @@ public class ThreadLocalFilter extends BaseFilter {
   @Override
   public void destroy() {
     ThreadLocalRegistry.clearThreadLocals();
+
+    super.destroy();
   }
 
   @Override

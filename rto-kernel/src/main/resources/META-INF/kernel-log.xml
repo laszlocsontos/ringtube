@@ -10,7 +10,7 @@
     </rollingPolicy>
 
     <encoder>
-      <pattern>[#|%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}|%-5level|%-25thread|%-25logger{10}|%file:%line|%msg|#]%n</pattern>
+      <pattern>[#|%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}|%X{REQUEST_ID}|%-5level|%-25thread|%X{REMOTE_ADDR}|%X{REQUEST_URL}|%-25logger{10}|%file:%line|%msg|#]%n</pattern>
     </encoder>
   </appender>
 
@@ -23,7 +23,7 @@
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <pattern>%msg%n</pattern>
+      <pattern>[#|%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}|%X{REQUEST_ID}|%-5level|%-25thread|%file:%line|%msg|#]%n</pattern>
     </encoder>
   </appender>
 

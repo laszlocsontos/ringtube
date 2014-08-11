@@ -7,14 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import jodd.util.StringUtil;
-
 import net.thirdfoot.rto.kernel.exception.ApplicationException;
 import net.thirdfoot.rto.kernel.exception.NoSuchObjectException;
 import net.thirdfoot.rto.kernel.exception.DuplicateObjectException;
+import net.thirdfoot.rto.kernel.log.MDCKeys;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.slf4j.MDC;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -77,7 +77,7 @@ public class HandlerExceptionResolver
   @Override
   protected void logException(Exception e, HttpServletRequest request) {
     if (!_isApplicationException(e)) {
-      _log.error(request.getRequestURL().toString(), e);
+      _log.error(e.getMessage(), e);
     }
     else if (_log.isDebugEnabled()) {
       _log.debug(e.getMessage(), e);
@@ -127,8 +127,9 @@ public class HandlerExceptionResolver
 
     ModelAndView modelAndView = new ModelAndView(_errorViewName);
 
-    modelAndView.addObject("exception", e);
-    modelAndView.addObject("url", request.getRequestURL());
+    String requestId = MDC.get(MDCKeys.REQUEST_ID.toString());
+
+    modelAndView.addObject(MDCKeys.REQUEST_ID.toString(), requestId);
 
     return modelAndView;
   }
