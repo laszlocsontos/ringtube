@@ -40,6 +40,10 @@ subprojects {
     maven {
       url 'http://xuggle.googlecode.com/svn/trunk/repo/share/java/'
     }
+
+    maven {
+      url 'https://oss.sonatype.org/content/repositories/orgpython-1027/'
+    }
   }
  
   dependencies {
@@ -66,7 +70,7 @@ project(':rto-kernel') {
     compile 'org.jodd:jodd-http:3.5.1'
     compile 'org.jodd:jodd-props:3.5.1'
     compile 'org.mortbay.jetty:servlet-api:3.0.20100224'
-    compile 'org.python:jython:2.7-b1'
+    compile 'org.python:jython-standalone:2.7-b3'
     compile 'org.slf4j:slf4j-api:1.7.7'
     compile 'org.springframework:spring-beans:3.2.9.RELEASE'
     compile 'org.springframework:spring-orm:3.2.9.RELEASE'
