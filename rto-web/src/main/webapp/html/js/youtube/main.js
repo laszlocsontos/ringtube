@@ -65,7 +65,7 @@
 
       var youTubeSlider = youTubeSliderElement.data('slider');
 
-      youTubeSliderElement.mouseup(function(event) {
+      youTubeSliderElement.on('slideStop', function(event) {
         var old = youTubeSliderElement.attr('data-old-value');
         var value = youTubeSlider.getValue();
 
@@ -78,7 +78,7 @@
           }
         }
 
-        if (old !== value) { 
+        if (old != value) { 
           if (typeof old != 'undefined') { 
             _this.onSliderChange.call(_this, value);
           }
@@ -178,10 +178,13 @@
       return null;
     },
 
-    onSliderChange: function(event) {
+    onSliderChange: function(value) {
       if (console && console.log) {
-        console.log(event);
+        console.log(value);
       }
+
+      this.youTubePlayer.seekTo(value, true);
+      this.youTubePlayer.playVideo();
     },
 
     onYouTubePlayerReady: function() {
@@ -205,13 +208,20 @@
     },
 
     setMetaData: function(metaData) {
-      var maxValue = (metaData && metaData.length) ? metaData.length : 0;
+      var length = (metaData && metaData.length) ? metaData.length : 0;
 
       if (this.youTubeSlider) {
         this.youTubeSlider.destroy();
       }
 
-      this.youTubeSlider = this.createSlider(0, maxValue);
+      this.youTubeSlider = this.createSlider(0, length);
+
+      this.youTubePlayer.loadVideoById({
+        videoId: metaData.youTubeId,
+        startSeconds: 0,
+        endSeconds: length,
+        suggestedQuality: 'small'
+      });
     },
 
     sliderFormatter: function(value) {
