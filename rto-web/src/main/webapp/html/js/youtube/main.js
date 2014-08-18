@@ -22,7 +22,7 @@
 
     _this.youTubeConvert = $(FIELD_YOUTUBE_CONVERT);
 
-    _this.youTubeSlider = _this.createSlider(0, 1);
+    _this.youTubeSlider = _this.createSlider(0, 1, false);
 
     _this.youTubeUrl = $(FIELD_YOUTUBE_URL);
     _this.youTubeUrl.val(YOUTUBE_URL_FIRST);
@@ -52,7 +52,7 @@
       }
     },
 
-    createSlider: function(minValue, maxValue) {
+    createSlider: function(minValue, maxValue, showTooltip) {
       var _this = this;
 
       var youTubeSliderElement = $(FIELD_YOUTUBE_SLIDER).slider({
@@ -60,6 +60,8 @@
         min: minValue,
         max: maxValue,
         step: 1,
+        tooltip: (showTooltip ? 'always' : 'hide'),
+        tooltip_split: true,
         value: [minValue, maxValue]
       })
 
@@ -214,7 +216,7 @@
         this.youTubeSlider.destroy();
       }
 
-      this.youTubeSlider = this.createSlider(0, length);
+      this.youTubeSlider = this.createSlider(0, length, true);
 
       this.youTubePlayer.loadVideoById({
         videoId: metaData.youTubeId,
@@ -229,9 +231,18 @@
       var minutes = Math.floor((value % 3600) / 60);
       var seconds = value - (hours * 3600) - (60 * minutes);
 
+      seconds = ("00" + seconds).slice(-2);
+
       var sb = []
 
-      sb.push('(', hours, ':', minutes, ':', seconds, ')');
+      if (hours > 0) {
+        minutes = ("00" + minutes).slice(-2);
+
+        sb.push('(', hours, ':', minutes, ':', seconds, ')');
+      }
+      else {
+        sb.push('(', minutes, ':', seconds, ')');
+      }
 
       return sb.join('');
     }

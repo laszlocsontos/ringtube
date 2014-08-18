@@ -65,7 +65,7 @@
 
     <div class="col-md-8 input-group lead">
       <span class="input-group-addon glyphicon glyphicon-resize-horizontal"></span>
-      <input id="youTube-slider" type="text" class="form-control">
+      <input id="youTube-slider" type="text" class="form-control" data-slider-handle="triangle">
     </div>
 
     <div id="youTube-convert" class="btn-group">
