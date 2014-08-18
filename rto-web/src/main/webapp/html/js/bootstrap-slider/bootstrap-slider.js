@@ -1,8 +1,6 @@
 /* =========================================================
  * bootstrap-slider.js v3.0.0
- * http://www.eyecon.ro/bootstrap-slider
  * =========================================================
- * Copyright 2012 Stefan Petre
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ========================================================= */
- 
+
 (function( $ ) {
 
 	var ErrorMsgs = {
@@ -57,7 +55,7 @@
 			this.picker[0].id = this.id;
 		}
 
-		if (typeof Modernizr !== 'undefined' && Modernizr.touch) {
+		if (('ontouchstart' in window) || window.DocumentTouch && document instanceof window.DocumentTouch) {
 			this.touchCapable = true;
 		}
 
@@ -176,11 +174,16 @@
 			}
 		}
 		this.diff = this.max - this.min;
-		this.percentage = [
-			(this.value[0]-this.min)*100/this.diff,
-			(this.value[1]-this.min)*100/this.diff,
-			this.step*100/this.diff
-		];
+
+		if (this.diff > 0) {
+			this.percentage = [
+				(this.value[0] - this.min) * 100 / this.diff,
+				(this.value[1] - this.min) * 100 / this.diff,
+				this.step * 100 / this.diff
+			];
+		} else {
+			this.percentage = [0, 0, 100];
+		}
 
 		this.offset = this.picker.offset();
 		this.size = this.picker[0][this.sizePos];
@@ -192,7 +195,7 @@
 		this.reversed = this.element.data('slider-reversed')||options.reversed;
 
 		this.layout();
-        this.layout();
+		this.layout();
 
 		this.handle1.on({
 			keydown: $.proxy(this.keydown, this, 0)
@@ -207,11 +210,11 @@
 			this.picker.on({
 				touchstart: $.proxy(this.mousedown, this)
 			});
-		} else {
-			this.picker.on({
-				mousedown: $.proxy(this.mousedown, this)
-			});
 		}
+		// Bind mouse events:
+		this.picker.on({
+			mousedown: $.proxy(this.mousedown, this)
+		});
 
 		if(tooltip === 'hide') {
 			this.tooltip.addClass('hide');
@@ -235,7 +238,7 @@
 			});
 		}
 
-		this.enabled = options.enabled && 
+		this.enabled = options.enabled &&
 						(this.element.data('slider-enabled') === undefined || this.element.data('slider-enabled') === true);
 		if(this.enabled) {
 			this.enable();
@@ -249,7 +252,7 @@
 
 		over: false,
 		inDrag: false,
-		
+
 		showTooltip: function(){
             if (this.tooltip_split === false ){
                 this.tooltip.addClass('in');
@@ -260,7 +263,7 @@
 
 			this.over = true;
 		},
-		
+
 		hideTooltip: function(){
 			if (this.inDrag === false && this.alwaysShowTooltip !== true) {
 				this.tooltip.removeClass('in');
@@ -358,12 +361,12 @@
 					touchmove: $.proxy(this.mousemove, this),
 					touchend: $.proxy(this.mouseup, this)
 				});
-			} else {
-				$(document).on({
-					mousemove: $.proxy(this.mousemove, this),
-					mouseup: $.proxy(this.mouseup, this)
-				});
 			}
+			// Bind mouse events:
+			$(document).on({
+				mousemove: $.proxy(this.mousemove, this),
+				mouseup: $.proxy(this.mouseup, this)
+			});
 
 			this.inDrag = true;
 			var val = this.calculateValue();
@@ -371,17 +374,16 @@
 			this.element.trigger({
 					type: 'slideStart',
 					value: val
-				}).trigger({
-					type: 'slide',
-					value: val
-				});
+				})
+				.data('value', val)
+				.prop('value', val);
 			return true;
 		},
 
 		triggerFocusOnHandle: function(handleIdx) {
 			if(handleIdx === 0) {
 				this.handle1.focus();
-			} 
+			}
 			if(handleIdx === 1) {
 				this.handle2.focus();
 			}
@@ -425,10 +427,6 @@
 			this.setValue(val);
 			this.element
 				.trigger({
-					type: 'slide',
-					value: val
-				})
-				.trigger({
 					type: 'slideStop',
 					value: val
 				})
@@ -445,7 +443,7 @@
 			if (this.touchCapable && ev.type === 'touchmove') {
 				ev = ev.originalEvent;
 			}
-			
+
 			var percentage = this.getPercentage(ev);
 			this.adjustPercentageForRangeSliders(percentage);
 			this.percentage[this.dragged] = this.reversed ? 100 - percentage : percentage;
@@ -453,13 +451,6 @@
 
 			var val = this.calculateValue();
 			this.setValue(val);
-			this.element
-				.trigger({
-					type: 'slide',
-					value: val
-				})
-				.data('value', val)
-				.prop('value', val);
 			return false;
 		},
 
@@ -485,12 +476,12 @@
 					touchmove: this.mousemove,
 					touchend: this.mouseup
 				});
-			} else {
-				$(document).off({
-					mousemove: this.mousemove,
-					mouseup: this.mouseup
-				});
 			}
+			// Bind mouse events:
+			$(document).off({
+				mousemove: this.mousemove,
+				mouseup: this.mouseup
+			});
 
 			this.inDrag = false;
 			if (this.over === false) {
@@ -534,7 +525,7 @@
 		},
 
 		getPercentage: function(ev) {
-			if (this.touchCapable) {
+			if (this.touchCapable && (ev.type === 'touchstart' || ev.type === 'touchmove')) {
 				ev = ev.touches[0];
 			}
 			var percentage = (ev[this.mousePos] - this.offset[this.stylePos])*100/this.size;
@@ -550,6 +541,11 @@
 		},
 
 		setValue: function(val) {
+
+			if (!val) {
+				val = 0;
+			}
+
 			this.value = this.validateInputValue(val);
 
 			if (this.range) {
@@ -565,17 +561,25 @@
 				}
 			}
 			this.diff = this.max - this.min;
-			this.percentage = [
-				(this.value[0]-this.min)*100/this.diff,
-				(this.value[1]-this.min)*100/this.diff,
-				this.step*100/this.diff
-			];
+
+
+			if (this.diff > 0) {
+				this.percentage = [
+					(this.value[0] - this.min) * 100 / this.diff,
+					(this.value[1] - this.min) * 100 / this.diff,
+					this.step * 100 / this.diff
+				];
+			} else {
+				this.percentage = [0, 0, 100];
+			}
+
 			this.layout();
 
+			var slideEventValue = this.range ? this.value : this.value[0];
 			this.element
 				.trigger({
 					'type': 'slide',
-					'value': this.value
+					'value': slideEventValue
 				})
 				.data('value', this.value)
 				.prop('value', this.value);
@@ -630,13 +634,19 @@
 
 		setAttribute: function(attribute, value) {
 			this[attribute] = value;
+		},
+
+		getAttribute: function(attribute) {
+			return this[attribute];
 		}
+
 	};
 
 	var publicMethods = {
 		getValue : Slider.prototype.getValue,
 		setValue : Slider.prototype.setValue,
 		setAttribute : Slider.prototype.setAttribute,
+		getAttribute : Slider.prototype.getAttribute,
 		destroy : Slider.prototype.destroy,
 		disable : Slider.prototype.disable,
 		enable : Slider.prototype.enable,
@@ -708,8 +718,8 @@
 		range: false,
 		selection: 'before',
 		tooltip: 'show',
-        tooltip_separator: ':',
-        tooltip_split: false,
+		tooltip_separator: ':',
+		tooltip_split: false,
 		handle: 'round',
 		reversed : false,
 		enabled: true,
@@ -721,3 +731,5 @@
 	$.fn.slider.Constructor = Slider;
 
 })( window.jQuery );
+
+/* vim: set noexpandtab tabstop=4 shiftwidth=4 autoindent: */
