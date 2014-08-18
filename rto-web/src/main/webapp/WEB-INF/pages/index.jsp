@@ -80,14 +80,15 @@
         <li><a href="#">OGG</a></li>
       </ul>
     </div>
-
-    <div id="youTube-player" class="col-md-4">
-    </div>
   </div>
 
   <div class="container">
     <!-- Example row of columns -->
     <div class="row">
+    <div class="col-md-4">
+      <h2 id="youTube-title">&nbsp;</h2>
+      <div id="youTube-player" class="col-md-12"></div>
+    </div>
     <div class="col-md-4">
       <h2>Why register?</h2>
       <p>First of all, it doesn&apos;t cost a thing, basically there no reason why not to register.

@@ -6,6 +6,7 @@
   var FIELD_YOUTUBE_CONVERT = '#youTube-convert';
   var FIELD_YOUTUBE_PLAYER = 'youTube-player';
   var FIELD_YOUTUBE_SLIDER = '#youTube-slider';
+  var FIELD_YOUTUBE_TITLE = '#youTube-title';
 
   var FIELD_YOUTUBE_URL = '#youTube-url';
   var FIELD_YOUTUBE_URL_CHECK_INTERVAL = 250;
@@ -23,6 +24,8 @@
     _this.youTubeConvert = $(FIELD_YOUTUBE_CONVERT);
 
     _this.youTubeSlider = _this.createSlider(0, 1, false);
+
+    _this.youTubeTitle = $(FIELD_YOUTUBE_TITLE);
 
     _this.youTubeUrl = $(FIELD_YOUTUBE_URL);
     _this.youTubeUrl.val(YOUTUBE_URL_FIRST);
@@ -105,8 +108,8 @@
 
       window.onYouTubeIframeAPIReady = function() {
         _this.youTubePlayer = new YT.Player(FIELD_YOUTUBE_PLAYER, {
-          height: '390',
-          width: '640',
+          /*height: '390',
+          width: '640',*/
           videoId: youTubeId,
           events: youTubeEvents
         });
@@ -211,12 +214,15 @@
 
     setMetaData: function(metaData) {
       var length = (metaData && metaData.length) ? metaData.length : 0;
+      var title = (metaData && metaData.title) ? metaData.title : '&nbsp;'
 
       if (this.youTubeSlider) {
         this.youTubeSlider.destroy();
       }
 
       this.youTubeSlider = this.createSlider(0, length, true);
+
+      this.youTubeTitle.text(title)
 
       this.youTubePlayer.loadVideoById({
         videoId: metaData.youTubeId,
