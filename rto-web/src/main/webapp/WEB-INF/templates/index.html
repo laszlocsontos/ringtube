@@ -12,7 +12,7 @@
 
   <link rel="shortcut icon" href="http://getbootstrap.com/assets/ico/favicon.ico" />
 
-  <title>ringtube.org | All the ringtones you&apos;ve every wanted</title>
+  <title th:text="#{index.title}">ringtube.org | All the ring tones you&apos;ve ever wanted</title>
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="../../html/css/bootstrap.min.css" th:href="@{/html/css/bootstrap.min.csss}" />
@@ -31,13 +31,13 @@
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
+          <span class="sr-only" th:text="#{index.navbar.header.hint}">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
   
-        <a class="navbar-brand" href="#">RingTube</a>
+        <a class="navbar-brand" href="#" th:text="#{index.navbar.brand}">RingTube</a>
       </div>
 
       <div class="navbar-collapse collapse">
@@ -50,7 +50,7 @@
             <input placeholder="Password" class="form-control" type="password">
           </div>
     
-          <button type="submit" class="btn btn-success">Sign in</button>
+          <button type="submit" class="btn btn-success" th:text="#{index.navbar.signin}">Sign In</button>
         </form>
       </div><!--/.navbar-collapse -->
     </div>
@@ -58,16 +58,16 @@
 
   <!-- Main jumbotron for a primary marketing message or call to action -->
   <div class="jumbotron">
-    <h2>Convert your favorite videos into ringtones easily for free of charge</h2>
-    <p class="lead">Just enter the link, pick the desired time frame, the target file format and your&apos;re ready to go!</p>
+    <h2 th:text="#{index.jumbotron.marketing1}">Convert your favorite videos into ring tones easily for free of charge</h2>
+    <p class="lead" th:text="#{index.jumbotron.marketing2}">Just enter the link, pick the desired time frame, the target file format and your&apos;re ready to go!</p>
 
     
     <div class="col-md-8 input-group lead">
       <span class="input-group-addon glyphicon glyphicon-music"></span>
-      <input id="youTube-url" type="text" class="form-control" placeholder="YouTube URL" />
+      <input id="youTube-url" type="text" class="form-control" th:placeholder="#{index.jumbotron.youtube.url.errmsg}" placeholder="YouTube URL" />
     </div>
 
-    <div id="youTube-url-errmsg" class="col-md-8 alert alert-danger">This isn't a YouTube URL</div>
+    <div id="youTube-url-errmsg" class="col-md-8 alert alert-danger" th:text="#{index.jumbotron.youtube.url.errmsg}">This isn't a YouTube URL</div>
 
     <div class="col-md-8 input-group lead">
       <span class="input-group-addon glyphicon glyphicon-resize-horizontal"></span>
@@ -75,10 +75,10 @@
     </div>
 
     <div id="youTube-convert" class="btn-group">
-      <button type="button" class="btn btn-lg btn-success">Convert</button>
+      <button type="button" class="btn btn-lg btn-success" th:text="#{index.jumbotron.youtube.convert}">Convert</button>
       <button type="button" class="btn btn-lg btn-success dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
-        <span class="sr-only">Toggle Dropdown</span>
+        <span class="sr-only" th:text="#{index.jumbotron.youtube.convert.hint}">Toggle Dropdown</span>
       </button>
       <ul class="dropdown-menu" role="menu">
         <li><a href="#">MP3</a></li>
@@ -97,36 +97,36 @@
       </div>
 
       <div class="col-md-4">
-        <h2>Why register?</h2>
-        <p>First of all, it doesn&apos;t cost a thing, basically there no reason why not to register.
+        <h2 th:text="#{index.container.col1.header}">Why register?</h2>
+        <p th:text="#{index.container.col1.content}">First of all, it doesn&apos;t cost a thing, basically there no reason why not to register.
         Furthermore, if you register you become a premium member. Premium membership has the following benefits.</p>
-        <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
+        <p><a class="btn btn-default" href="#" role="button" th:text="#{index.container.view.details}">View details »</a></p>
       </div>
 
       <div class="col-md-4">
-        <h2>Supported formats</h2>
-        <p>You can choose from the following file formats.</p>
+        <h2 th:text="#{index.container.col2.header}">Supported formats</h2>
+        <p th:text="#{index.container.col2.content}">You can choose from the following file formats.</p>
         <li>MP3</li>
         <li>AAC</li>
         <li>OGG</li>
         <p>Flac is coming soon...</p>
-        <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
+        <p><a class="btn btn-default" href="#" role="button" th:text="#{index.container.view.details}">View details »</a></p>
       </div>
        
       <div class="col-md-4">
-        <h2>Top Videos</h2>
+        <h2 th:text="#{index.container.col3.header}">Top Videos</h2>
         <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis 
   in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. 
   Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh,
    ut fermentum massa justo sit amet risus.</p>
-        <p><a class="btn btn-default" href="#" role="button">View details »</a></p>
+        <p><a class="btn btn-default" href="#" role="button" th:text="#{index.container.view.details}">View details »</a></p>
       </div>
     </div>
 
     <hr />
 
     <footer>
-      <p>© ringtube.org 2014</p>
+      <p th:text="index.footer">© ringtube.org 2014</p>
     </footer>
   </div> <!-- /container -->
 
