@@ -60,6 +60,22 @@
     </property>
   </bean>
 
+  <!-- Thymeleaf -->
+
+  <bean id="templateResolver"
+    class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+
+    <property name="prefix" value="/WEB-INF/templates/" />
+    <property name="suffix" value=".html" />
+    <property name="templateMode" value="HTML5" />
+  </bean>
+    
+  <bean id="templateEngine"
+    class="org.thymeleaf.spring3.SpringTemplateEngine">
+
+    <property name="templateResolver" ref="templateResolver" />
+  </bean>
+
   <!-- MVC -->
 
   <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" /> 
@@ -88,14 +104,9 @@
   </bean>
 
   <bean id="viewResolver"
-    class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    class="org.thymeleaf.spring3.view.ThymeleafViewResolver">
 
-    <property name="prefix">
-      <value>/WEB-INF/pages/</value>
-    </property>
-    <property name="suffix">
-      <value>.jsp</value>
-    </property>
+    <property name="templateEngine" ref="templateEngine" />
   </bean>
 
   <bean id="handlerExceptionResolver"
