@@ -1,38 +1,59 @@
 package net.thirdfoot.rto.kernel.i18n;
 
-import java.text.MessageFormat;
-
 import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.context.MessageSource;
 
 /**
  * @author lcsontos
  */
-public class LanguageUtil {
+public final class LanguageUtil {
 
   public static String get(String key) {
-    return get(key, LanguageThreadLocal.getCurrentLocale());
+    return get(key, null);
   }
 
   public static String get(String key, Locale locale) {
-    ResourceBundle resourceBundle = ResourceBundle.getBundle(_BASE_NAME, locale);
-
-    return resourceBundle.getString(key);
+    return get(key, locale, (Object[])null);
   }
 
-  public static String format(String key, Object... params) {
-    return format(key, LanguageThreadLocal.getCurrentLocale(), params);
+  public static String get(String key, Locale locale, Object... params) {
+    if (!_initialized.get()) {
+      if (_log.isWarnEnabled()) {
+        _log.warn("No messageSource has been supplied.");
+      }
+
+      return key;
+    }
+
+    if (locale == null) {
+      locale = LanguageThreadLocal.getCurrentLocale();
+    }
+
+    return _instance._messageSource.getMessage(key, params, locale);
   }
 
-  public static String format(String key, Locale locale, Object... params) {
-    String pattern = get(key, locale);
+  public static LanguageUtil getInstance(MessageSource messageSource) {
+    if (_initialized.compareAndSet(false, true)) {
+      _instance = new LanguageUtil(messageSource);
+    }
 
-    return MessageFormat.format(pattern, params);
+    return _instance;
   }
 
-  private static final String _BASE_NAME = "bundles.Language";
-
-  private LanguageUtil() {
+  private LanguageUtil(MessageSource messageSource) {
+    _messageSource = messageSource;
   }
+
+  private static LanguageUtil _instance;
+  private static AtomicBoolean _initialized = new AtomicBoolean(false);
+
+  private static Logger _log = LoggerFactory.getLogger(LanguageUtil.class);
+
+  private final MessageSource _messageSource;
 
 }

@@ -46,7 +46,7 @@ public class ApplicationException extends Exception {
     String messageKey = _messageKey.getKey();
 
     if (_messageParams.length > 0) {
-      _message = LanguageUtil.format(messageKey, _messageParams);
+      _message = LanguageUtil.get(messageKey, null, _messageParams);
     }
     else {
       _message = LanguageUtil.get(messageKey);
