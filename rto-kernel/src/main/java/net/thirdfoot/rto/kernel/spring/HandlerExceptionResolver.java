@@ -96,20 +96,12 @@ public class HandlerExceptionResolver
   private void _handleApplicationException(
     HttpServletResponse response, Exception e) {
 
-    if (e instanceof NoSuchObjectException) {
-      response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-    }
-    else if (e instanceof DuplicateObjectException) {
-      response.setStatus(HttpServletResponse.SC_CONFLICT);
-    }
-    else {
-      response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    }
-
     Map<String, String> errorInfo = new HashMap<String, String>(2);
 
     errorInfo.put("exception", e.getClass().getSimpleName());
     errorInfo.put("message", e.getMessage());
+
+    response.setStatus(_SC_UNPROCESSABLE_ENTITY);
 
     HttpOutputMessage outputMessage = new ServletServerHttpResponse(response);
 
@@ -139,6 +131,8 @@ public class HandlerExceptionResolver
   }
 
   private static final String _DEFAULT_ERROR_VIEW_NAME = "error";
+
+  private static final int _SC_UNPROCESSABLE_ENTITY = 422;
 
   private static Logger _log = LoggerFactory.getLogger(
     HandlerExceptionResolver.class);

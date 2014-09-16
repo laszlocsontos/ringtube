@@ -32,6 +32,16 @@ public class VideoController {
   }
 
   @RequestMapping(
+      value="/testError", method = RequestMethod.GET,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  @ResponseBody
+  public int testError() {
+    Object obj = null;
+
+    return obj.hashCode();
+  }
+
+  @RequestMapping(
     value="/get/{youTubeId}", method = RequestMethod.GET,
     produces = MediaType.APPLICATION_JSON_VALUE,
     consumes = MediaType.APPLICATION_JSON_VALUE)

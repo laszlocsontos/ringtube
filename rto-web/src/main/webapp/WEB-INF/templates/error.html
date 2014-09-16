@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title th:text="#{index.title}"></title>
+</head>
+
+<body th:if="${REQUEST_ID}">
+  <h1>Guru Meditation Error</h1>
+  <p th:text="${REQUEST_ID}"></p>
+</body>
+</html>
