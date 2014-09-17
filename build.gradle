@@ -79,6 +79,7 @@ project(':rto-kernel') {
     compile 'xuggle:xuggle-xuggler:5.4'
 
     runtime 'ch.qos.logback:logback-classic:1.1.2'
+    runtime 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:1.2.5'
     runtime 'com.fasterxml.jackson.core:jackson-core:2.3.3'
     runtime 'com.fasterxml.jackson.core:jackson-databind:2.3.3'
     runtime 'com.h2database:h2:1.4.178'
