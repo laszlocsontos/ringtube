@@ -2,12 +2,12 @@ package net.thirdfoot.rto.view;
 
 import net.thirdfoot.rto.kernel.exception.ApplicationException;
 import net.thirdfoot.rto.model.Video;
+import net.thirdfoot.rto.model.VideoConversion;
 import net.thirdfoot.rto.model.VideoMetadata;
 import net.thirdfoot.rto.service.VideoService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -56,6 +56,11 @@ public class VideoController {
     VideoMetadata videoMetadata = video.getVideoMetadata();
 
     return videoMetadata.clone();
+  }
+
+  @RequestMapping(value="/convert")
+  public String convert(VideoConversion videoConversion) {
+    return "redirect:/conversion";
   }
 
   private static Logger _log = LoggerFactory.getLogger(VideoController.class);

@@ -22,6 +22,13 @@
     var _this = this;
 
     _this.youTubeConvert = $(FIELD_YOUTUBE_CONVERT);
+    _this.youTubeConvertForm = $('youTube-convert-fm');
+
+    _this.youTubeConvertButton = $('youTube-convert-btn');
+
+    _this.youTubeConvertButton.on('click', function(event) {
+      _this.youTubeConvertForm.submit();
+    });
 
     _this.youTubeSlider = _this.createSlider(0, 1, false);
 
@@ -181,6 +188,10 @@
       }
 
       return null;
+    },
+
+    onConvert: function() {
+      
     },
 
     onSliderChange: function(value) {

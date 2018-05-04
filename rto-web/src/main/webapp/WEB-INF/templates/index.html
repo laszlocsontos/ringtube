@@ -19,31 +19,32 @@
     <h2 th:text="#{index.jumbotron.marketing1}">Convert your favorite videos into ring tones easily for free of charge</h2>
     <p class="lead" th:text="#{index.jumbotron.marketing2}">Just enter the link, pick the desired time frame, the target file format and your&apos;re ready to go!</p>
 
-    
-    <div class="col-md-8 input-group lead">
-      <span class="input-group-addon glyphicon glyphicon-music"></span>
-      <input id="youTube-url" type="text" class="form-control" th:placeholder="#{index.jumbotron.youtube.url.errmsg}" placeholder="YouTube URL" />
-    </div>
-
-    <div id="youTube-url-errmsg" class="col-md-8 alert alert-danger" th:text="#{index.jumbotron.youtube.url.errmsg}">This isn't a YouTube URL</div>
-
-    <div class="col-md-8 input-group lead">
-      <span class="input-group-addon glyphicon glyphicon-resize-horizontal"></span>
-      <input id="youTube-slider" type="text" class="form-control" data-slider-handle="triangle" />
-    </div>
-
-    <div id="youTube-convert" class="btn-group">
-      <button type="button" class="btn btn-lg btn-success" th:text="#{index.jumbotron.youtube.convert}">Convert</button>
-      <button type="button" class="btn btn-lg btn-success dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-        <span class="sr-only" th:text="#{index.jumbotron.youtube.convert.hint}">Toggle Dropdown</span>
-      </button>
-      <ul class="dropdown-menu" role="menu">
-        <li><a href="#">MP3</a></li>
-        <li><a href="#">AAC</a></li>
-        <li><a href="#">OGG</a></li>
-      </ul>
-    </div>
+    <form id="youTube-convert-fm" action="#" th:action="@{/video/convert}" th:object="${videoConversion}" method="post">
+      <div class="col-md-8 input-group lead">
+        <span class="input-group-addon glyphicon glyphicon-music"></span>
+        <input id="youTube-url" type="text" class="form-control" th:placeholder="#{index.jumbotron.youtube.url.errmsg}" placeholder="YouTube URL" th:field="*{youTubeUrl}" />
+      </div>
+  
+      <div id="youTube-url-errmsg" class="col-md-8 alert alert-danger" th:text="#{index.jumbotron.youtube.url.errmsg}">This isn't a YouTube URL</div>
+  
+      <div class="col-md-8 input-group lead">
+        <span class="input-group-addon glyphicon glyphicon-resize-horizontal"></span>
+        <input id="youTube-slider" type="text" class="form-control" data-slider-handle="triangle" />
+      </div>
+  
+      <div id="youTube-convert" class="btn-group">
+        <button id="youTube-convert-btn" type="button" class="btn btn-lg btn-success" th:text="#{index.jumbotron.youtube.convert}">Convert</button>
+        <button type="button" class="btn btn-lg btn-success dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+          <span class="sr-only" th:text="#{index.jumbotron.youtube.convert.hint}">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="#">MP3</a></li>
+          <li><a href="#">AAC</a></li>
+          <li><a href="#">OGG</a></li>
+        </ul>
+      </div>
+    </form>
   </div>
 
   <!-- main -->
